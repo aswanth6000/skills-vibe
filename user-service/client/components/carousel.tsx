@@ -1,4 +1,5 @@
 'use client'
+import { FC } from 'react';
 
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -6,7 +7,15 @@ import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import Image from 'next/image';
  
-export function CarouselDefault({className}) {
+interface CarouselDefaultProps {
+  stl: {
+    outerdiv: string | null;
+    innerdiv: string;
+    autosec: number;
+  };
+}
+export const CarouselDefault: FC<CarouselDefaultProps> = ({stl}) => {
+  
   return (
     <>
     <Swiper
@@ -17,19 +26,26 @@ export function CarouselDefault({className}) {
       autoplay={{delay:5000}}
       onSwiper={(swiper) => console.log(swiper)}
       loop={true}
-      className='h-96 w-full'
+      className='h-auto w-full'
     >
       <SwiperSlide>
-      <div className='flex h-full w-full items-center justify-center'>
+      <div >
       <img src='https://c4.wallpaperflare.com/wallpaper/553/119/620/windows-10-windows-10x-windows-11-minimalism-material-minimal-hd-wallpaper-preview.jpg'     
-        className='w-full h-96 object-fill m-0 p-0'
+        className={stl.innerdiv}
       alt="Picture of the author"/>
       </div>
       </SwiperSlide>
       <SwiperSlide>
-      <div className='flex h-full w-full items-center justify-center'>
-      <img src='https://wallpaperaccess.com/full/7178383.jpg'     
-        className='w-full h-96 object-fill m-0 p-0'
+      <div >
+      <img src='https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg'     
+        className={stl.innerdiv}
+      alt="Picture of the author"/>
+      </div>
+      </SwiperSlide>
+      <SwiperSlide>
+      <div >
+      <img src='https://i.redd.it/lsknlqcnihza1.jpg'     
+        className={stl.innerdiv}
       alt="Picture of the author"/>
       </div>
       </SwiperSlide>
