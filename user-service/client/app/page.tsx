@@ -3,6 +3,7 @@ import Navbar from "@/components/navbar"
 import { CarouselDefault } from "@/components/carousel"
 import Grid from '@/components/grid'
 import Popular from '@/components/popular'
+import Footer from "@/components/footer"
 export default function Home() {
   const styles = {
     outerdiv : 'flex h-full w-full items-center justify-center',
@@ -16,7 +17,9 @@ export default function Home() {
     <Grid/>
     <Grid/>
     <Grid/>
+    <Grid/>
     <Popular/>
+    <Footer/>
     </>
   )
 }
