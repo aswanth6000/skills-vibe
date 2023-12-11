@@ -4,6 +4,8 @@ import { User } from "../models/User";
 const authController = {
   getIndex(req: Request, res: Response) {
     res.send({ message: "received" });
+    console.log(req.body);
+    
   },
 };
 

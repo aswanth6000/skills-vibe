@@ -1,9 +1,12 @@
 'use client'
 import GoogleButton from 'react-google-button'
+import React,{ useState } from "react";
 import { GoogleAuthProvider, getAuth, signInWithPopup, UserCredential, OAuthCredential } from "firebase/auth";
 import {app} from '../../config/firebase'
+import axios from '../../config/axios'
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
+
 
 interface userDataType{
   uid: string;
@@ -27,6 +30,9 @@ const handleLogin = () =>{
       email: user.email,
       // Add other relevant user data
     };
+    console.log(userData);
+    
+    sendUserData(userData)
     
     // ...
   }).catch((error) => {
@@ -39,11 +45,22 @@ const handleLogin = () =>{
     const credential = GoogleAuthProvider.credentialFromError(error);
     // ...
   });
+  const sendUserData = async (userData: userDataType) => {
+    try {
+      const response = await axios.post('/signup', userData, {
+        headers: {
+          "Content-Type": 'application/json'
+        }
+      });
+      console.log('User data sent to server:', response.data);
+    } catch (error) {
+      console.error('Error sending user data to server:', error);
+    }
+  };
 }
 
 
 
-import React,{ useState } from "react";
 interface FormValues {
   email: string;
   password: string;
