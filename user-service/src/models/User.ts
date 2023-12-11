@@ -1,6 +1,7 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, Types, ObjectId } from "mongoose";
 
 interface User {
+  _id: Types.ObjectId,
   username: string;
   phone: number;
   email: string;
@@ -24,7 +25,6 @@ const userSchema = new Schema<User>({
   },
   phone: {
     type: Number,
-    required: true,
   },
   email: {
     type: String,
@@ -32,15 +32,12 @@ const userSchema = new Schema<User>({
   },
   password: {
     type: String,
-    required: true,
   },
   profilePicture: {
     type: String,
-    required: true,
   },
   role: {
     type: Boolean,
-    required: true,
   },
   createdAt: {
     type: Date,
@@ -52,7 +49,6 @@ const userSchema = new Schema<User>({
   },
   status: {
     type: Boolean,
-    required: true,
   },
   clients: [{
     type: Types.ObjectId,
@@ -63,7 +59,6 @@ const userSchema = new Schema<User>({
   }],
   availability: {
     type: Boolean,
-    required: true,
   },
   portfolio: {
     type: Schema.Types.ObjectId,

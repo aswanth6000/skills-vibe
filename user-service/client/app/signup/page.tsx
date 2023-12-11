@@ -12,6 +12,7 @@ interface userDataType{
   uid: string;
   displayName: string | null;
   email: string | null;
+  google: boolean
 }
 
 const handleLogin = () =>{
@@ -28,6 +29,7 @@ const handleLogin = () =>{
       uid: user.uid,
       displayName: user.displayName,
       email: user.email,
+      google: true
       // Add other relevant user data
     };
     console.log(userData);
