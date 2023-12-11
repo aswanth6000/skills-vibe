@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken'
 
 const authController = {
   async getIndex(req: Request, res: Response) {
-    res.send({ message: 'received' });
     const { email, displayName, google } = req.body;
     try {
       if (google === true) {

@@ -2,8 +2,8 @@
 import GoogleButton from 'react-google-button'
 import React,{ useState } from "react";
 import { GoogleAuthProvider, getAuth, signInWithPopup, UserCredential, OAuthCredential } from "firebase/auth";
-import {app} from '../../config/firebase'
-import axios from '../../config/axios'
+import {app} from '../../../config/firebase'
+import axios from '../../../config/axios'
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
