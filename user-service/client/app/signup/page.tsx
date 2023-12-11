@@ -1,21 +1,33 @@
 'use client'
 import GoogleButton from 'react-google-button'
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup, UserCredential, OAuthCredential } from "firebase/auth";
 import {app} from '../../config/firebase'
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
+
+interface userDataType{
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+}
 
 const handleLogin = () =>{
   console.log("button clicked");
   
   signInWithPopup(auth, provider)
-  .then((result) => {
+  .then((result: UserCredential) => {
     // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
+    const credential: OAuthCredential | null = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential?.accessToken || '';
     // The signed-in user info.
     const user = result.user;
-    // IdP data available using getAdditionalUserInfo(result)
+    const userData: userDataType = {
+      uid: user.uid,
+      displayName: user.displayName,
+      email: user.email,
+      // Add other relevant user data
+    };
+    
     // ...
   }).catch((error) => {
     // Handle Errors here.
