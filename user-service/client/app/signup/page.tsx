@@ -1,6 +1,35 @@
 'use client'
-import axios from "../../constants/axios";
 import GoogleButton from 'react-google-button'
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import {app} from '../../config/firebase'
+const provider = new GoogleAuthProvider();
+const auth = getAuth(app);
+
+const handleLogin = () =>{
+  console.log("button clicked");
+  
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    // IdP data available using getAdditionalUserInfo(result)
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
+}
+
+
 
 import React,{ useState } from "react";
 interface FormValues {
@@ -21,7 +50,7 @@ export default function Signup() {
     });
   };
 
-  const handleLogin = () =>{
+  const handleLoginp = () =>{
     
   }
       
@@ -35,7 +64,7 @@ export default function Signup() {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-white-900 md:text-2xl dark:text-black">
                 Sign up to Skill Vibe
               </h1>
-              <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
+              <form className="space-y-4 md:space-y-6" onSubmit={handleLoginp}>
                 <div>
                   <label
                     htmlFor="email"
@@ -102,7 +131,7 @@ export default function Signup() {
                 <div className="ml-20">
                 <GoogleButton 
                 label='Continue with Google'
-                  onClick={() => { console.log('Google button clicked') }}
+                  onClick={handleLogin}
                 />
                 </div>
 

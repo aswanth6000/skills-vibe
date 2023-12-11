@@ -1,5 +1,5 @@
 'use client'
-import axios from "../../constants/axios";
+import axios from "../../config/axios";
 import GoogleButton from 'react-google-button'
 
 import React,{ useState } from "react";
