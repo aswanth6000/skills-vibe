@@ -4,49 +4,72 @@ import React,{ useState } from "react";
 import { GoogleAuthProvider, getAuth, signInWithPopup, UserCredential, OAuthCredential } from "firebase/auth";
 import {app} from '../../../config/firebase'
 import axios from '../../../config/axios'
+import useFormValidation from '@/hooks/validation';
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
 
 interface userDataType{
-  uid: string;
-  displayName: string | null;
+  username: string | null;
   email: string | null;
-  google: boolean
+  google: boolean;
+  password: string | null
 }
 
-const handleLogin = () =>{
-  console.log("button clicked");
-  
-  signInWithPopup(auth, provider)
-  .then((result: UserCredential) => {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential: OAuthCredential | null = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential?.accessToken || '';
-    // The signed-in user info.
-    const user = result.user;
-    const userData: userDataType = {
-      uid: user.uid,
-      displayName: user.displayName,
-      email: user.email,
-      google: true
-      // Add other relevant user data
-    };
-    console.log(userData);
+
+
+export default function Signup() {
+  const {
+    name,
+    setName,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    errors,
+  } = useFormValidation();
+
+  const  handleSubmit  = (e: React.FormEvent<HTMLFormElement>) =>{
+    e.preventDefault()
+      const userData: userDataType = {
+        username: name,
+        email: email,
+        google: false,
+        password: password
+      }
+      console.log(userData);
+      sendUserData(userData)
+
     
-    sendUserData(userData)
+  }
+
+  const handleLogin = () =>{
+    console.log("button clicked");
     
-    // ...
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-  });
+    signInWithPopup(auth, provider)
+    .then((result: UserCredential) => {
+      const credential: OAuthCredential | null = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential?.accessToken || '';
+      const user = result.user;
+      const userData: userDataType = {
+        username: user.displayName,
+        email: user.email,
+        password: '',
+        google: true
+      };
+      console.log(userData);
+      
+      sendUserData(userData)
+      
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.customData.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
+    });
+  }
   const sendUserData = async (userData: userDataType) => {
     try {
       const response = await axios.post('/signup', userData, {
@@ -59,35 +82,10 @@ const handleLogin = () =>{
       console.error('Error sending user data to server:', error);
     }
   };
-}
-
-
-
-interface FormValues {
-  email: string;
-  password: string;
-}
-
-export default function Signup() {
-  const [value, setValue] = useState<FormValues>({
-    email: '',
-    password: '',
-  });
-  const [error, setError] = useState<string>('');
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue({
-      ...value,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleLoginp = () =>{
-    
-  }
+  
       
   
   return (
-    <div>
       <section className="bg-white-50 dark:bg-white-900 mt-11 mb-11">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white-800 dark:border-white-700">
@@ -95,7 +93,26 @@ export default function Signup() {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-white-900 md:text-2xl dark:text-black">
                 Sign up to Skill Vibe
               </h1>
-              <form className="space-y-4 md:space-y-6" onSubmit={handleLoginp}>
+              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block mb-2 text-sm font-medium text-white-900 dark:text-black"
+                  >
+                    Your Name
+                  </label>
+                  <input
+                    type="name"
+                    name="name"
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="bg-white-50 border border-white-300 text-white-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-green-500 dark:focus:border-green-500 focus:outline-none"
+                    placeholder="Your Name"
+                    required
+                  />
+                  {errors.name && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.name}</p>}
+                </div>
                 <div>
                   <label
                     htmlFor="email"
@@ -107,12 +124,14 @@ export default function Signup() {
                     type="email"
                     name="email"
                     id="email"
-                    value={value.email}
-                    onChange={handleChange}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="bg-white-50 border border-white-300 text-white-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-green-500 dark:focus:border-green-500 focus:outline-none"
                     placeholder="name@company.com"
                     required
                   />
+                  {errors.email && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.email}</p>}
+
                 </div>
                 <div>
                   <label
@@ -125,16 +144,18 @@ export default function Signup() {
                     type="password"
                     name="password"
                     id="password"
-                    value={value.password}
-                    onChange={handleChange}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="bg-white-50 border border-white-300 text-white-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-green-500 dark:focus:border-green-500 focus:outline-none"
                     placeholder="••••••••"
                     required
                   />
+                  {errors.password && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.password}</p>}
+
                 </div>
                 <div>
                   <label
-                    htmlFor="password"
+                    htmlFor="confirmPassword"
                     className="block mb-2 text-sm font-medium text-white-900 dark:text-black"
                   >
                     Confirm Password
@@ -142,16 +163,17 @@ export default function Signup() {
                   <input
                     type="password"
                     name="confirmPassword"
-                    id="password"
-                    value={value.password}
-                    onChange={handleChange}
+                    id="confirmPassword"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     className="bg-white-50 border border-white-300 text-white-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-green-500 dark:focus:border-green-500 focus:outline-none"
                     placeholder="••••••••"
                     required
                   />
+                  {errors.confirmPassword && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.confirmPassword}</p>}
+
                 </div>
 
-                <p className='block mb-2 text-sm font-medium text-red-600 dark:text-red-600 text-center' >{error? error : 'dddddddd'}</p>
                 <button
                   type="submit"
                   className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
@@ -167,9 +189,9 @@ export default function Signup() {
                 </div>
 
                 <p className="text-sm font-light text-white-500 dark:text-white-400">
-                  Dont have an account yet?{' '}
-                  <a href="/signup" className="font-medium text-green-600 hover:underline dark:text-green-500">
-                    Sign up
+                  Already have an account?{' '}
+                  <a href="/login" className="font-medium text-green-600 hover:underline dark:text-green-500">
+                    Login
                   </a>
                 </p>
               </form>
@@ -177,6 +199,5 @@ export default function Signup() {
           </div>
         </div>
       </section>
-    </div>
   )
 }

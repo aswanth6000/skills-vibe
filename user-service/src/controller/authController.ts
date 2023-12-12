@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 
 const authController = {
   async getIndex(req: Request, res: Response) {
-    const { email, displayName, google } = req.body;
+    const { email, username, google } = req.body;
     try {
       if (google === true) {
         const user = await UserModel.findOne({ email });
@@ -12,7 +12,7 @@ const authController = {
         if (!user) {
           // If the user doesn't exist, create a new account
           const newUser = new UserModel({
-            username: displayName,
+            username: username,
             email: email,
           });
 
@@ -28,6 +28,9 @@ const authController = {
           console.log('User already exists');
           res.status(200).json({ user, message: 'User already exists.' });
         }
+      }else{
+        console.log(req.body);
+        
       }
     } catch (err) {
       console.error(err);
