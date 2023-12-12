@@ -2,8 +2,10 @@
 import axios from "../../../config/axios";
 import useFormValidation from "@/hooks/validation";
 import GoogleButton from 'react-google-button'
+import { useDispatch } from "react-redux";
 
 import React,{ useState } from "react";
+import { AppDispatch } from "@/redux/store";
 interface FormValues {
   email: string;
   password: string;
@@ -15,6 +17,7 @@ interface userDataType{
 }
 
 export default function Login() {
+  const dispatch = useDispatch<AppDispatch>()
   const {email, setEmail, errors, password, setPassword} = useFormValidation()
 
 
