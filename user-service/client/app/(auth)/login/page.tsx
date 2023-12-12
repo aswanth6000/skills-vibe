@@ -1,5 +1,6 @@
 'use client'
 import axios from "../../../config/axios";
+import useFormValidation from "@/hooks/validation";
 import GoogleButton from 'react-google-button'
 
 import React,{ useState } from "react";
@@ -8,26 +9,41 @@ interface FormValues {
   password: string;
 }
 
-export default function Login() {
-  const [value, setValue] = useState<FormValues>({
-    email: '',
-    password: '',
-  });
-  const [error, setError] = useState<string>('');
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue({
-      ...value,
-      [e.target.name]: e.target.value,
-    });
-  };
+interface userDataType{
+  email: string | null;
+  password: string | null,
+}
 
-  const handleLogin = () =>{
-    
+export default function Login() {
+  const {email, setEmail, errors, password, setPassword} = useFormValidation()
+
+
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) =>{
+    e.preventDefault()
+    const userData :userDataType ={
+      email: email,
+      password: password
+    }
+    sendUserData(userData)
   }
+
+  const sendUserData = async (userData: userDataType) => {
+    try {
+      const response = await axios.post('/login', userData, {
+        method: 'POST',
+        headers: {
+          "Content-Type": 'application/json'
+        }
+      });
+      console.log('User data sent to server:', response.data);
+    } catch (error) {
+      console.error('Error sending user data to server:', error);
+    }
+  };
       
   
   return (
-    <div>
       <section className="bg-white-50 dark:bg-white-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white-800 dark:border-white-700">
@@ -47,13 +63,14 @@ export default function Login() {
                     type="email"
                     name="email"
                     id="email"
-                    value={value.email}
-                    onChange={handleChange}
+                    value={email}
+                    onChange={(e)=>setEmail( e.target.value)}
                     className="bg-white-50 border border-white-300 text-white-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-green-500 dark:focus:border-green-500 focus:outline-none"
                     placeholder="name@company.com"
                     required
                   />
                 </div>
+                {errors.email && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.email}</p>}
                 <div>
                   <label
                     htmlFor="password"
@@ -65,15 +82,15 @@ export default function Login() {
                     type="password"
                     name="password"
                     id="password"
-                    value={value.password}
-                    onChange={handleChange}
+                    value={password}
+                    onChange={(e)=> setPassword(e.target.value)}
                     className="bg-white-50 border border-white-300 text-white-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-green-500 dark:focus:border-green-500 focus:outline-none"
                     placeholder="••••••••"
                     required
                   />
                 </div>
+                {errors.password && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.password}</p>}
 
-                <p className='block mb-2 text-sm font-medium text-red-600 dark:text-red-600 text-center' >{error? error : 'dddddddd'}</p>
                 <button
                   type="submit"
                   className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
@@ -99,6 +116,5 @@ export default function Login() {
           </div>
         </div>
       </section>
-    </div>
   )
 }

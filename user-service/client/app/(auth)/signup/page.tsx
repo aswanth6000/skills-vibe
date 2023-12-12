@@ -5,20 +5,23 @@ import { GoogleAuthProvider, getAuth, signInWithPopup, UserCredential, OAuthCred
 import {app} from '../../../config/firebase'
 import axios from '../../../config/axios'
 import useFormValidation from '@/hooks/validation';
+import { useRouter } from 'next/navigation';
+
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
-
 
 interface userDataType{
   username: string | null;
   email: string | null;
   google: boolean;
-  password: string | null
+  password: string | null,
+  phone: number | string | null
 }
 
 
 
 export default function Signup() {
+  const router = useRouter()
   const {
     name,
     setName,
@@ -29,14 +32,18 @@ export default function Signup() {
     confirmPassword,
     setConfirmPassword,
     errors,
+    phone, 
+    setPhone
   } = useFormValidation();
 
   const  handleSubmit  = (e: React.FormEvent<HTMLFormElement>) =>{
+    router.push('signup/otp')
     e.preventDefault()
       const userData: userDataType = {
         username: name,
         email: email,
         google: false,
+        phone: phone,
         password: password
       }
       console.log(userData);
@@ -47,6 +54,7 @@ export default function Signup() {
 
   const handleLogin = () =>{
     console.log("button clicked");
+
     
     signInWithPopup(auth, provider)
     .then((result: UserCredential) => {
@@ -56,6 +64,7 @@ export default function Signup() {
       const userData: userDataType = {
         username: user.displayName,
         email: user.email,
+        phone: '',
         password: '',
         google: true
       };
@@ -73,6 +82,7 @@ export default function Signup() {
   const sendUserData = async (userData: userDataType) => {
     try {
       const response = await axios.post('/signup', userData, {
+        method: 'POST',
         headers: {
           "Content-Type": 'application/json'
         }
@@ -112,6 +122,25 @@ export default function Signup() {
                     required
                   />
                   {errors.name && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.name}</p>}
+                </div>
+                <div>
+                  <label
+                    htmlFor="phone"
+                    className="block mb-2 text-sm font-medium text-white-900 dark:text-black"
+                  >
+                    Your Phone Number
+                  </label>
+                  <input
+                    type="number"
+                    name="phone"
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="bg-white-50 border border-white-300 text-white-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-green-500 dark:focus:border-green-500 focus:outline-none"
+                    placeholder="Your Phone Number"
+                    required
+                  />
+                  {errors.phone && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.phone}</p>}
                 </div>
                 <div>
                   <label
