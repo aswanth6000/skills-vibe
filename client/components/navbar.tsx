@@ -67,7 +67,7 @@ export default function Navbar() {
               <li className="nav-item">
                {user ? <a
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                  href={`/userhome/${user._id}`}
+                  href={`/userprofile/${user._id}`}
                 >
                 {user.username}
                 </a> :
