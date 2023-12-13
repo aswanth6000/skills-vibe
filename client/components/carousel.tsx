@@ -21,10 +21,8 @@ export const CarouselDefault: FC<CarouselDefaultProps> = ({stl}) => {
     <Swiper
       spaceBetween={50}
       slidesPerView={1}
-      onSlideChange={() => console.log('slide change')}
       modules={[Autoplay]}
       autoplay={{delay:5000}}
-      onSwiper={(swiper) => console.log(swiper)}
       loop={true}
       className='h-auto w-full'
     >

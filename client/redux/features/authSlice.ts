@@ -7,7 +7,7 @@ interface InitialState {
 interface AuthState {
   isAuth: boolean;
   username: string;
-  uid: string;
+  _id: string;
   isAdmin: boolean;
   token: string;
   
@@ -17,7 +17,7 @@ const initialState: InitialState = {
   value: {
     isAuth: false,
     username: '',
-    uid: '',
+    _id: '',
     token: '',
     isAdmin: false,
   },

@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { logIn,  } from "@/redux/features/authSlice";
 import React,{ useState } from "react";
 import { AppDispatch, useAppSelector } from "@/redux/store";
-import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 interface FormValues {
   email: string;
@@ -46,7 +45,6 @@ export default function Login() {
   const sendUserData = async (userData: userDataType) => {
     try {
       const response = await axios.post('/login', userData, {
-        method: 'POST',
         headers: {
           "Content-Type": 'application/json'
         }
@@ -63,6 +61,9 @@ export default function Login() {
           token: token,
           ...user
         }))
+        localStorage.setItem('user', JSON.stringify(user));
+        console.log('kkkkkkkkkkkkkkkk',localStorage);
+        
         router.push('/')
       }else if(response.status === 203){
         setErr(response.data.message)
@@ -71,7 +72,7 @@ export default function Login() {
       console.error('Error sending user data to server:', error);
     }
   };
-  const username = useAppSelector((state)=> state.authReducer.value)
+  const username = useAppSelector((state)=> state.auth.value)
   console.log(username);
   
       

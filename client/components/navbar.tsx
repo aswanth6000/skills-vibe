@@ -1,7 +1,16 @@
 "use client"
-import React,{useState} from "react"
+import { useAppSelector } from "@/redux/store";
+import React,{useState, useEffect} from "react"
+
 export default function Navbar() {
+  localStorage.getItem('user');
+  const user = useAppSelector((state)=> state.auth.value)
+  console.log(user.username);
+  
   const [navbarOpen, setNavbarOpen] = useState<Boolean>(false);
+  useEffect(() => {
+    setNavbarOpen(false);
+  }, [user]);
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-green-600 ">
@@ -56,12 +65,18 @@ export default function Navbar() {
                 </a>
               </li>
               <li className="nav-item">
+               {user ? <a
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                  href={`/userhome/${user._id}`}
+                >
+                {user.username}
+                </a> :
                 <a
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
                   href="/login"
                 >
                 Login
-                </a>
+                </a>}
               </li>
               <li className="nav-item">
                 <a
@@ -71,6 +86,14 @@ export default function Navbar() {
                   Contact
                 </a>
               </li>
+               {user.username && <li className="nav-item">
+                <a
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                  href="#pablo"
+                >
+                  Logout
+                </a>
+              </li>}
             </ul>
           </div>
         </div>
