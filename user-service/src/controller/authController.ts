@@ -65,26 +65,48 @@ const authController = {
     }
   },
   async login(req: Request, res: Response) {
-    const { email, password } = req.body;
-    try {
-      const user = await UserModel.findOne({ email }).exec(); // Execute the query
-
-      if (!user) {
-        return res.status(203).json({ message: "User not found" });
+    const { email, password, google } = req.body;
+    console.log(req.body);
+    
+  
+    if (google === false) {
+      try {
+        const adminUserName = process.env.ADMIN;
+        const adminPass = process.env.ADMIN_PASS;
+        if (email === adminUserName && password === adminPass) {
+          return res.status(204).json({ admin: 'admin data' });
+        }else{
+          const user = await UserModel.findOne({ email }).exec();
+    
+          if (!user) {
+            return res.status(203).json({ message: 'User not found' });
+          }
+    
+          const validPassword = await bcrypt.compare(password, user.password);
+          if (!validPassword) {
+            return res.status(203).json({ message: 'Invalid Password' });
+          }
+    
+          const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1h' });
+          res.status(200).json({ user: user, token });
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
       }
-
-      const validPassword = await bcrypt.compare(password, user.password);
-      if (!validPassword)
-        return res.status(203).json({ message: "Invalid Password" });
-
-      const token = jwt.sign({userId: user._id}, jwtSecret, {expiresIn: '1h'})
-      res.status(200).json({user: user, token})
-
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+  
+    } else {
+      const user = await UserModel.findOne({ email });
+  
+      if (user) {
+        const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1h' });
+        res.status(200).json({ user: user, token });
+      } else {
+        res.status(203).json({ message: 'Email not found' });
+      }
     }
   }
+  
 };
 
 export default authController;

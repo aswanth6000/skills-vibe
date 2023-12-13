@@ -4,13 +4,19 @@ import useFormValidation from "@/hooks/validation";
 import GoogleButton from 'react-google-button'
 import { useDispatch } from "react-redux";
 import { logIn,  } from "@/redux/features/authSlice";
+import { GoogleAuthProvider, getAuth, signInWithPopup, UserCredential, OAuthCredential } from "firebase/auth";
 import React,{ useState } from "react";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
+import {app} from '../../../config/firebase'
+
 interface FormValues {
   email: string;
   password: string;
 }
+
+const provider = new GoogleAuthProvider();
+const auth = getAuth(app);
 interface AuthState {
   isAuth: boolean;
   username: string;
@@ -23,6 +29,11 @@ interface AuthState {
 interface userDataType{
   email: string | null;
   password: string | null,
+  google: boolean
+}
+interface userDataTypeG{
+  email: string | null;
+  google: boolean | null;
 }
 
 export default function Login() {
@@ -37,12 +48,36 @@ export default function Login() {
     e.preventDefault()
     const userData :userDataType ={
       email: email,
-      password: password
+      password: password,
+      google: false
     }
     sendUserData(userData)
   }
+  const handleGoogleLogin = () =>{
+    console.log("button clicked");
 
-  const sendUserData = async (userData: userDataType) => {
+    
+    signInWithPopup(auth, provider)
+    .then((result: UserCredential) => {
+      const credential: OAuthCredential | null = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential?.accessToken || '';
+      const user = result.user;
+      const userData: userDataTypeG = {
+        email: user.email,
+        google: true
+      };
+      
+      
+      sendUserData(userData)
+      
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.customData.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
+    });
+  }
+  const sendUserData = async (userData: userDataType | userDataTypeG) => {
     try {
       const response = await axios.post('/login', userData, {
         headers: {
@@ -61,12 +96,18 @@ export default function Login() {
           token: token,
           ...user
         }))
-        localStorage.setItem('user', JSON.stringify(user));
-        console.log('kkkkkkkkkkkkkkkk',localStorage);
         
         router.push('/')
       }else if(response.status === 203){
         setErr(response.data.message)
+      }else if(response.status === 204){
+        dispatch(logIn({
+          isAuth: true,
+          token: token,
+          isAdmin: true,
+          ...user
+        }))
+        router.push('/adminhome')
       }
     } catch (error) {
       console.error('Error sending user data to server:', error);
@@ -135,7 +176,7 @@ export default function Login() {
                 <div className="ml-20">
                 <GoogleButton 
                 label='Continue with Google'
-                  onClick={() => { console.log('Google button clicked') }}
+                  onClick={handleGoogleLogin}
                 />
                 </div>
 
