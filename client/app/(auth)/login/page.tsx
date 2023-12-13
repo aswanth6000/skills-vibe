@@ -3,12 +3,21 @@ import axios from "../../../config/axios";
 import useFormValidation from "@/hooks/validation";
 import GoogleButton from 'react-google-button'
 import { useDispatch } from "react-redux";
-
+import { logIn,  } from "@/redux/features/authSlice";
 import React,{ useState } from "react";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch, useAppSelector } from "@/redux/store";
+import { useSelector } from "react-redux";
 interface FormValues {
   email: string;
   password: string;
+}
+interface AuthState {
+  isAuth: boolean;
+  username: string;
+  uid: string;
+  isAdmin: boolean;
+  token: string;
+  
 }
 
 interface userDataType{
@@ -40,10 +49,23 @@ export default function Login() {
         }
       });
       console.log('User data sent to server:', response.data);
+      const token = response.data.token
+      const user = response.data.user
+      console.log(response.status);
+      if(response.status === 200){
+        dispatch(logIn({
+          isAuth: true,
+          token: token,
+          ...user
+        }))
+      }
     } catch (error) {
       console.error('Error sending user data to server:', error);
     }
   };
+  const username = useAppSelector((state)=> state.authReducer.value)
+  console.log(username);
+  
       
   
   return (
