@@ -7,6 +7,7 @@ import { logIn,  } from "@/redux/features/authSlice";
 import React,{ useState } from "react";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 interface FormValues {
   email: string;
   password: string;
@@ -26,7 +27,9 @@ interface userDataType{
 }
 
 export default function Login() {
+  const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
+  const [err, setErr] = useState('')
   const {email, setEmail, errors, password, setPassword} = useFormValidation()
 
 
@@ -49,6 +52,8 @@ export default function Login() {
         }
       });
       console.log('User data sent to server:', response.data);
+      console.log(response.data.message);
+      
       const token = response.data.token
       const user = response.data.user
       console.log(response.status);
@@ -58,6 +63,9 @@ export default function Login() {
           token: token,
           ...user
         }))
+        router.push('/')
+      }else if(response.status === 203){
+        setErr(response.data.message)
       }
     } catch (error) {
       console.error('Error sending user data to server:', error);
@@ -115,7 +123,7 @@ export default function Login() {
                   />
                 </div>
                 {errors.password && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.password}</p>}
-
+                {err && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{err}</p>}
                 <button
                   type="submit"
                   className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"

@@ -70,12 +70,12 @@ const authController = {
       const user = await UserModel.findOne({ email }).exec(); // Execute the query
 
       if (!user) {
-        return res.status(401).send({ message: "User not found" });
+        return res.status(203).json({ message: "User not found" });
       }
 
       const validPassword = await bcrypt.compare(password, user.password);
       if (!validPassword)
-        return res.status(401).send({ message: "Invalid Password" });
+        return res.status(203).json({ message: "Invalid Password" });
 
       const token = jwt.sign({userId: user._id}, jwtSecret, {expiresIn: '1h'})
       res.status(200).json({user: user, token})
