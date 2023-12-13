@@ -68,7 +68,7 @@ export default function Signup() {
         password: '',
         google: true
       };
-      console.log(userData);
+      
       
       sendUserData(userData)
       

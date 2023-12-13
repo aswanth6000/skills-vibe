@@ -1,9 +1,15 @@
 "use client"
+import { logOut } from "@/redux/features/authSlice";
 import { useAppSelector } from "@/redux/store";
-import React,{useState, useEffect} from "react"
+import React,{useState, useEffect} from "react" ;
+import { AppDispatch } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+
 
 export default function Navbar() {
-  localStorage.getItem('user');
+  const router = useRouter()
+  const dispatch = useDispatch<AppDispatch>()
   const user = useAppSelector((state)=> state.auth.value)
   console.log(user.username);
   
@@ -11,6 +17,13 @@ export default function Navbar() {
   useEffect(() => {
     setNavbarOpen(false);
   }, [user]);
+  
+  const handleLogout = () =>{
+     dispatch(logOut())
+     router.push('/login')
+  }
+
+
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-green-600 ">
@@ -90,6 +103,7 @@ export default function Navbar() {
                 <a
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
                   href="#pablo"
+                  onClick={handleLogout}
                 >
                   Logout
                 </a>

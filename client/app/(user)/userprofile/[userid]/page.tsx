@@ -1,10 +1,13 @@
 'use client'
+import { useAppSelector } from '@/redux/store';
 import React, { useState } from 'react';
+import Navbar from '@/components/navbar';
 
 const UserProfileEdit: React.FC = () => {
-  const [username, setUsername] = useState('JohnDoe');
-  const [phone, setPhone] = useState('123-456-7890');
-  const [email, setEmail] = useState('johndoe@example.com');
+  const user = useAppSelector((state)=> state.auth.value)
+  const [username, setUsername] = useState(user.username);
+  const [phone, setPhone] = useState(user.phone);
+  const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState('');
 
   const handleProfilePhotoClick = () => {
@@ -18,7 +21,9 @@ const UserProfileEdit: React.FC = () => {
   };
 
   return (
-    <div className=" bg-white min-h-screen flex mt-24  ">
+    <section>
+      <Navbar/>
+    <div className=" bg-white min-h-screen flex mt-11  ">
       {/* Left Section - Profile Photo */}
       <div className="w-1/3 flex flex-col mt-24 items-center p-4">
         <div
@@ -100,6 +105,7 @@ const UserProfileEdit: React.FC = () => {
         {/* Add more buttons as needed */}
       </div>
     </div>
+    </section>
   );
 };
 

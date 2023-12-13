@@ -10,6 +10,9 @@ interface AuthState {
   _id: string;
   isAdmin: boolean;
   token: string;
+  phone: number;
+  email: string;
+
   
 }
 
@@ -20,6 +23,8 @@ const initialState: InitialState = {
     _id: '',
     token: '',
     isAdmin: false,
+    phone: 0,
+    email: ''
   },
 };
 

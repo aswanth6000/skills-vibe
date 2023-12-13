@@ -1,4 +1,4 @@
-
+'use client'
 import Navbar from "@/components/navbar"
 import { CarouselDefault } from "@/components/carousel"
 import Grid from '@/components/grid'

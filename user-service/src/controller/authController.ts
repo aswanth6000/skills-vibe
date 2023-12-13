@@ -25,7 +25,7 @@ const authController = {
 
           console.log('User created');
           // Generate a JWT token
-          const token = jwt.sign({ userId: newUser._id }, 'your-secret-key', { expiresIn: '1h' });
+          const token = jwt.sign({ userId: newUser._id }, jwtSecret, { expiresIn: '1h' });
 
           res.status(201).json({ user: newUser, token });
         } else {
