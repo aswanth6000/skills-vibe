@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faBell, faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faBell, faCircleQuestion, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { Menu } from '@headlessui/react'
 
@@ -104,10 +104,10 @@ export default function Navbar() {
                 </a>
               </li>
             )}
-            <li className="nav-item">
+            {user && <li className="nav-item">
               <Menu as="div" className="relative z-10">
                 <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
-                  More
+                  Business<FontAwesomeIcon className="ml-1" icon={faCaretDown} />
                 </Menu.Button>
                 <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
                   <Menu.Item>
@@ -118,7 +118,7 @@ export default function Navbar() {
                         } hover:bg-blue-500 hover:text-white`}
                         href="/account-settings"
                       >
-                        Account settings
+                        Orders
                       </a>
                     )}
                   </Menu.Item>
@@ -130,48 +130,61 @@ export default function Navbar() {
                         } hover:bg-blue-500 hover:text-white`}
                         href="/documentation"
                       >
-                        Documentation
+                        Gigs
+                      </a>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <a
+                        className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
+                          active ? "bg-blue-500 text-white" : ""
+                        } hover:bg-blue-500 hover:text-white`}
+                        href="/documentation"
+                      >
+                        Profile
+                      </a>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <a
+                        className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
+                          active ? "bg-blue-500 text-white" : ""
+                        } hover:bg-blue-500 hover:text-white`}
+                        href="/documentation"
+                      >
+                        Earnings
                       </a>
                     )}
                   </Menu.Item>
                 </Menu.Items>
               </Menu>
-            </li>
-            {user && (
-              <li className="nav-item">
-                <Link
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
-                  href="/gigform"
-                >
-                  business
-                </Link>
-              </li>
-            )}
-            <li className="nav-item">
-              {user ? (
-                <Link
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
-                  href={`/userprofile/${user._id}`}
-                >
-                  {user.username}
-                </Link>
-              ) : (
-                <Link
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
-                  href="/login"
-                >
-                  Login
-                </Link>
-              )}
-            </li>
-            <li className="nav-item">
-              <a
-                className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
-                href="#pablo"
-              >
-                Analytics
-              </a>
-            </li>
+            </li>}
+
+            {user && <li className="nav-item">
+              <Menu as="div" className="relative z-10">
+                <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
+                  analytics<FontAwesomeIcon className="ml-1" icon={faCaretDown} />
+                </Menu.Button>
+                <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <a
+                        className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
+                          active ? "bg-blue-500 text-white" : ""
+                        } hover:bg-blue-500 hover:text-white`}
+                        href="/account-settings"
+                      >
+                        Overview
+                      </a>
+                    )}
+                  </Menu.Item>
+                  
+                </Menu.Items>
+              </Menu>
+            </li>}
+
             <li className="nav-item">
               <FontAwesomeIcon
                 className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
