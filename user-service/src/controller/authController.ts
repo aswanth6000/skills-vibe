@@ -49,14 +49,10 @@ const authController = {
           await newUser.save();
 
           console.log('User created');
-          // Generate a JWT token
-          const token = jwt.sign({ userId: newUser._id }, jwtSecret, { expiresIn: '1h' });
-
-          res.status(201).json({ user: newUser, token });
+          res.status(201).json({ user: 'created' });
         } else {
-          // If the user already exists, send existing data
           console.log('User already exists');
-          res.status(200).json({ user, message: 'User already exists.' });
+          res.status(200).json({ message: 'User already exists.' });
         }
       }
     } catch (err) {
@@ -75,6 +71,7 @@ const authController = {
         const adminPass = process.env.ADMIN_PASS;
         if (email === adminUserName && password === adminPass) {
           return res.status(204).json({ admin: 'admin data' });
+
         }else{
           const user = await UserModel.findOne({ email }).exec();
     

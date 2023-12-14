@@ -21,6 +21,7 @@ interface userDataType{
 
 
 export default function Signup() {
+  const [err, setErr] = useState('')
   const router = useRouter()
   const {
     name,
@@ -87,7 +88,11 @@ export default function Signup() {
           "Content-Type": 'application/json'
         }
       });
-      console.log('User data sent to server:', response.data);
+      if(response.status === 200){
+        router.push('/login')
+      }else if(response.status === 201){
+        setErr(response.data.message)
+      }
     } catch (error) {
       console.error('Error sending user data to server:', error);
     }
@@ -202,7 +207,7 @@ export default function Signup() {
                   {errors.confirmPassword && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.confirmPassword}</p>}
 
                 </div>
-
+                  {err && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{err}</p> }
                 <button
                   type="submit"
                   className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"

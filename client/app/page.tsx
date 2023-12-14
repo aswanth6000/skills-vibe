@@ -11,7 +11,7 @@ export default function Home() {
     autosec : 6000
   }
   return (
-    <>
+    <div className="bg-bodywhite">
     <Navbar/>
     <CarouselDefault stl={styles}/>
     <Grid/>
@@ -20,6 +20,6 @@ export default function Home() {
     <Grid/>
     <Popular/>
     <Footer/>
-    </>
+    </div>
   )
 }
