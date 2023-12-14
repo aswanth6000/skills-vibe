@@ -2,6 +2,7 @@
 import { useAppSelector } from '@/redux/store';
 import React, { useState } from 'react';
 import Navbar from '@/components/navbar';
+import Image from 'next/image';
 
 const UserProfileEdit: React.FC = () => {
   const user = useAppSelector((state)=> state.auth.value)
@@ -21,9 +22,9 @@ const UserProfileEdit: React.FC = () => {
   };
 
   return (
-    <section>
+    <section> 
       <Navbar/>
-    <div className=" bg-white min-h-screen flex mt-11  ">
+    <div className=" bg-bodywhite min-h-screen flex   ">
       {/* Left Section - Profile Photo */}
       <div className="w-1/3 flex flex-col mt-24 items-center p-4">
         <div
@@ -31,8 +32,10 @@ const UserProfileEdit: React.FC = () => {
           onClick={handleProfilePhotoClick}
         >
           {/* You can use an actual profile photo here */}
-          <img
-            src="https://via.placeholder.com/150"
+          <Image
+            width={500}
+            height={500}
+            src="https://res.cloudinary.com/dihrwghx2/image/upload/v1699291554/admin-user-react/default-pic_rkk3gl.jpg"
             alt="Profile"
             className="w-full h-full object-cover"
           />

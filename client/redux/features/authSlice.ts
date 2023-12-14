@@ -12,6 +12,7 @@ interface AuthState {
   token: string;
   phone: number;
   email: string;
+  profilePicture: string
 
   
 }
@@ -24,7 +25,9 @@ const initialState: InitialState = {
     token: '',
     isAdmin: false,
     phone: 0,
-    email: ''
+    email: '',
+    profilePicture: ''
+
   },
 };
 

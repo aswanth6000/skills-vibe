@@ -9,6 +9,8 @@ import React,{ useState } from "react";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import {app} from '../../../config/firebase'
+import { useSelector } from "react-redux";
+
 
 interface FormValues {
   email: string;
@@ -37,6 +39,10 @@ interface userDataTypeG{
 }
 
 export default function Login() {
+  const user = useAppSelector((state)=> state.auth.value)
+
+  // Log the user state
+  console.log('User State:', user);
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const [err, setErr] = useState('')
