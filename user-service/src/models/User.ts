@@ -28,7 +28,7 @@ const userSchema = new Schema<User>({
     type: Number,
   },
   bio: {
-    type: string
+    type: String
   },
   email: {
     type: String,

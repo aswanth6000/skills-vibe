@@ -9,12 +9,20 @@ import makeAnimated from 'react-select/animated';
 import { textarea } from '@material-tailwind/react';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
 
 const UserProfileEdit: React.FC = () => {
-  const colourOptions = [
-    { value: 'red', label: 'Red' },
-    { value: 'blue', label: 'Blue' },
-    { value: 'green', label: 'Green' },
+   const skillsOptions = [
+    { value: 'graphic-design', label: 'Graphic Design' },
+    { value: 'web-development', label: 'Web Development' },
+    { value: 'content-writing', label: 'Content Writing' },
+    { value: 'digital-marketing', label: 'Digital Marketing' },
+    { value: 'video-editing', label: 'Video Editing' },
+    { value: 'music-production', label: 'Music Production' },
+    { value: 'social-media-management', label: 'Social Media Management' },
+    { value: 'translation', label: 'Translation' },
+    { value: 'voice-over', label: 'Voice Over' },
+    { value: 'illustration', label: 'Illustration' },
   ];
   const animatedComponents = makeAnimated();
   const user = useAppSelector((state) => state.auth.value);
@@ -138,9 +146,9 @@ const UserProfileEdit: React.FC = () => {
             <Select
               closeMenuOnSelect={false}
               components={animatedComponents}
-              defaultValue={[colourOptions[4], colourOptions[5]]}
+              defaultValue={[skillsOptions[4], skillsOptions[5]]}
               isMulti
-              options={colourOptions}
+              options={skillsOptions}
             />
           </div>
           <div className="mt-4">
@@ -164,8 +172,17 @@ const UserProfileEdit: React.FC = () => {
             Orders
           </button>
           <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
+            Portfolio
+          </button>
+          <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
             Active Gigs
           </button>
+            <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
+          <Link href='/gigform' >
+            New Gig
+          </Link>
+            </button>
+
           <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
             Dashboard
           </button>
