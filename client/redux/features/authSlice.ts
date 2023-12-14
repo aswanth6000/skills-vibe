@@ -12,7 +12,7 @@ interface AuthState {
   token: string;
   phone: number;
   email: string;
-  profilePicture: string
+  profilePicture:  string
 
   
 }
