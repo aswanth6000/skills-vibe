@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { UserModel } from "../models/User";
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import jwt, { Secret } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 dotenv.config()
 
-const jwtSecret: string | undefined = process.env.JWT_KEY || 'defaultSecret'
+const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
 const authController = {
   async signup(req: Request, res: Response) {
@@ -43,7 +43,8 @@ const authController = {
             username: username,
             email: email,
             phone,
-            password: hashedPassword
+            password: hashedPassword,
+            status: true
           });
 
           await newUser.save();
@@ -83,9 +84,15 @@ const authController = {
           if (!validPassword) {
             return res.status(203).json({ message: 'Invalid Password' });
           }
-    
-          const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1h' });
-          res.status(200).json({ user: user, token });
+          const payload = {
+            userId : user._id,
+            email: user.email,
+            username: user.username,
+            status: user.status
+          }
+          const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
+          res.cookie('jwt', token, { httpOnly: true, maxAge: 300000 }); 
+          res.status(200).json({ token });
         }
       } catch (error) {
         console.error(error);
@@ -96,8 +103,16 @@ const authController = {
       const user = await UserModel.findOne({ email });
   
       if (user) {
-        const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1h' });
-        res.status(200).json({ user: user, token });
+        const payload = {
+          userId : user._id,
+          email: user.email,
+          username: user.username,
+          status: user.status
+        }
+        const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
+        res.cookie('jwt', token, { httpOnly: true, maxAge: 300000 }); 
+        const hh = req.headers
+        res.status(200).json({ token  });
       } else {
         res.status(203).json({ message: 'Email not found' });
       }
