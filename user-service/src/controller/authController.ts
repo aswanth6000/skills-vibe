@@ -20,7 +20,6 @@ const authController = {
         const user = await UserModel.findOne({ email });
 
         if (!user) {
-          // If the user doesn't exist, create a new account
           const newUser = new UserModel({
             username: username,
             email: email,
@@ -71,9 +70,6 @@ const authController = {
 
   async login(req: Request, res: Response) {
     const { email, password, google } = req.body;
-    console.log(req.body);
-    
-  
     if (google === false) {
       try {
         const adminUserName = process.env.ADMIN;
@@ -119,7 +115,6 @@ const authController = {
         }
         const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
         res.cookie('jwt', token, { httpOnly: true, maxAge: 300000 }); 
-        const hh = req.headers
         res.status(200).json({ token  });
       } else {
         res.status(203).json({ message: 'Email not found' });

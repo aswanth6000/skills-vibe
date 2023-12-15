@@ -16,7 +16,7 @@ interface User {
   availability: boolean;
   portfolio: Types.ObjectId;
   orders: Types.ObjectId;
-  bio: string
+  description: string
 }
 
 const userSchema = new Schema<User>({
@@ -27,7 +27,7 @@ const userSchema = new Schema<User>({
   phone: {
     type: Number,
   },
-  bio: {
+  description: {
     type: String
   },
   email: {

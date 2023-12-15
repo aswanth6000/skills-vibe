@@ -5,6 +5,7 @@ import verifyToken from "../middleware/verifyToken";
 const userRouter = express.Router()
 
 userRouter.get('/userhome',verifyToken,userController.getUserHome)
+userRouter.put('/userProfileUpdate' ,verifyToken, userController.userProfileUpdate)
 
 
 export default userRouter

@@ -1,18 +1,29 @@
 'use client'
-import { useEffect } from 'react';
 import { useAppSelector } from '@/redux/store';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Navbar from '@/components/navbar';
+import axios from '../../../../config/axios'
+import  OptionTypeBase  from 'react-select';
 import Image from 'next/image';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
+import  ValueType from 'react-select';
 import { textarea } from '@material-tailwind/react';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
+import useFormValidation from '@/hooks/validation';
+
+
+
+type StateManagedSelect = {
+  value: string;
+  label: string;
+};
+let bearerToken : string | null;
 
 const UserProfileEdit: React.FC = () => {
-   const skillsOptions = [
+   const skillsOptions: StateManagedSelect[] = [
     { value: 'graphic-design', label: 'Graphic Design' },
     { value: 'web-development', label: 'Web Development' },
     { value: 'content-writing', label: 'Content Writing' },
@@ -25,41 +36,102 @@ const UserProfileEdit: React.FC = () => {
     { value: 'illustration', label: 'Illustration' },
   ];
   const animatedComponents = makeAnimated();
+
+  // Get user data from Redux state
   const user = useAppSelector((state) => state.auth.value);
-  const [username, setUsername] = useState(user.username);
-  const [phone, setPhone] = useState(user.phone);
-  const [email, setEmail] = useState(user.email);
-  const [password, setPassword] = useState('');
-  const [uploadPic, setUploadPic] = useState<File | null>(null);
-  const [pic, setPic] = useState< null | string>(null);
 
-  const handleProfilePhotoClick = () => {
-    // Logic to handle profile photo editing
-    alert('Edit profile photo');
-  };
+  // Use state hooks to manage form data
+  const [formData, setFormData]: any = useState({
+    username: '',
+    phone: 0,
+    email: '',
+    description: '',
+    selectedSkills: [] as StateManagedSelect[],
+  });
 
-  const handleSaveChanges = () => {
-    // Logic to save changes
-    alert('Changes saved');
-  };
+  // Destructure formData for easy access
+  const { username, phone, email, description, selectedSkills } = formData;
 
+  // Use effect to fetch user data from the server on component mount
   useEffect(() => {
-    if (user) {
-      setPic(user.profilePicture || null);
+    const bearerToken = localStorage.getItem('token');
+    console.log('jjjjjjjjjjj',bearerToken);
+    
+    // Check if user is defined and bearerToken is available
+    if (user && bearerToken) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get('/userhome', {
+            headers: {
+              'Authorization': `Bearer ${bearerToken}`,
+            },
+          });
+
+          const userData = response.data;
+          console.log("User data:", userData);
+
+          // Update the form data with user data
+          setFormData({
+            username: userData.username,
+            phone: userData.phone,
+            email: userData.email,
+            description: userData.description,
+            selectedSkills: userData.skills || [],
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      fetchData();
     }
   }, [user]);
+
+  const handleSkillsChange = (selectedOptions:any) => {
+    const selectedSkillsArray = selectedOptions as StateManagedSelect[];
+    setFormData({
+      ...formData,
+      selectedSkills: selectedSkillsArray,
+    });
+  };
+
+
+
+  const handleSaveChanges = async () => {
+    const updatedUserData = {
+      username,
+      email,
+      phone,
+      description,
+      skills: selectedSkills,
+    };
+
+    console.log("Updated user data:", updatedUserData);
+    try {
+      const response = await axios.put('/userProfileUpdate', updatedUserData, {
+        headers: {
+          'Authorization': `Bearer ${bearerToken}`,
+        },
+      });
+      console.log("Response from server:", response.data);
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setPic(URL.createObjectURL(file));
-      setUploadPic(file);
+      setFormData({
+        ...formData,
+        profilePicture: URL.createObjectURL(file),
+        uploadPic: file,
+      });
     }
   };
-  
 
+  // Event handler for clicking on the profile picture
   const handleImageClick = () => {
-    
     // Trigger the file input when the image is clicked
     const fileInput = document.getElementById('file_input') as HTMLInputElement | null;
     if (fileInput) {
@@ -71,7 +143,8 @@ const UserProfileEdit: React.FC = () => {
     <section>
       <Navbar />
       
-      <div className=" bg-bodywhite min-h-screen flex   ">
+      
+      <div className="bg-bodywhite min-h-screen flex">
         {/* Left Section - Profile Photo */}
         <div className="w-1/3 bg-navwhite h-auto ml-5 rounded-2xl border-black flex flex-col mt-2 items-center p-4 mb-12">
           <div className="w-56 h-56 rounded-full cursor-pointer overflow-hidden">
@@ -84,8 +157,8 @@ const UserProfileEdit: React.FC = () => {
             />
             <Image
               src={
-                pic
-                  ? pic
+                formData.profilePicture
+                  ? formData.profilePicture
                   : "https://res.cloudinary.com/dihrwghx2/image/upload/v1699291554/admin-user-react/default-pic_rkk3gl.jpg"
               }
               alt="Profile"
@@ -98,14 +171,13 @@ const UserProfileEdit: React.FC = () => {
           <h2 className="text-2xl font-bold mb-2">{username}</h2>
         </div>
 
+        {/* Middle Section - User Details */}
         <div className="w-1/3 flex-grow p-4 bg-navwhite h-auto ml-5 mt-2 rounded-2xl border-black mb-12">
           <h2 className="text-2xl font-bold mb-2">{username}</h2>
-          <p className="text-gray-600">
-            {/* User bio or additional details */}
-          </p>
+          <p className="text-gray-600">{description}</p>
 
           {/* Editable Fields */}
-          <div className="mt-4 ">
+          <div className="mt-4">
             <label className="block mb-2 text-sm font-medium text-gray-600">
               Username
             </label>
@@ -113,7 +185,7 @@ const UserProfileEdit: React.FC = () => {
               type="text"
               className="w-96 p-2 border rounded-md focus:outline-none focus:border-green-500"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             />
           </div>
           <div className="mt-4">
@@ -124,7 +196,7 @@ const UserProfileEdit: React.FC = () => {
               type="tel"
               className="w-96 p-2 border rounded-md focus:outline-none focus:border-green-500"
               value={phone}
-              onChange={(e) => setPhone(parseInt(e.target.value, 10))}
+              onChange={(e) => setFormData({ ...formData, phone: parseInt(e.target.value, 10) })}
             />
           </div>
           <div className="mt-4">
@@ -135,7 +207,7 @@ const UserProfileEdit: React.FC = () => {
               type="email"
               className="w-96 p-2 border rounded-md focus:outline-none focus:border-green-500"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
 
@@ -146,16 +218,21 @@ const UserProfileEdit: React.FC = () => {
             <Select
               closeMenuOnSelect={false}
               components={animatedComponents}
-              defaultValue={[skillsOptions[4], skillsOptions[5]]}
+              value={selectedSkills}
               isMulti
               options={skillsOptions}
+              onChange={handleSkillsChange}
             />
           </div>
           <div className="mt-4">
             <label className="block mb-2 text-sm font-medium text-gray-600">
               Brief description about yourself
             </label>
-            <textarea className="w-96 p-2 border rounded-md focus:outline-none focus:border-green-500" />
+            <textarea
+              className="w-96 p-2 border rounded-md focus:outline-none focus:border-green-500"
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              value={description}
+            />
           </div>
 
           {/* Save Changes Button */}
