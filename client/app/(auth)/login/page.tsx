@@ -1,5 +1,6 @@
 'use client'
 import axios from "../../../config/axios";
+import { useEffect } from "react";
 import useFormValidation from "@/hooks/validation";
 import GoogleButton from 'react-google-button'
 import { useDispatch } from "react-redux";
@@ -9,7 +10,6 @@ import React,{ useState } from "react";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import {app} from '../../../config/firebase'
-import { useSelector } from "react-redux";
 
 
 interface FormValues {
@@ -40,10 +40,13 @@ interface userDataTypeG{
 
 export default function Login() {
   const user = useAppSelector((state)=> state.auth.value)
-
-  // Log the user state
-  console.log('User State:', user);
   const router = useRouter()
+  useEffect(() => {
+    if (user.isAuth) {
+      router.push('/userhome');
+    }
+  }, [user.isAuth, router]);
+  console.log('User State:', user);
   const dispatch = useDispatch<AppDispatch>()
   const [err, setErr] = useState('')
   const {email, setEmail, errors, password, setPassword} = useFormValidation()
@@ -91,19 +94,19 @@ export default function Login() {
         }
       });
       console.log('User data sent to server:', response.data);
-      console.log(response.data.message);
       
       const token = response.data.token
       const user = response.data.user
       console.log(response.status);
       if(response.status === 200){
+        localStorage.setItem('token', token);
         dispatch(logIn({
           isAuth: true,
           token: token,
           ...user
         }))
         
-        router.push('/')
+        router.push('/userhome')
       }else if(response.status === 203){
         setErr(response.data.message)
       }else if(response.status === 204){

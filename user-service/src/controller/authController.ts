@@ -7,7 +7,12 @@ dotenv.config()
 
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
+
+
 const authController = {
+// @DESC users can signup to the website by validation
+// @METHOD  post
+// @PATH /signup
   async signup(req: Request, res: Response) {
     const { email, username, google } = req.body;
     try {
@@ -24,12 +29,10 @@ const authController = {
           await newUser.save();
 
           console.log('User created');
-          // Generate a JWT token
           const token = jwt.sign({ userId: newUser._id }, jwtSecret, { expiresIn: '1h' });
 
           res.status(201).json({ user: newUser, token });
         } else {
-          // If the user already exists, send existing data
           console.log('User already exists');
           res.status(200).json({ user, message: 'User already exists.' });
         }
@@ -61,6 +64,11 @@ const authController = {
       res.status(500).send('Internal Server Error');
     }
   },
+
+// @DESC users can login to the website by validation
+// @METHOD  post
+// @PATH /login
+
   async login(req: Request, res: Response) {
     const { email, password, google } = req.body;
     console.log(req.body);
@@ -92,7 +100,7 @@ const authController = {
           }
           const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
           res.cookie('jwt', token, { httpOnly: true, maxAge: 300000 }); 
-          res.status(200).json({ token });
+          res.status(200).json({ token ,user });
         }
       } catch (error) {
         console.error(error);

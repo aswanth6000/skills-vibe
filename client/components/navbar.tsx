@@ -10,13 +10,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faBell, faCircleQuestion, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { Menu } from '@headlessui/react'
+import { button } from "@material-tailwind/react";
 
 
 export default function Navbar() {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const user = useAppSelector((state)=> state.auth.value)
-  console.log(user.profilePicture);
+  
   
   const [navbarOpen, setNavbarOpen] = useState<Boolean>(false);
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function Navbar() {
   }, [user]);
   
   const handleLogout = () =>{
+     localStorage.removeItem('token');
      dispatch(logOut())
      router.push('/login')
   }
@@ -206,13 +208,12 @@ export default function Navbar() {
 
             {user.username && (
               <li className="nav-item">
-                <Link
+                <button
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
-                  href="#pablo"
                   onClick={handleLogout}
                 >
                   Logout
-                </Link>
+                </button>
               </li>
             )}
 
