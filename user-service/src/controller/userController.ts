@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
 import { UserModel ,User } from "../models/User";
 import bcrypt from 'bcrypt'
+import cloudinary from '../config/cloudinary'
 import jwt, { Secret ,JwtPayload } from 'jsonwebtoken'
+import multer from 'multer'
 import dotenv from 'dotenv'
 dotenv.config()
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
 interface ExtendedRequest extends Request {
@@ -22,9 +26,10 @@ const userController = {
         
     },
 
-    async userProfileUpdate(req: Request, res: Response) {
+    async userProfileUpdate(req: any, res: Response) {
       try {
-        const { username, email, phone, description, skills } = req.body;
+        const folderName = 'skillVibe';
+        const updatedData = req.body;
         console.log(req.body);
         
         const token = req.headers.authorization?.split(' ')[1];
@@ -47,23 +52,15 @@ const userController = {
         console.log('Decoded Token:', decodedToken);
     
         const userId = decodedToken.userId
-    
-        const user = await UserModel.findById(userId);
-        console.log(user);
-        
-    
-        if (!user) {
-          res.status(404).json({ error: 'User not found' });
-          return;
+        if (req.file) {
+          const result = await cloudinary.uploader.upload(req.file.path, { public_id: `${folderName}/${req.file.originalname}` });
+          updatedData.profilePicture = result.secure_url;
         }
     
-        user.username = username;
-        user.email = email;
-        user.phone = phone;
-        user.description = description;
-        user.skills = skills;
+        const user = await UserModel.findByIdAndUpdate(userId, updatedData, { new: true });
+        console.log('updated user data: ',user);
+        
     
-        await user.save();
     
         res.status(200).json({ message: 'User profile updated successfully' });
       } catch (error) {

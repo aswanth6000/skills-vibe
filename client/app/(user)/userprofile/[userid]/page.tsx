@@ -118,18 +118,14 @@ const UserProfileEdit: React.FC = () => {
 
 
   const handleSaveChanges = async () => {
-    const updatedUserData = {
-      username,
-      email,
-      phone,
-      description,
-      skills: selectedSkills,
-    };
+    const updatedUserData = formData
 
+    
     console.log("Updated user data:", updatedUserData);
     try {
       const response = await axios.put('/userProfileUpdate', updatedUserData, {
         headers: {
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${bearerToken}`,
         },
       });
