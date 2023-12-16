@@ -3,7 +3,7 @@ import gigController from '../controllers/gigController'
 
 const router = express.Router();
 
-router.post('/addgig', )
+router.post('/addgig', gigController.addGig)
 
 
 
