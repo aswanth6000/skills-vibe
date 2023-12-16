@@ -3,11 +3,16 @@ import { UserModel } from "../models/User";
 import bcrypt from 'bcrypt'
 import jwt, { Secret } from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import * as amqp from 'amqplib';
+import RabbitMQ from '../../../messages/rabbitMQ'
 dotenv.config()
 
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
-
+interface UserLoggedInEvent {
+  userId: string;
+  timestamp: Date;
+}
 
 const authController = {
 // @DESC users can signup to the website by validation
@@ -96,6 +101,16 @@ const authController = {
           }
           const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
           res.cookie('jwt', token, { httpOnly: true, maxAge: 300000 }); 
+          try {
+            await publishUserLoggedInEvent(user._id);
+            console.log('User logged in event published successfully');
+          } catch (error) {
+            console.error('Error publishing user logged in event:', error);
+            // Handle the error or return an appropriate response to the client
+            res.status(500).json({ error: 'Internal Server Error' });
+          }
+          console.log("event publish call");
+          
           res.status(200).json({ token ,user });
         }
       } catch (error) {
@@ -123,5 +138,34 @@ const authController = {
   }
   
 };
+
+async function publishUserLoggedInEvent(userId: any): Promise<void> {
+  try {
+      console.log("Starting RabbitMQ producer...");
+
+      const channel = await RabbitMQ.createChannel();
+      const exchangeName = 'user-exchange';
+      const routingKey = 'user-logged-in';
+
+      // Declare the exchange
+      await channel.assertExchange(exchangeName, 'direct', { durable: false });
+
+      // Create and publish the UserLoggedInEvent
+      const userLoggedInEvent: UserLoggedInEvent = {
+          userId,
+          timestamp: new Date(),
+      };
+
+      // Publish the message to the exchange with the routing key
+      channel.publish(exchangeName, routingKey, Buffer.from(JSON.stringify(userLoggedInEvent)));
+
+      console.log('User logged in event published to RabbitMQ exchange');
+
+      // Close the channel
+      await channel.close();
+  } catch (error) {
+      console.error('Error publishing user logged in event:', error);
+  }
+}
 
 export default authController;

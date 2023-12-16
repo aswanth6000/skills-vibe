@@ -11,7 +11,7 @@ app.use(cors())
 dotenv.config()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8001;
 
 app.use(router)
 app.use(userRouter)
@@ -32,6 +32,9 @@ mongoose.connect(mongoUrl).then(()=>{
     console.log("Database connection error", err);
     
 })
+
+
+
 app.listen(PORT, ()=>{
     console.log(`server running on ${PORT}`);
 })
