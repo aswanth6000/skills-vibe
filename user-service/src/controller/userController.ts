@@ -22,9 +22,11 @@ const userController = {
         
     },
 
-    async userProfileUpdate(req: Request, res: Response): Promise<void> {
+    async userProfileUpdate(req: Request, res: Response) {
       try {
-        const { userId, username, email, phone, description, skills } = req.body;
+        const { username, email, phone, description, skills } = req.body;
+        console.log(req.body);
+        
         const token = req.headers.authorization?.split(' ')[1];
     
         if (!token) {
@@ -44,11 +46,7 @@ const userController = {
     
         console.log('Decoded Token:', decodedToken);
     
-        // Check if the user ID in the request matches the one in the token
-        if (userId !== decodedToken.userId) {
-          res.status(401).json({ error: 'Unauthorized - Invalid user ID' });
-          return;
-        }
+        const userId = decodedToken.userId
     
         const user = await UserModel.findById(userId);
         console.log(user);
@@ -69,7 +67,7 @@ const userController = {
     
         res.status(200).json({ message: 'User profile updated successfully' });
       } catch (error) {
-        console.error('Error handling user profile update:', error);
+        console.log('Error handling user profile update:', error);
         res.status(500).json({ error: 'Internal server error' });
       }
     }

@@ -12,12 +12,17 @@ interface User {
   updatedAt: Date;
   status: boolean;
   clients: Types.ObjectId[];
-  skills: string[];
+  skills: any;
   availability: boolean;
   portfolio: Types.ObjectId;
   orders: Types.ObjectId;
   description: string
 }
+
+const skillSchema = new Schema({
+  value: String,
+  label: String,
+});
 
 const userSchema = new Schema<User>({
   username: {
@@ -59,9 +64,10 @@ const userSchema = new Schema<User>({
     type: Types.ObjectId,
     ref: "User", // Assuming 'User' is the name of the model
   }],
-  skills: [{
-    type: String,
-  }],
+  skills: {
+    type: [skillSchema], // Expecting an array of skillSchema objects
+    default: [],
+  },
   availability: {
     type: Boolean,
   },

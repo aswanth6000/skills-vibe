@@ -13,6 +13,10 @@ import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import useFormValidation from '@/hooks/validation';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+
+
 
 
 
@@ -20,7 +24,8 @@ type StateManagedSelect = {
   value: string;
   label: string;
 };
-let bearerToken : string | null;
+
+let bearerToken: string | null 
 
 const UserProfileEdit: React.FC = () => {
    const skillsOptions: StateManagedSelect[] = [
@@ -37,6 +42,19 @@ const UserProfileEdit: React.FC = () => {
   ];
   const animatedComponents = makeAnimated();
 
+  const updateSucess = () => {
+    toast.success('Profile details updated successfully!!', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+  }
+
   // Get user data from Redux state
   const user = useAppSelector((state) => state.auth.value);
 
@@ -51,14 +69,16 @@ const UserProfileEdit: React.FC = () => {
 
   // Destructure formData for easy access
   const { username, phone, email, description, selectedSkills } = formData;
+  console.log(formData);
+  
 
   // Use effect to fetch user data from the server on component mount
   useEffect(() => {
-    const bearerToken = localStorage.getItem('token');
+    bearerToken = localStorage.getItem('token');
+    
     console.log('jjjjjjjjjjj',bearerToken);
     
-    // Check if user is defined and bearerToken is available
-    if (user && bearerToken) {
+    if (bearerToken) {
       const fetchData = async () => {
         try {
           const response = await axios.get('/userhome', {
@@ -113,9 +133,14 @@ const UserProfileEdit: React.FC = () => {
           'Authorization': `Bearer ${bearerToken}`,
         },
       });
+      console.log(response.status);
+      
+      if(response.status === 200){
+        updateSucess()
+      }
       console.log("Response from server:", response.data);
     } catch (error) {
-      console.error("Error updating user profile:", error);
+      console.log("Error updating user profile:", error);
     }
   };
 
@@ -268,6 +293,18 @@ const UserProfileEdit: React.FC = () => {
           </button>
         </div>
       </div>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </section>
   );
 };
