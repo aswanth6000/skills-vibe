@@ -28,6 +28,7 @@ type StateManagedSelect = {
 let bearerToken: string | null 
 
 const UserProfileEdit: React.FC = () => {
+  const [pic, setPic] = useState('')
    const skillsOptions: StateManagedSelect[] = [
     { value: 'graphic-design', label: 'Graphic Design' },
     { value: 'web-development', label: 'Web Development' },
@@ -88,6 +89,7 @@ const UserProfileEdit: React.FC = () => {
           });
 
           const userData = response.data;
+          setPic(userData.profilePicture)
           console.log("User data:", userData);
 
           // Update the form data with user data
@@ -180,7 +182,7 @@ const UserProfileEdit: React.FC = () => {
               src={
                 formData.profilePicture
                   ? formData.profilePicture
-                  : "https://res.cloudinary.com/dihrwghx2/image/upload/v1699291554/admin-user-react/default-pic_rkk3gl.jpg"
+                  : pic
               }
               alt="Profile"
               height={500}

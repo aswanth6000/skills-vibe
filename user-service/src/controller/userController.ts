@@ -3,11 +3,9 @@ import { UserModel ,User } from "../models/User";
 import bcrypt from 'bcrypt'
 import cloudinary from '../config/cloudinary'
 import jwt, { Secret ,JwtPayload } from 'jsonwebtoken'
-import multer from 'multer'
 import dotenv from 'dotenv'
 dotenv.config()
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
 interface ExtendedRequest extends Request {
@@ -30,7 +28,7 @@ const userController = {
       try {
         const folderName = 'skillVibe';
         const updatedData = req.body;
-        console.log(req.body);
+        console.log('sssssssssssssss',req.body);
         
         const token = req.headers.authorization?.split(' ')[1];
     
@@ -62,7 +60,7 @@ const userController = {
         
     
     
-        res.status(200).json({ message: 'User profile updated successfully' });
+        res.status(200).json({ message: 'User profile updated successfully', user });
       } catch (error) {
         console.log('Error handling user profile update:', error);
         res.status(500).json({ error: 'Internal server error' });

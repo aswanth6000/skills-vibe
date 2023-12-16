@@ -1,11 +1,11 @@
-import  express   from "express";
-import userController from "../controller/userController";
-import verifyToken from "../middleware/verifyToken";
+import express from 'express';
+import userController from '../controller/userController';
+import verifyToken from '../middleware/verifyToken';
+import multerConfig from '../config/multer';
 
-const userRouter = express.Router()
+const userRouter = express.Router();
 
-userRouter.get('/userhome',verifyToken,userController.getUserHome)
-userRouter.put('/userProfileUpdate' ,verifyToken, userController.userProfileUpdate)
+userRouter.get('/userhome', verifyToken, userController.getUserHome);
+userRouter.put('/userProfileUpdate', verifyToken, multerConfig.single('uploadPic'), userController.userProfileUpdate);
 
-
-export default userRouter
+export default userRouter;
