@@ -1,15 +1,38 @@
-import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
+import express from 'express';
+import dotenv from 'dotenv'
+import mongoose from 'mongoose'
+import router from './routes/gigRoutes'
+import cors from 'cors'
+const app = express();
+app.use(cors())
 
-dotenv.config();
 
-const app: Express = express();
-const port = process.env.PORT || 8001;
+dotenv.config()
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+const PORT = process.env.PORT || 8001;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
+app.use(router)
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+
+
+const mongoUrl: string | undefined = process.env.MONGO_URL
+
+if (!mongoUrl) {
+    console.error('MongoDB connection URL is not defined.');
+    process.exit(1);
+  }
+
+mongoose.connect(mongoUrl).then(()=>{
+    console.log('database connected..');
+})
+.catch((err)=>{
+    console.log("Database connection error", err);
+    
+})
+
+
+
+app.listen(PORT, ()=>{
+    console.log(`server running on ${PORT}`);
+})
