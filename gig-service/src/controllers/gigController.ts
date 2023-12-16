@@ -6,7 +6,6 @@ const gigController = {
         try {
             const loginEvnt: any = await consumers.listenForUserLoggedInEvent();
             console.log('kkkkk', loginEvnt.userId);
-
             return res.status(200).json({});
         } catch (error) {
             console.error('Error in addGig:', error);
