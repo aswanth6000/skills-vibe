@@ -1,10 +1,12 @@
 // MultiStepForm.tsx
 'use client'
 import Navbar from '@/components/navbar';
-import React, { useState } from 'react';
-import Select from 'react-select'
+import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import axios from 'axios';
 
+let bearerToken: string | null;
 
 const MultiStepForm: React.FC = () => {
   const skillsOptions = [
@@ -20,7 +22,6 @@ const MultiStepForm: React.FC = () => {
     { value: 'illustration', label: 'Illustration' },
   ];
   const animatedComponents = makeAnimated();
-  const [step, setStep] = useState<number>(1);
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -33,28 +34,36 @@ const MultiStepForm: React.FC = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleNextStep = () => {
-    setStep((prevStep) => prevStep + 1);
-  };
+  useEffect(() => {
+    bearerToken = localStorage.getItem('token');
+  }, []);
 
-  const handlePrevStep = () => {
-    setStep((prevStep) => prevStep - 1);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (bearerToken) {
+      try {
+        const response = await axios.post('http://localhost:8001/addgig', formData, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        });
+
+        console.log('Response from userhome:', response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     console.log('Form submitted:', formData);
   };
 
   return (
     <div className='bg-bodywhite h-screen'>
-    <Navbar/>
-    <div className=" bg-white mt-5 border-black rounded-2xl max-w-md mx-auto p-4">
-      <h1 className='text-2xl font-bold mb-5'>Create New Gig  </h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {step === 1 && (
-          <div>
-            <div className='mb-3'>
+      <Navbar />
+      <div className=" bg-white mt-5 border-black rounded-2xl max-w-md mx-auto p-4">
+        <h1 className='text-2xl font-bold mb-5'>Create New Gig </h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className='mb-3'>
             <label htmlFor="title" className="block text-sm font-medium text-gray-600">
               Gig Title
             </label>
@@ -66,65 +75,26 @@ const MultiStepForm: React.FC = () => {
               onChange={handleChange}
               className="mt-1 p-2 w-full border rounded-md"
               placeholder="Enter gig title"
-              />
-              </div>
-              <div className='mb-3'>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-600">
+            />
+          </div>
+          <div className='mb-3'>
+            <label htmlFor="category" className="block text-sm font-medium text-gray-600">
               Category
             </label>
             <Select
               closeMenuOnSelect={false}
               components={animatedComponents}
               defaultValue={[skillsOptions[4]]}
-              
               options={skillsOptions}
             />
-              </div>
-              <div className='mb-3'>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-600">
+          </div>
+          <div className='mb-3'>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-600">
               Breif description about your Gig
             </label>
-              <textarea className="w-96 p-2 border rounded-md focus:outline-none focus:border-green-500" />
-              </div>
+            <textarea className="w-96 p-2 border rounded-md focus:outline-none focus:border-green-500" />
           </div>
-        )}
-
-        {step === 2 && (
-          <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-600">
-              Category
-            </label>
-            <input
-              type="text"
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border rounded-md"
-              placeholder="Enter gig category"
-            />
-          </div>
-        )}
-
-        {step === 3 && (
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-600">
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              rows={4}
-              className="mt-1 p-2 w-full border rounded-md"
-              placeholder="Enter gig description"
-            ></textarea>
-          </div>
-        )}
-
-        {step === 4 && (
-          <div>
+          <div className='mb-3'>
             <label htmlFor="price" className="block text-sm font-medium text-gray-600">
               Price
             </label>
@@ -138,35 +108,13 @@ const MultiStepForm: React.FC = () => {
               placeholder="Enter gig price"
             />
           </div>
-        )}
-
-        <div className="flex justify-between">
-          {step > 1 && (
-            <button
-              type="button"
-              onClick={handlePrevStep}
-              className="bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600"
-            >
-              Previous
-            </button>
-          )}
-          {step === 1 &&
-            <button type="button" onClick={handleNextStep} className="bg-gray-500  text-white p-2 rounded-md hover:bg-gray-600">
-            cancel
-          </button>          
-          }
-          {step < 4 ? (
-            <button type="button" onClick={handleNextStep} className="bg-green-500 ml-auto text-white p-2 rounded-md hover:bg-green-600">
-              Next
-            </button>
-          ) : (
+          <div className="flex justify-center">
             <button type="submit" className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600">
               Submit
             </button>
-          )}
-        </div>
-      </form>
-    </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

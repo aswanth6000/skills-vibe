@@ -42,10 +42,12 @@ export default function Login() {
   const user = useAppSelector((state)=> state.auth.value)
   const router = useRouter()
   useEffect(() => {
-    if (user.isAuth) {
+    if (user.isAuth && user.isAdmin === false) {
       router.push('/userhome');
+    }else if(user.isAuth && user.isAdmin){
+      router.push('/adminhome')
     }
-  }, [user.isAuth, router]);
+  }, [user.isAuth,user.isAdmin, router]);
   console.log('User State:', user);
   const dispatch = useDispatch<AppDispatch>()
   const [err, setErr] = useState('')
