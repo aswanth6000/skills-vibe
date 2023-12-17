@@ -1,3 +1,4 @@
+import NextTopLoader from 'nextjs-toploader';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -17,6 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+       <NextTopLoader color="#ff0000" />
       <body className={inter.className}><ReduxProvider>{children}</ReduxProvider></body>
     </html>
   )

@@ -24,6 +24,24 @@ const publisher = {
         } catch (error) {
             console.error('Error publishing user logged in event:', error);
         }
+},
+    async userCreatedEvent(userId: any): Promise<void> {
+        try {
+            console.log("Starting RabbitMQ producer...");
+            const channel = await RabbitMQ.createChannel();
+            const exchangeName = 'user-exchange';
+            const routingKey = 'user-created';
+            await channel.assertExchange(exchangeName, 'direct', { durable: false });
+            const userCreatedEvent: UserLoggedInEvent = {
+                userId,
+                timestamp: new Date(),
+            };
+            channel.publish(exchangeName, routingKey, Buffer.from(JSON.stringify(userCreatedEvent)));
+            console.log('User logged in event published to RabbitMQ exchange');
+            await channel.close();
+        } catch (error) {
+            console.error('Error publishing user logged in event:', error);
+        }
 }
 }
 

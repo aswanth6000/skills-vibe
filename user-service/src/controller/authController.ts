@@ -28,6 +28,13 @@ const authController = {
           });
 
           await newUser.save();
+          try {
+            await publisher.userCreatedEvent(newUser);
+            console.log('User logged in event published successfully');
+          } catch (error) {
+            console.error('Error publishing user logged in event:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+          }
 
           console.log('User created');
           const token = jwt.sign({ userId: newUser._id }, jwtSecret, { expiresIn: '1h' });
@@ -52,6 +59,13 @@ const authController = {
           });
 
           await newUser.save();
+          try {
+            await publisher.userCreatedEvent(newUser);
+            console.log('User created event published successfully');
+          } catch (error) {
+            console.error('Error publishing user created event:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+          }
 
           console.log('User created');
           res.status(201).json({ user: 'created' });
