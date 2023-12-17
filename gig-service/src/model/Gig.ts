@@ -3,21 +3,21 @@ import { Schema, Document, model } from 'mongoose';
 
 interface Gig {
     title: string;
-    description: string;
+    gigdescription: string;
     price: number;
     tags: string[];
-    images: string[]; // Array of image URLs or file paths
-    video: string;    // Video URL or file path
+    images: string[]; 
+    video: string;   
 }
 
 interface GigModel extends Gig, Document {}
 
-const gigSchema = new Schema<GigModel>({
+const gigSchema = new Schema<GigModel>({ 
     title: {
         type: String,
         required: true,
     },
-    description: {
+    gigdescription: {
         type: String,
         required: true,
     },
