@@ -8,22 +8,17 @@ interface UserLoggedInEvent {
 
 const userPublisher = {
 
-    async userUpdatedEvent(userId: any): Promise<void> {
+    async userUpdatedEvent(updatedUserData: any): Promise<void> {
         try {
             console.log("Starting RabbitMQ producer...");
             const channel = await RabbitMQ.createChannel();
             const exchangeName = 'user-exchange';
             const routingKey = 'user-created';
             await channel.assertExchange(exchangeName, 'direct', { durable: false });
-            const userUpdatedEvent: UserLoggedInEvent = {
-                userId,
-                timestamp: new Date(),
-            };
-            channel.publish(exchangeName, routingKey, Buffer.from(JSON.stringify(userUpdatedEvent)));
-            console.log('User logged in event published to RabbitMQ exchange');
+            channel.publish(exchangeName, routingKey, Buffer.from(JSON.stringify(updatedUserData)));
             await channel.close();
         } catch (error) {
-            console.error('Error publishing user logged in event:', error);
+            console.error('Error publishing user update  event:', error);
         }
 }
 }

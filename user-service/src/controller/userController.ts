@@ -3,6 +3,7 @@ import { UserModel ,User } from "../models/User";
 import bcrypt from 'bcrypt'
 import cloudinary from '../config/cloudinary'
 import jwt, { Secret ,JwtPayload } from 'jsonwebtoken'
+import userPublisher from "../events/publisher/userPublisher";
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -56,10 +57,8 @@ const userController = {
         }
     
         const user = await UserModel.findByIdAndUpdate(userId, updatedData, { new: true });
-        console.log('updated user data: ',user);
+        userPublisher.userUpdatedEvent(updatedData)
         
-    
-    
         res.status(200).json({ message: 'User profile updated successfully', user });
       } catch (error) {
         console.log('Error handling user profile update:', error);
