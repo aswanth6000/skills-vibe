@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import cloudinary from '../config/cloudinary'
 import jwt, { Secret ,JwtPayload } from 'jsonwebtoken'
 import userPublisher from "../events/publisher/userPublisher";
+import userGigConsumers from "../events/consumer/userGigConsumer";
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -16,6 +17,16 @@ interface ExtendedRequest extends Request {
   }
 
 const userController = {
+  async setup() {
+    try {
+        console.log('[User Controller]: Setting up RabbitMQ');
+        const data = await userGigConsumers.gigCreatedConsumer();
+        console.log("[User Controller]: Data received:", data);
+        console.log('[User Controller]: RabbitMQ setup completed');
+    } catch (error) {
+        console.error('[User Controller]: Error setting up RabbitMQ:', error);
+    }
+},
     async getUserHome(req: ExtendedRequest ,res: Response) {
         const user = req.user;
         const userId = user?.userId

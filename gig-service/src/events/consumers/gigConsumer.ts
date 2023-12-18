@@ -1,12 +1,11 @@
-// consumer.ts
-import * as amqp from 'amqplib';
+
 import RabbitMQ from '../../../../messages/rabbitMQ';
 
 interface UserLoggedInEvent {
     userId: string;
     timestamp: Date;
 }
-const consumers = {
+const consumers = { 
     async listenForUserLoggedInEvent() {
         try {
             console.log("Starting RabbitMQ consumer...");
