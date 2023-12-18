@@ -15,6 +15,20 @@ type StateManagedSelect = {
 };
 
 const MultiStepForm: React.FC = () => {
+  const animatedComponents = makeAnimated();
+  const [formData, setFormData] = useState({
+    title: '',
+    category: '',
+    description: '',
+    selectedSkills: [] as StateManagedSelect[],
+    price: '',
+    tags: '',
+    image1: '',
+    image2: '',
+    image3: '',
+    video: ''
+  });
+
   const skillsOptions = [
     { value: 'graphic-design', label: 'Graphic Design' },
     { value: 'web-development', label: 'Web Development' },
@@ -27,16 +41,20 @@ const MultiStepForm: React.FC = () => {
     { value: 'voice-over', label: 'Voice Over' },
     { value: 'illustration', label: 'Illustration' },
   ];
-  const [image1, setImage1] = useState<string | null>('');
-  const [image2, setImage2] = useState<string | null>('');
-  const [image3, setImage3] = useState<string | null>('');
-  const [video, setVideo] = useState<string | null>('');
+  const [image1, setImage1] = useState<string >('');
+  const [image2, setImage2] = useState<string>('');
+  const [image3, setImage3] = useState<string>('');
+  const [video, setVideo] = useState<string>('');
 
   const handleImage1Change = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const image1 = e.target.files[0]
-      const image1Url = URL.createObjectURL(image1)
-      setImage1(image1Url);      
+      const image1file = e.target.files[0]
+      const image1Url = URL.createObjectURL(image1file)
+      setImage1(image1Url);     
+      setFormData({
+        ...formData,
+        image1: image1
+      }) 
     }
   };
 
@@ -68,19 +86,7 @@ const MultiStepForm: React.FC = () => {
     }
   }
 
-  const animatedComponents = makeAnimated();
-  const [formData, setFormData] = useState({
-    title: '',
-    category: '',
-    description: '',
-    selectedSkills: [] as StateManagedSelect[],
-    price: '',
-    tags: '',
-    image1: '',
-    image2: '',
-    image3: '',
-    video: ''
-  });
+
   const handleSkillsChange = (selectedOptions:any) => {
     const selectedSkillsArray = selectedOptions as StateManagedSelect[];
     setFormData({
