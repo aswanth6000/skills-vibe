@@ -5,8 +5,14 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import axios from 'axios';
+import Image from 'next/image';
 
 let bearerToken: string | null;
+
+type StateManagedSelect = {
+  value: string;
+  label: string;
+};
 
 const MultiStepForm: React.FC = () => {
   const skillsOptions = [
@@ -21,13 +27,68 @@ const MultiStepForm: React.FC = () => {
     { value: 'voice-over', label: 'Voice Over' },
     { value: 'illustration', label: 'Illustration' },
   ];
+  const [image1, setImage1] = useState<string | null>('');
+  const [image2, setImage2] = useState<string | null>('');
+  const [image3, setImage3] = useState<string | null>('');
+  const [video, setVideo] = useState<string | null>('');
+
+  const handleImage1Change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const image1 = e.target.files[0]
+      const image1Url = URL.createObjectURL(image1)
+      setImage1(image1Url);      
+    }
+  };
+
+  const handleImage2Change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const image2 = e.target.files[0]
+      const image2Url = URL.createObjectURL(image2)
+      setImage2(image2Url);      
+    }
+  };
+
+  const handleImage3Change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const image3 = e.target.files[0]
+      const image3Url = URL.createObjectURL(image3)
+      setImage3(image3Url);      
+    }
+  };
+
+  const handleVideoChange = (e: any) =>{
+    if(e.target.files){
+      const videofile = e.target.files[0];
+      const videourl = URL.createObjectURL(videofile);
+      console.log("video url" ,videourl);
+      setVideo(videourl)
+      console.log('sssssssss',video);
+      
+
+    }
+  }
+
   const animatedComponents = makeAnimated();
   const [formData, setFormData] = useState({
     title: '',
     category: '',
     description: '',
+    selectedSkills: [] as StateManagedSelect[],
     price: '',
+    tags: '',
+    image1: '',
+    image2: '',
+    image3: '',
+    video: ''
   });
+  const handleSkillsChange = (selectedOptions:any) => {
+    const selectedSkillsArray = selectedOptions as StateManagedSelect[];
+    setFormData({
+      ...formData,
+      selectedSkills: selectedSkillsArray,
+    });
+  };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -53,12 +114,11 @@ const MultiStepForm: React.FC = () => {
         console.error(error);
       }
     }
-
     console.log('Form submitted:', formData);
   };
 
   return (
-    <div className='bg-bodywhite h-screen'>
+    <div className='bg-bodywhite h-auto  pb-12'>
       <Navbar />
       <div className=" bg-white mt-5 border-black rounded-2xl max-w-md mx-auto p-4">
         <h1 className='text-2xl font-bold mb-5'>Create New Gig </h1>
@@ -83,9 +143,11 @@ const MultiStepForm: React.FC = () => {
             </label>
             <Select
               closeMenuOnSelect={false}
+              name='selectedSkills'
               components={animatedComponents}
-              defaultValue={[skillsOptions[4]]}
               options={skillsOptions}
+              value={formData.selectedSkills}
+              onChange={handleSkillsChange}
             />
           </div>
           <div className='mb-3'>
@@ -106,6 +168,83 @@ const MultiStepForm: React.FC = () => {
               onChange={handleChange}
               className="mt-1 p-2 w-full border rounded-md"
               placeholder="Enter gig price"
+            />
+          </div>
+          <div className='mb-3'>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-600">
+              Tags
+            </label>
+            <input
+              type="text"
+              id="tags"
+              name="tags"
+              value={formData.tags}
+              onChange={handleChange}
+              className="mt-1 p-2 w-full border rounded-md"
+              placeholder="Enter gig Tags"
+            />
+          </div>
+          <div className='mb-3 flex flex-row align-middle justify-center content-center'>
+              {image1 && <Image height={500} width={500} src={image1 || ''} alt='displayImage1' className='h-28 w-32 ml-3'></Image>}
+              {image2 && <Image height={500} width={500} src={image2 || ''} alt='displayImage1' className='h-28 w-32 ml-3'></Image>}
+              {image3 && <Image height={500} width={500} src={image3 || ''} alt='displayImage1' className='h-28 w-32 ml-3'></Image>}
+            
+          </div>
+          <div className='mb-3'>
+            <label htmlFor="image1" className="block text-sm font-medium text-gray-600">
+              image1
+            </label>
+            <input
+              type="file"
+              id="image1"
+              name="image1"
+              accept="image/*"
+              onChange={handleImage1Change}
+              className="mt-1 p-2 w-full border rounded-md"
+            />
+          </div>
+          <div className='mb-3'>
+            <label htmlFor="image2" className="block text-sm font-medium text-gray-600">
+              image2
+            </label>
+            <input
+              type="file"
+              id="image2"
+              name="image2"
+              accept="image/*"
+              onChange={handleImage2Change}
+              className="mt-1 p-2 w-full border rounded-md"
+            />
+          </div>
+          <div className='mb-3'>
+            <label htmlFor="image3" className="block text-sm font-medium text-gray-600">
+              image3
+            </label>
+            <input
+              type="file"
+              id="image3"
+              name="image3"
+              accept="image/*"
+              onChange={handleImage3Change}
+              className="mt-1 p-2 w-full border rounded-md"
+            />
+          </div>
+          <div className='mb-3 flex flex-row align-middle justify-center content-center'>
+            {video && <video controls  className='h-44 w-80 bg-black ml-3'>
+            <source src={video || ''} type="video/mp4" />
+            </video>}
+          </div>
+          <div className='mb-3'>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-600">
+              video
+            </label>
+            <input
+              type="file"
+              id="video"
+              name="video"
+              accept="video/*"
+              onChange={handleVideoChange}
+              className="mt-1 p-2 w-full border rounded-md"
             />
           </div>
           <div className="flex justify-center">

@@ -26,6 +26,7 @@ const userGigConsumers ={
                     }
                 })
             })
+            await channel.close()
             
         }catch(err){
             console.error("error setting up consumer", err)

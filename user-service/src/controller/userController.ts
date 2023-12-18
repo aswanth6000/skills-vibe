@@ -5,6 +5,7 @@ import cloudinary from '../config/cloudinary'
 import jwt, { Secret ,JwtPayload } from 'jsonwebtoken'
 import userPublisher from "../events/publisher/userPublisher";
 import userGigConsumers from "../events/consumer/userGigConsumer";
+import { GigUserModel } from "../models/GigUser";
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -20,8 +21,38 @@ const userController = {
   async setup() {
     try {
         console.log('[User Controller]: Setting up RabbitMQ');
-        const data = await userGigConsumers.gigCreatedConsumer();
+        const data: any = await userGigConsumers.gigCreatedConsumer();
         console.log("[User Controller]: Data received:", data);
+        const userId  = data.userId;
+        const user = await UserModel.findById(userId);
+        if(user && data){
+          const gigUserData = {
+            username: user.username,
+            phone: user.phone,
+            description: user.description,
+            email: user.email,
+            profilePicture: user.profilePicture,
+            status: user.status,
+            skills: user.skills,
+            availablity: user.availability,
+            portfolio: user.portfolio,
+            title: data.title,
+            gigdescription: data.description,
+            price: data.price,
+            tags: data.tags,
+            images: data.images,
+            video: data.video
+          }
+          const newGigUser = new GigUserModel(gigUserData);
+          const savedGigUser = newGigUser.save();
+          console.log("gigAdded success", savedGigUser);
+        }else{
+          console.log("no user and data");
+          
+        }
+        
+
+
         console.log('[User Controller]: RabbitMQ setup completed');
     } catch (error) {
         console.error('[User Controller]: Error setting up RabbitMQ:', error);

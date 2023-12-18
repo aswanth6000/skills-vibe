@@ -56,10 +56,8 @@ const UserProfileEdit: React.FC = () => {
       });
   }
 
-  // Get user data from Redux state
   const user = useAppSelector((state) => state.auth.value);
 
-  // Use state hooks to manage form data
   const [formData, setFormData]: any = useState({
     username: '',
     phone: 0,
@@ -68,17 +66,13 @@ const UserProfileEdit: React.FC = () => {
     selectedSkills: [] as StateManagedSelect[],
   });
 
-  // Destructure formData for easy access
   const { username, phone, email, description, selectedSkills } = formData;
-  console.log(formData);
+  
   
 
-  // Use effect to fetch user data from the server on component mount
   useEffect(() => {
     bearerToken = localStorage.getItem('token');
-    
-    console.log('jjjjjjjjjjj',bearerToken);
-    
+        
     if (bearerToken) {
       const fetchData = async () => {
         try {
@@ -92,7 +86,6 @@ const UserProfileEdit: React.FC = () => {
           setPic(userData.profilePicture)
           console.log("User data:", userData);
 
-          // Update the form data with user data
           setFormData({
             username: userData.username,
             phone: userData.phone,
@@ -153,9 +146,7 @@ const UserProfileEdit: React.FC = () => {
     }
   };
 
-  // Event handler for clicking on the profile picture
   const handleImageClick = () => {
-    // Trigger the file input when the image is clicked
     const fileInput = document.getElementById('file_input') as HTMLInputElement | null;
     if (fileInput) {
       fileInput.click();
@@ -168,7 +159,6 @@ const UserProfileEdit: React.FC = () => {
       
       
       <div className="bg-bodywhite min-h-screen flex">
-        {/* Left Section - Profile Photo */}
         <div className="w-1/3 bg-navwhite h-auto ml-5 rounded-2xl border-black flex flex-col mt-2 items-center p-4 mb-12">
           <div className="w-56 h-56 rounded-full cursor-pointer overflow-hidden">
             <input
@@ -194,12 +184,10 @@ const UserProfileEdit: React.FC = () => {
           <h2 className="text-2xl font-bold mb-2">{username}</h2>
         </div>
 
-        {/* Middle Section - User Details */}
         <div className="w-1/3 flex-grow p-4 bg-navwhite h-auto ml-5 mt-2 rounded-2xl border-black mb-12">
           <h2 className="text-2xl font-bold mb-2">{username}</h2>
           <p className="text-gray-600">{description}</p>
 
-          {/* Editable Fields */}
           <div className="mt-4">
             <label className="block mb-2 text-sm font-medium text-gray-600">
               Username
@@ -258,7 +246,6 @@ const UserProfileEdit: React.FC = () => {
             />
           </div>
 
-          {/* Save Changes Button */}
           <button
             className="mt-6 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none"
             onClick={handleSaveChanges}
