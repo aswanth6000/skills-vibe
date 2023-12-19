@@ -20,8 +20,10 @@ interface GigUser {
   title: string;
   gigdescription: string;
   price: number;
-  tags: string[];
-  images: string[];
+  tags: string;
+  image1: string;
+  image2: string;
+  image3: string;
   video: string;
 }
 
@@ -73,12 +75,19 @@ const GigUserSchema = new Schema<GigUser>({
     type: Number,
   },
   tags: {
-    type: [String],
-    default: [],
+    type: String,
   },
-  images: {
-    type: [String],
-    default: [],
+  image1: {
+    type: String,
+
+  },
+  image2: {
+    type: String,
+
+  },
+  image3: {
+    type: String,
+
   },
   video: {
     type: String,

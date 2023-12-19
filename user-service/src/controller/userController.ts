@@ -40,7 +40,9 @@ const userController = {
             gigdescription: data.description,
             price: data.price,
             tags: data.tags,
-            images: data.images,
+            image1: data.image1,
+            image2: data.image2,
+            image3: data.image3,
             video: data.video
           }
           const newGigUser = new GigUserModel(gigUserData);

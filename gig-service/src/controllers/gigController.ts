@@ -47,7 +47,7 @@ const gigController = {
                 }
 
                 if (req.files['video'] && req.files['video'][0]) {
-                    video = await cloudinary.uploader.upload(req.files['video'][0].path, { resource_type: 'video', public_id: `${folderName}/${req.files['video'][0].originalname}` });
+                    video = await cloudinary.uploader.upload_large(req.files['video'][0].path, { resource_type: 'video', public_id: `${folderName}/${req.files['video'][0].originalname}` });
                 }
 
                 const newGig = new GigModel({
@@ -66,7 +66,7 @@ const gigController = {
                 console.log("Gig data inserted to the database");
 
                 res.status(200).json({});
-                gigPublisher.gigCreatedEvent(data);
+                gigPublisher.gigCreatedEvent(newGig);
                 console.log('Data sent to publisher is ', data);
             } catch (error) {
                 console.log('Error in addGig:', error);
