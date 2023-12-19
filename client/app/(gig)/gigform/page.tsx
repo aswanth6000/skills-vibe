@@ -1,4 +1,3 @@
-// MultiStepForm.tsx
 'use client'
 import Navbar from '@/components/navbar';
 import React, { useEffect, useState } from 'react';
@@ -19,9 +18,8 @@ const MultiStepForm: React.FC = () => {
   const animatedComponents = makeAnimated();
   const [formData, setFormData] = useState({
     title: '',
-    category: '',
+    category: [] as StateManagedSelect[],
     description: '',
-    selectedSkills: [] as StateManagedSelect[],
     price: '',
     tags: '',
     image1: '',
@@ -54,7 +52,7 @@ const MultiStepForm: React.FC = () => {
       setImage1(image1Url);     
       setFormData({
         ...formData,
-        image1: image1
+        image1: image1Url
       }) 
     }
   };
@@ -63,7 +61,11 @@ const MultiStepForm: React.FC = () => {
     if (e.target.files) {
       const image2 = e.target.files[0]
       const image2Url = URL.createObjectURL(image2)
-      setImage2(image2Url);      
+      setImage2(image2Url);  
+      setFormData({
+        ...formData,
+        image2: image2Url
+      })    
     }
   };
 
@@ -71,7 +73,11 @@ const MultiStepForm: React.FC = () => {
     if (e.target.files) {
       const image3 = e.target.files[0]
       const image3Url = URL.createObjectURL(image3)
-      setImage3(image3Url);      
+      setImage3(image3Url);  
+      setFormData({
+        ...formData, 
+        image3: image3Url
+      })    
     }
   };
 
@@ -82,8 +88,10 @@ const MultiStepForm: React.FC = () => {
       console.log("video url" ,videourl);
       setVideo(videourl)
       console.log('sssssssss',video);
-      
-
+      setFormData({
+        ...formData,
+        video: videourl
+      })
     }
   }
 
@@ -92,7 +100,7 @@ const MultiStepForm: React.FC = () => {
     const selectedSkillsArray = selectedOptions as StateManagedSelect[];
     setFormData({
       ...formData,
-      selectedSkills: selectedSkillsArray,
+      category: selectedSkillsArray,
     });
   };
 
@@ -158,10 +166,10 @@ const MultiStepForm: React.FC = () => {
             </label>
             <Select
               closeMenuOnSelect={false}
-              name='selectedSkills'
+              name='category'
               components={animatedComponents}
               options={skillsOptions}
-              value={formData.selectedSkills}
+              value={formData.category}
               onChange={handleSkillsChange}
             />
           </div>
@@ -169,7 +177,11 @@ const MultiStepForm: React.FC = () => {
             <label htmlFor="description" className="block text-sm font-medium text-gray-600">
               Breif description about your Gig
             </label>
-            <textarea className="w-96 p-2 border rounded-md focus:outline-none focus:border-green-500" />
+            <textarea className="w-96 p-2 border rounded-md focus:outline-none focus:border-green-500"
+            name='description' 
+            value={formData.description}
+            onChange={handleChange}
+            />
           </div>
           <div className='mb-3'>
             <label htmlFor="price" className="block text-sm font-medium text-gray-600">
