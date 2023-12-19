@@ -15,6 +15,7 @@ import Link from 'next/link';
 import useFormValidation from '@/hooks/validation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import NextBreadcrumb from '@/components/NextBreadcrumb';
 
 
 
@@ -156,7 +157,14 @@ const UserProfileEdit: React.FC = () => {
   return (
     <section>
       <Navbar />
-      
+      <NextBreadcrumb
+        homeElement={'Home'}
+        separator={<span> &gt;  </span>}
+        activeClasses='text-amber-500'
+        containerClasses='flex py-2 bg-bodywhite' 
+        listClasses='hover:underline mx-2 font-bold'
+        capitalizeLinks
+      />
       
       <div className="bg-bodywhite min-h-screen flex">
         <div className="w-1/3 bg-navwhite h-auto ml-5 rounded-2xl border-black flex flex-col mt-2 items-center p-4 mb-12">

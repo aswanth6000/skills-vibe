@@ -6,6 +6,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import axios from 'axios';
 import Image from 'next/image';
+import NextBreadcrumb from '@/components/NextBreadcrumb';
 
 let bearerToken: string | null;
 
@@ -126,6 +127,14 @@ const MultiStepForm: React.FC = () => {
   return (
     <div className='bg-bodywhite h-auto  pb-12'>
       <Navbar />
+      <NextBreadcrumb
+        homeElement={'Home'}
+        separator={<span> &gt;  </span>}
+        activeClasses='text-amber-500'
+        containerClasses='flex py-2 bg-bodywhite' 
+        listClasses='hover:underline mx-2 font-bold'
+        capitalizeLinks
+      />
       <div className=" bg-white mt-5 border-black rounded-2xl max-w-md mx-auto p-4">
         <h1 className='text-2xl font-bold mb-5'>Create New Gig </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
