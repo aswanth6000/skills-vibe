@@ -1,6 +1,6 @@
 'use client'
 import Navbar from '@/components/navbar';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import axios from 'axios';
@@ -14,7 +14,20 @@ type StateManagedSelect = {
   label: string;
 };
 
+interface FormData {
+  title: string;
+  category: StateManagedSelect[];
+  description: string;
+  price: string;
+  tags: string;
+  image1: File | string;
+  image2: File | string;
+  image3: File | string;
+  video: File | string;
+}
+
 const MultiStepForm: React.FC = () => {
+  const initialFileValue: File | string = '';
   const animatedComponents = makeAnimated();
   const [formData, setFormData] = useState({
     title: '',
@@ -22,7 +35,7 @@ const MultiStepForm: React.FC = () => {
     description: '',
     price: '',
     tags: '',
-    image1: '',
+    image1: '', 
     image2: '',
     image3: '',
     video: ''
@@ -40,60 +53,37 @@ const MultiStepForm: React.FC = () => {
     { value: 'voice-over', label: 'Voice Over' },
     { value: 'illustration', label: 'Illustration' },
   ];
-  const [image1, setImage1] = useState<string >('');
-  const [image2, setImage2] = useState<string>('');
-  const [image3, setImage3] = useState<string>('');
-  const [video, setVideo] = useState<string>('');
+  const [viewimage1, setviewImage1] = useState<any >('');
+  const [viewimage2, setviewImage2] = useState<any>('');
+  const [viewimage3, setviewImage3] = useState<any>('');
+  const [viewvideo, setviewVideo] = useState<any>('');
 
-  const handleImage1Change = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const image1file = e.target.files[0]
-      const image1Url = URL.createObjectURL(image1file)
-      setImage1(image1Url);     
+
+  const handleFileChange = (field: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
       setFormData({
         ...formData,
-        image1: image1Url
-      }) 
+        [field]: file,
+      });
+      if (field === 'image1') setviewImage1(URL.createObjectURL(file));
+      else if (field === 'image2') setviewImage2(URL.createObjectURL(file));
+      else if (field === 'image3') setviewImage3(URL.createObjectURL(file));
     }
   };
+  
 
-  const handleImage2Change = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVideoChange = (e: any) => {
     if (e.target.files) {
-      const image2 = e.target.files[0]
-      const image2Url = URL.createObjectURL(image2)
-      setImage2(image2Url);  
-      setFormData({
-        ...formData,
-        image2: image2Url
-      })    
-    }
-  };
-
-  const handleImage3Change = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const image3 = e.target.files[0]
-      const image3Url = URL.createObjectURL(image3)
-      setImage3(image3Url);  
-      setFormData({
-        ...formData, 
-        image3: image3Url
-      })    
-    }
-  };
-
-  const handleVideoChange = (e: any) =>{
-    if(e.target.files){
       const videofile = e.target.files[0];
       const videourl = URL.createObjectURL(videofile);
-      console.log("video url" ,videourl);
-      setVideo(videourl)
-      console.log('sssssssss',video);
+      setviewVideo(videourl);
       setFormData({
         ...formData,
-        video: videourl
-      })
+        video: videofile,
+      });
     }
-  }
+  };
 
 
   const handleSkillsChange = (selectedOptions:any) => {
@@ -120,7 +110,8 @@ const MultiStepForm: React.FC = () => {
       try {
         const response = await axios.post('http://localhost:8001/addgig', formData, {
           headers: {
-            Authorization: `Bearer ${bearerToken}`,
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${bearerToken}`,
           },
         });
 
@@ -212,9 +203,9 @@ const MultiStepForm: React.FC = () => {
             />
           </div>
           <div className='mb-3 flex flex-row align-middle justify-center content-center'>
-              {image1 && <Image height={500} width={500} src={image1 || ''} alt='displayImage1' className='h-28 w-32 ml-3'></Image>}
-              {image2 && <Image height={500} width={500} src={image2 || ''} alt='displayImage1' className='h-28 w-32 ml-3'></Image>}
-              {image3 && <Image height={500} width={500} src={image3 || ''} alt='displayImage1' className='h-28 w-32 ml-3'></Image>}
+              {viewimage1 && <Image height={500} width={500} src={viewimage1 || ''} alt='displayviewImage1' className='h-28 w-32 ml-3'></Image>}
+              {viewimage2 && <Image height={500} width={500} src={viewimage2 || ''} alt='displayviewImage1' className='h-28 w-32 ml-3'></Image>}
+              {viewimage3 && <Image height={500} width={500} src={viewimage3 || ''} alt='displayviewImage1' className='h-28 w-32 ml-3'></Image>}
             
           </div>
           <div className='mb-3'>
@@ -226,7 +217,7 @@ const MultiStepForm: React.FC = () => {
               id="image1"
               name="image1"
               accept="image/*"
-              onChange={handleImage1Change}
+              onChange={handleFileChange('image1')}
               className="mt-1 p-2 w-full border rounded-md"
             />
           </div>
@@ -239,7 +230,7 @@ const MultiStepForm: React.FC = () => {
               id="image2"
               name="image2"
               accept="image/*"
-              onChange={handleImage2Change}
+              onChange={handleFileChange('image2')}
               className="mt-1 p-2 w-full border rounded-md"
             />
           </div>
@@ -252,13 +243,13 @@ const MultiStepForm: React.FC = () => {
               id="image3"
               name="image3"
               accept="image/*"
-              onChange={handleImage3Change}
+              onChange={handleFileChange('image3')}
               className="mt-1 p-2 w-full border rounded-md"
             />
           </div>
           <div className='mb-3 flex flex-row align-middle justify-center content-center'>
-            {video && <video controls  className='h-44 w-80 bg-black ml-3'>
-            <source src={video || ''} type="video/mp4" />
+            {viewvideo && <video controls  className='h-44 w-80 bg-black ml-3'>
+            <source src={viewvideo || ''} type="video/mp4" />
             </video>}
           </div>
           <div className='mb-3'>

@@ -5,14 +5,21 @@ interface Gig {
     title: string;
     gigdescription: string;
     price: number;
-    tags: string[];
-    images: string[]; 
+    tags: string;
+    image1: string; 
+    image2: string; 
+    image3: string; 
     video: string;   
+    userId: string
 }
 
 interface GigModel extends Gig, Document {}
 
 const gigSchema = new Schema<GigModel>({ 
+    userId: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true,
@@ -26,12 +33,19 @@ const gigSchema = new Schema<GigModel>({
         required: true,
     },
     tags: {
-        type: [String],
-        default: [],
+        type: String,
     },
-    images: {
-        type: [String],
-        default: [],
+    image1: {
+        type: String,
+
+    },
+    image2: {
+        type: String,
+
+    },
+    image3: {
+        type: String,
+
     },
     video: {
         type: String, 
