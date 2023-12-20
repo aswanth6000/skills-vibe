@@ -1,17 +1,15 @@
 'use client'
 import React from 'react';
-import AdminLayout from '../../../components/adminLayout';
-import Navbar from '@/components/navbar';
+import Navbar from '@/components/adminNav';
 
 const Home: React.FC = () => {
   return (
-    <AdminLayout>
+    <>
         <Navbar/>
       <div className="container">
         <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
-        {/* Your dashboard content goes here */}
       </div>
-    </AdminLayout>
+      </>
   );
 };
 

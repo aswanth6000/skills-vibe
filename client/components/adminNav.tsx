@@ -16,7 +16,8 @@ import { button } from "@material-tailwind/react";
 export default function Navbar() {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
-  const user = useAppSelector((state)=> state.auth.value)
+  const user = useAppSelector((state)=> state.auth.value.isAdmin)
+  
   
   
   const [navbarOpen, setNavbarOpen] = useState<Boolean>(false);
@@ -71,31 +72,8 @@ export default function Navbar() {
           id="example-navbar-danger"
         >
           <ul className="flex flex-col lg:flex-row list-none lg:ml-auto p-2">
-            <div className="relative mt-3">
-              <div className="absolute inset-y-0 mb-3 start-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </div>
-            </div>
-            <input
-              type="text"
-              id="search-navbar"
-              className="block outline-none w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-              placeholder="Search..."
-            />
+
+
             {user && (
               <li className="nav-item">
                 <a
@@ -130,9 +108,9 @@ export default function Navbar() {
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
-                        href="/documentation"
+                        href="/viewGigs"
                       >
-                        Gigs
+                        View Gigs
                       </a>
                     )}
                   </Menu.Item>
@@ -167,7 +145,7 @@ export default function Navbar() {
             {user && <li className="nav-item">
               <Menu as="div" className="relative z-10">
                 <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
-                  analytics<FontAwesomeIcon className="ml-1" icon={faCaretDown} />
+                  Users<FontAwesomeIcon className="ml-1" icon={faCaretDown} />
                 </Menu.Button>
                 <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
                   <Menu.Item>
@@ -176,9 +154,9 @@ export default function Navbar() {
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
-                        href="/account-settings"
+                        href="viewusers"
                       >
-                        Overview
+                        View Users
                       </a>
                     )}
                   </Menu.Item>
@@ -206,7 +184,7 @@ export default function Navbar() {
               />
             </li>
 
-            {user.username && (
+            {user && (
               <li className="nav-item">
                 <button
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
@@ -220,9 +198,9 @@ export default function Navbar() {
             {user && (
               <li className="nav-item">
                 <div className=" h-8 w-8 rounded-3xl">
-                  <Link href={`/userprofile/${user._id}`}>
-                    <Image
-                      src={user.profilePicture}
+                  <Link href={`/adminprofile`}>
+                    <img
+                      src='https://cdn3.iconfinder.com/data/icons/user-group-black/100/user-process-512.png'
                       className="h-8 w-8 rounded-3xl"
                       width={500}
                       height={500}

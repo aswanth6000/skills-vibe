@@ -105,6 +105,7 @@ export default function Login() {
         dispatch(logIn({
           isAuth: true,
           token: token,
+          isAdmin: false,
           ...user
         }))
         
