@@ -108,7 +108,22 @@ const userController = {
         console.log('Error handling user profile update:', error);
         res.status(500).json({ error: 'Internal server error' });
       }
-    }
+    },
+
+
+    async getAllUsers(req: Request, res: Response){
+      try {
+        const allusers = await UserModel.find({});
+        console.log(allusers,"hererere");
+        
+        res.status(200).json({message: 'user data fetched successfully', allusers})
+      } catch (error) {
+        console.log('Error handling user profile update:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+
+    },
+
 }
 
 export default userController
