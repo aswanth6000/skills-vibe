@@ -53,6 +53,7 @@ const GigUserSchema = new Schema<GigUser>({
   },
   status: {
     type: Boolean,
+    default: false
   },
   skills: {
     type: [skillSchema],

@@ -113,9 +113,7 @@ const userController = {
 
     async getAllUsers(req: Request, res: Response){
       try {
-        const allusers = await UserModel.find({});
-        console.log(allusers,"hererere");
-        
+        const allusers = await UserModel.find({});        
         res.status(200).json({message: 'user data fetched successfully', allusers})
       } catch (error) {
         console.log('Error handling user profile update:', error);
@@ -123,6 +121,15 @@ const userController = {
       }
 
     },
+    async getAllGigs(req: Request, res: Response){
+      try {
+        const allgigs = await GigUserModel.find()
+        console.log("all gigs", allgigs);
+        res.status(200).json({message: 'gig data fetched successfully', allgigs})
+      } catch (error) {
+        res.status(500).json({error: "internal server error"})
+      }
+    }
 
 }
 

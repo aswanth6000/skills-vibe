@@ -1,6 +1,31 @@
-import Navbar from "@/components/adminNav";
+'use client'
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-function page() {
+interface Gig{
+
+}
+
+function Page() {
+  const [gigData, setGigData] = useState<Gig[]>([])
+  useEffect(()=>{
+    const fetchData = async () => {
+      try{
+        const response = await axios.get('http://localhost:8000/viewallgigs');
+        if(response.status === 200){
+          setGigData(response.data.allgigs)
+          console.log(response.data);
+          
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
+    fetchData()
+  }, [])
+  console.log(gigData);
+  
+
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -114,4 +139,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

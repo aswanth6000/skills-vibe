@@ -1,6 +1,5 @@
 'use client'
 
-import Navbar from "@/components/adminNav";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -14,7 +13,6 @@ interface User {
 
 function Page() {
   const [userData, setUserData] = useState<User[]>([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
