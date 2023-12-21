@@ -18,13 +18,8 @@ function AdminMenuList() {
     }
     const router = useRouter()
   return (
-    <Menu mode='inline' className='menu-bar' onClick={handleClick}>
-        <Menu.Item key='allusers' icon={<UserOutlined/>}>
-            All Users
-        </Menu.Item>
-        <Menu.Item key='viewgigs' icon={<PaperClipOutlined/>}>
-            Gigs
-        </Menu.Item>
+    <Menu mode='inline' theme='dark' className='h-auto rounded-2xl' onClick={handleClick}>
+
     </Menu>
   )
 }
