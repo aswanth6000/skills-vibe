@@ -10,12 +10,6 @@ interface Gig{
   username: string,
   phone: number,
   status: boolean
-
-  
-
-
-
-
 }
 
 function Page() {
@@ -27,7 +21,6 @@ function Page() {
         const response = await axios.get('http://localhost:8000/viewallgigs');
         if(response.status === 200){
           setGigData(response.data.allgigs)
-          console.log(response.data);
           
         }
       }catch(err){
@@ -39,9 +32,25 @@ function Page() {
   console.log(gigData);
 
 
-  const approval = () =>{
+  const approval = async () =>{
     setApp(!app)
+    const status = {
+      status: app
+    }
+        try {
+          const response = await axios.post('http://localhost:8001/rejectgig', status,{
+
+          })
+          
+        } catch (error) {
+          
+        }
+
   }
+  console.log(app);
+  
+
+
   
 
   return (
