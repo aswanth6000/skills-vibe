@@ -1,7 +1,8 @@
 import { Schema, model, Types, ObjectId } from "mongoose";
 
-interface GigUser {
+interface GigUser { 
   _id: Types.ObjectId,
+  userId: string,
   username: string;
   phone: number;
   email: string;
@@ -33,6 +34,10 @@ const skillSchema = new Schema({
 });
 
 const GigUserSchema = new Schema<GigUser>({
+  userId:{
+    type: String,
+
+  },
   username: {
     type: String,
     required: true,

@@ -27,6 +27,7 @@ const userController = {
         const user = await UserModel.findById(userId);
         if(user && data){
           const gigUserData = {
+            userId: userId,
             username: user.username,
             phone: user.phone,
             description: user.description,
