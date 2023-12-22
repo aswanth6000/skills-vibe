@@ -38,6 +38,7 @@ export default function Signup() {
   } = useFormValidation();
 
   const  handleSubmit  = (e: React.FormEvent<HTMLFormElement>) =>{
+    localStorage.setItem('phoneNumberForVerification', phone);
     router.push('signup/otp')
     e.preventDefault()
       const userData: userDataType = {

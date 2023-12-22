@@ -10,7 +10,7 @@ interface Gig {
   username: string;
   phone: number;
   status: boolean;
-  refId: string
+  refId: string;
 }
 
 function Page() {
@@ -51,10 +51,8 @@ function Page() {
         }
       );
       console.log(response);
-      
     } catch (error) {
       console.log(error);
-      
     }
   };
   console.log(app);
@@ -116,18 +114,27 @@ function Page() {
                   >
                     View
                   </button>
-                  <button
-                    onClick={() => setgigId(gig.refId)}
-                    className="font-medium text-green-600 dark:text-green-500 hover:underline"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={approval}
-                    className="font-medium text-red-600 dark:text-red-500 hover:underline ms-3"
-                  >
-                    Reject
-                  </button>
+                  {app ? (
+                    <button
+                      onClick={() => {
+                        setgigId(gig.refId);
+                        approval();
+                      }}
+                      className="font-medium text-green-600 dark:text-green-500 hover:underline"
+                    >
+                      Approve
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setgigId(gig.refId);
+                        approval();
+                      }}
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline ms-3"
+                    >
+                      Reject
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

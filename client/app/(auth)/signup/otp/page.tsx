@@ -7,8 +7,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 
-interface OtpProps {}
+let phone: string | null;
 
+interface OtpProps {}
 const Otp: React.FC<OtpProps> = () => {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
@@ -26,6 +27,12 @@ const Otp: React.FC<OtpProps> = () => {
       });
   }
   const auth = getAuth(app);
+  useEffect(()=>{
+     phone = localStorage.getItem('phoneNumberForVerification')
+  })
+
+  console.log(phone);
+  
   auth.tenantId = "myTenantId1";
   
 
