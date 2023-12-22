@@ -20,7 +20,6 @@ interface ExtendedRequest extends Request {
 const userController = {
   async setup() {
     try {
-        console.log('[User Controller]: Setting up RabbitMQ');
         const data: any = await userGigConsumers.gigCreatedConsumer();
         console.log("[User Controller]: Data received:", data);
         const userId  = data.userId;
@@ -62,6 +61,26 @@ const userController = {
         console.error('[User Controller]: Error setting up RabbitMQ:', error);
     }
 },
+    async gigStatusEvent() {
+      try {
+        const data: any = await userGigConsumers.gigStatusConsumer();
+        console.log("lslslslls", data);
+        const gigId = data.objectId;
+        const statusData = {   
+          status: data.status
+        } 
+        const objId = await GigUserModel.find({refId: gigId})
+        console.log('jjjj',objId[0]._id);
+
+        const gig = await GigUserModel.findByIdAndUpdate(objId[0]._id, statusData, {new: true});
+        console.log('ssssssssssssssssss', gig);
+        
+      } catch (error) {
+       console.log(error);
+        
+      }
+    },
+
     async getUserHome(req: ExtendedRequest ,res: Response) {
         const user = req.user;
         const userId = user?.userId

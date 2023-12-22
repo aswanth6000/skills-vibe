@@ -64,13 +64,11 @@ const gigController = {
                 });
 
                 await newGig.save();
-                console.log('sssssssssss', newGig._id);
                 
                 console.log("Gig data inserted to the database");
 
                 res.status(200).json({});
                 newGig.refId = newGig._id
-                console.log("asedfasdfasdf",newGig);
                 
                 gigPublisher.gigCreatedEvent(newGig);
                 console.log('Data sent to publisher is ', data);
@@ -88,7 +86,6 @@ const gigController = {
         try {
             
             const objectId = req.body.gigId;
-            console.log('hh',objectId);
             
             if (!isValidObjectId(objectId)) {
                 return res.status(400).json({ error: 'Invalid ObjectId' });
@@ -97,14 +94,16 @@ const gigController = {
             const gigData = {
               status: req.body.status,
             };     
-            const pp = await GigModel.findById(objectId)
-            console.log('sss',pp);
                     
             const gig = await GigModel.findByIdAndUpdate(objectId, gigData, { new: true });
             // if (!gig) {
             //   return res.status(404).json({ error: 'Gig not found' });
             // }
-            console.log('Updated gig:', gig);
+            const eventData = {
+                objectId : req.body.gigId,
+                status: req.body.status
+            }
+            gigPublisher.gigStatusEvent(eventData)
             res.status(200).json({ message: 'Gig status updated successfully', gig });
           } catch (error) {
             console.error('Error updating gig status:', error);
