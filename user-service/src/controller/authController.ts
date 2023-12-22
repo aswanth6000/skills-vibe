@@ -104,6 +104,9 @@ const authController = {
           if (!user) {
             return res.status(203).json({ message: 'User not found' });
           }
+          if(!user.status){
+            return res.status(207).json({message: 'User is blocked by admin'});
+          }
           const validPassword = await bcrypt.compare(password, user.password);
           if (!validPassword) {
             return res.status(203).json({ message: 'Invalid Password' });

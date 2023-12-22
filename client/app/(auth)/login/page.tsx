@@ -51,6 +51,7 @@ export default function Login() {
   console.log('User State:', user);
   const dispatch = useDispatch<AppDispatch>()
   const [err, setErr] = useState('')
+  const [error, setError] = useState('')
   const {email, setEmail, errors, password, setPassword} = useFormValidation()
 
 
@@ -62,12 +63,10 @@ export default function Login() {
       password: password,
       google: false
     }
-    sendUserData(userData)
+      sendUserData(userData)
   }
   const handleGoogleLogin = () =>{
     console.log("button clicked");
-
-    
     signInWithPopup(auth, provider)
     .then((result: UserCredential) => {
       const credential: OAuthCredential | null = GoogleAuthProvider.credentialFromResult(result);
@@ -110,9 +109,15 @@ export default function Login() {
         }))
         
         router.push('/userhome')
-      }else if(response.status === 203){
+      }
+      else if(response.status === 203){
         setErr(response.data.message)
-      }else if(response.status === 204){
+      }
+      else if(response.status === 207){
+        setError(response.data.message)
+        
+      }
+      else if(response.status === 204){
         dispatch(logIn({
           isAuth: true,
           token: token,
@@ -178,6 +183,7 @@ export default function Login() {
                 </div>
                 {errors.password && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.password}</p>}
                 {err && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{err}</p>}
+                {error && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{error}</p>}
                 <button
                   type="submit"
                   className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"

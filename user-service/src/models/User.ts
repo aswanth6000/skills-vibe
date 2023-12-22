@@ -59,6 +59,7 @@ const userSchema = new Schema<User>({
   },
   status: {
     type: Boolean,
+    default: true
   },
   clients: [{
     type: Types.ObjectId,
