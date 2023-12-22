@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import consumers from '../events/consumers/gigConsumer';
 import gigPublisher from '../events/publishers/gigPublisher';
+import { isValidObjectId } from 'mongoose';
 import jwt from 'jsonwebtoken'
 import { JwtPayload, Secret } from 'jsonwebtoken';
 import dotenv from 'dotenv'
@@ -63,9 +64,14 @@ const gigController = {
                 });
 
                 await newGig.save();
+                console.log('sssssssssss', newGig._id);
+                
                 console.log("Gig data inserted to the database");
 
                 res.status(200).json({});
+                newGig.refId = newGig._id
+                console.log("asedfasdfasdf",newGig);
+                
                 gigPublisher.gigCreatedEvent(newGig);
                 console.log('Data sent to publisher is ', data);
             } catch (error) {
@@ -77,6 +83,34 @@ const gigController = {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+    async gigStatus(req: Request, res: Response){
+        
+        try {
+            
+            const objectId = req.body.gigId;
+            console.log('hh',objectId);
+            
+            if (!isValidObjectId(objectId)) {
+                return res.status(400).json({ error: 'Invalid ObjectId' });
+              }
+            
+            const gigData = {
+              status: req.body.status,
+            };     
+            const pp = await GigModel.findById(objectId)
+            console.log('sss',pp);
+                    
+            const gig = await GigModel.findByIdAndUpdate(objectId, gigData, { new: true });
+            // if (!gig) {
+            //   return res.status(404).json({ error: 'Gig not found' });
+            // }
+            console.log('Updated gig:', gig);
+            res.status(200).json({ message: 'Gig status updated successfully', gig });
+          } catch (error) {
+            console.error('Error updating gig status:', error);
+            res.status(500).json({ error: 'Internal server error' });
+          }
+    }
 };
 
 export default gigController;

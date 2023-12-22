@@ -44,7 +44,8 @@ const userController = {
             image1: data.image1,
             image2: data.image2,
             image3: data.image3,
-            video: data.video
+            video: data.video,
+            refId: data.refId
           }
           const newGigUser = new GigUserModel(gigUserData);
           const savedGigUser = newGigUser.save();
@@ -125,7 +126,6 @@ const userController = {
     async getAllGigs(req: Request, res: Response){
       try {
         const allgigs = await GigUserModel.find()
-        console.log("all gigs", allgigs);
         res.status(200).json({message: 'gig data fetched successfully', allgigs})
       } catch (error) {
         res.status(500).json({error: "internal server error"})

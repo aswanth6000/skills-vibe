@@ -11,6 +11,7 @@ const upload = multerConfig.fields([
   ]);
 
 router.post('/addgig',upload, gigController.addGig)
+router.post('/gigstatus', gigController.gigStatus)
 
 
 

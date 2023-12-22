@@ -26,6 +26,7 @@ interface GigUser {
   image2: string;
   image3: string;
   video: string;
+  refId: string;
 }
 
 const skillSchema = new Schema({
@@ -37,6 +38,9 @@ const GigUserSchema = new Schema<GigUser>({
   userId:{
     type: String,
 
+  },
+  refId: {
+    type: String,
   },
   username: {
     type: String,

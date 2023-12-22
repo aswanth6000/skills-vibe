@@ -10,7 +10,9 @@ interface Gig {
     image2: string; 
     image3: string; 
     video: string;   
-    userId: string
+    userId: string;
+    status: boolean;
+    refId: string;
 }
 
 interface GigModel extends Gig, Document {}
@@ -23,6 +25,13 @@ const gigSchema = new Schema<GigModel>({
     title: {
         type: String,
         required: true,
+    },
+    status: {
+        type: Boolean,
+        default: false
+    },
+    refId: {
+        type: String,
     },
     gigdescription: {
         type: String,

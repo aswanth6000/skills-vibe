@@ -91,8 +91,15 @@ const authController = {
         const adminUserName = process.env.ADMIN;
         const adminPass = process.env.ADMIN_PASS;
         if (email === adminUserName && password === adminPass) {
-          return res.status(204).json({ admin: 'admin data' });
+          const role = 'admin'
+          const payload = {
+            admin: adminUserName,
+            role
+          }
+          const token = jwt.sign(payload, jwtSecret, {expiresIn: '1h'})
+          return res.status(204).json({ token, admin: 'admin data' });
         }else{
+          const role = 'user'
           const user = await UserModel.findOne({ email }).exec();
           if (!user) {
             return res.status(203).json({ message: 'User not found' });
@@ -105,7 +112,8 @@ const authController = {
             userId : user._id,
             email: user.email,
             username: user.username,
-            status: user.status
+            status: user.status,
+            role
           }
           const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
           res.cookie('jwt', token, { httpOnly: true, maxAge: 300000 }); 

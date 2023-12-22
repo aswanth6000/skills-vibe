@@ -1,63 +1,69 @@
-'use client'
+"use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-interface Gig{
-  _id:string,
-  title: string,
-  skills: any,
-  price: number,
-  username: string,
-  phone: number,
-  status: boolean
+interface Gig {
+  _id: string;
+  title: string;
+  skills: any;
+  price: number;
+  username: string;
+  phone: number;
+  status: boolean;
+  refId: string
 }
 
 function Page() {
-  const [gigData, setGigData] = useState<Gig[]>([])
+  const [gigData, setGigData] = useState<Gig[]>([]);
+  const [gigId, setgigId] = useState<string>();
   const [app, setApp] = useState<boolean>(false);
-  useEffect(()=>{
+  console.log(gigId);
+
+  useEffect(() => {
     const fetchData = async () => {
-      try{
-        const response = await axios.get('http://localhost:8000/viewallgigs');
-        if(response.status === 200){
-          setGigData(response.data.allgigs)
-          
+      try {
+        const response = await axios.get("http://localhost:8000/viewallgigs");
+        if (response.status === 200) {
+          setGigData(response.data.allgigs);
         }
-      }catch(err){
-        console.log(err)
+      } catch (err) {
+        console.log(err);
       }
-    }
-    fetchData()
-  }, [])
+    };
+    fetchData();
+  }, []);
   console.log(gigData);
 
-
-  const approval = async () =>{
-    setApp(!app)
+  const approval = async () => {
+    setApp(!app);
     const status = {
-      status: app
-    }
-        try {
-          const response = await axios.post('http://localhost:8001/rejectgig', status,{
-
-          })
-          
-        } catch (error) {
-          
+      status: app,
+      gigId: gigId,
+    };
+    try {
+      const response = await axios.post(
+        "http://localhost:8001/gigstatus",
+        status,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-
-  }
+      );
+      console.log(response);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  };
   console.log(app);
-  
-
-
-  
 
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Gig Name
@@ -86,44 +92,45 @@ function Page() {
             </tr>
           </thead>
           <tbody>
-          { gigData.map((gig) => (
-            <tr key={gig._id.toString()} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            {gigData.map((gig) => (
+              <tr
+                key={gig._id.toString()}
+                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                {gig.title}
-              </th>
-              <td className="px-6 py-4">{gig.username}</td>
-              <td className="px-6 py-4">{gig.skills[0].value}</td>
-              <td className="px-6 py-4">{gig.phone}</td>
-              <td className="px-6 py-4">{gig.status}</td>
-              <td className="px-6 py-4">${gig.price}</td>
-              <td className="px-6 py-4">3.0 lb.</td>
-              <td className="flex items-center flex-col px-6 py-4 pb-3">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  View
-                </a>
-                <a
-                  href="#"
-                  className="font-medium text-green-600 dark:text-green-500 hover:underline"
-                >
-                  Approve
-                </a>
-                <button
-                  onClick={approval}
-                  className="font-medium text-red-600 dark:text-red-500 hover:underline ms-3"
-                >
-                  Reject
-                </button>
-              </td>
-            </tr>
+                  {gig.title}
+                </th>
+                <td className="px-6 py-4">{gig.username}</td>
+                <td className="px-6 py-4">{gig.skills[0].value}</td>
+                <td className="px-6 py-4">{gig.phone}</td>
+                <td className="px-6 py-4">{gig.status}</td>
+                <td className="px-6 py-4">${gig.price}</td>
+                <td className="px-6 py-4">3.0 lb.</td>
+                <td className="flex items-center flex-col px-6 py-4 pb-3">
+                  <button
+                    onClick={() => setgigId(gig._id.toString())}
+                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  >
+                    View
+                  </button>
+                  <button
+                    onClick={() => setgigId(gig.refId)}
+                    className="font-medium text-green-600 dark:text-green-500 hover:underline"
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={approval}
+                    className="font-medium text-red-600 dark:text-red-500 hover:underline ms-3"
+                  >
+                    Reject
+                  </button>
+                </td>
+              </tr>
             ))}
-           
           </tbody>
         </table>
       </div>
