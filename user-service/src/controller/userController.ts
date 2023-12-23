@@ -70,10 +70,8 @@ const userController = {
           status: data.status
         } 
         const objId = await GigUserModel.find({refId: gigId})
-        console.log('jjjj',objId[0]._id);
 
         const gig = await GigUserModel.findByIdAndUpdate(objId[0]._id, statusData, {new: true});
-        console.log('ssssssssssssssssss', gig);
         
       } catch (error) {
        console.log(error);
@@ -94,7 +92,6 @@ const userController = {
       try {
         const folderName = 'skillVibe';
         const updatedData = req.body;
-        console.log('sssssssssssssss',req.body);
         
         const token = req.headers.authorization?.split(' ')[1];
     
@@ -147,6 +144,21 @@ const userController = {
         const allgigs = await GigUserModel.find()
         res.status(200).json({message: 'gig data fetched successfully', allgigs})
       } catch (error) {
+        res.status(500).json({error: "internal server error"})
+      }
+    },
+    async mygigs(req: Request, res: Response){
+      try {
+        const token = req.headers.authorization?.split(' ')[1];;
+        if(!token){
+          return res.status(401).json({error: 'unauthorized'})
+        }
+        const decoded = jwt.verify(token, jwtSecret) as JwtPayload
+        const userId = decoded.userId;
+        const usergigs = await GigUserModel.find({userId: userId})
+        res.status(200).json({message: 'success', usergigs})
+      } catch (error) {
+        console.log(error);
         res.status(500).json({error: "internal server error"})
       }
     }

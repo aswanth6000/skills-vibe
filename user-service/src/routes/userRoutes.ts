@@ -9,5 +9,6 @@ userRouter.get('/userhome', verifyToken, userController.getUserHome);
 userRouter.get('/viewAllUsers', userController.getAllUsers)
 userRouter.get('/viewallgigs', userController.getAllGigs)
 userRouter.put('/userProfileUpdate', verifyToken, multerConfig.single('uploadPic'), userController.userProfileUpdate);
+userRouter.get('/mygigs', userController.mygigs)
 
 export default userRouter;
