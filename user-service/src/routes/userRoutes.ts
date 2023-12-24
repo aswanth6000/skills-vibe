@@ -10,5 +10,6 @@ userRouter.get('/viewAllUsers', userController.getAllUsers)
 userRouter.get('/viewallgigs', userController.getAllGigs)
 userRouter.put('/userProfileUpdate', verifyToken, multerConfig.single('uploadPic'), userController.userProfileUpdate);
 userRouter.get('/mygigs', userController.mygigs)
+userRouter.get('/editgig/:gigId',userController.getgig)
 
 export default userRouter;

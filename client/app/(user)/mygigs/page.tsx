@@ -102,7 +102,7 @@ export default function Page() {
             <p className='pl-3'>status: {x.status ? 'approved' : 'rejected'}</p>
         </div>
     <div className='pl-3'>
-        <a href="/edit" className='text-blue-900'>Edit</a>
+        <a href={`/editgig/${x.refId}`} className='text-blue-900'>Edit</a>
     </div>
     </div>
     )}
