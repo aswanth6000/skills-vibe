@@ -2,10 +2,24 @@
 import { CarouselDefault } from '@/components/carousel'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { FC } from 'react';
+
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import Image from 'next/image';
+import Navbar from '@/components/navbar';
 
 interface Gigs{
     _id: string,
     title: string,
+    refId: string,
+    image1: string,
+    image2: string,
+    image3: string,
+    price: number,
+    status: boolean
 
 }
 
@@ -39,20 +53,59 @@ export default function Page() {
     }, [])
 
   return (
-    <div className='w-64 h-auto flex flex-col justify-start border rounded mt-3 mb-3 ml-3'>
-        <div >
-            <CarouselDefault stl={styles}/>
+    <>
+    <Navbar/>
+    { gig.map((x)=>
+    <div key={x.refId} className='w-72 h-auto flex flex-col justify-start border rounded mt-3 mb-3 ml-3'>
+    <div >
+        <Swiper
+      spaceBetween={50}
+      slidesPerView={1}
+      modules={[Autoplay]}
+      autoplay={{delay:5000}}
+      loop={true}
+      className='h-auto w-full'
+    >
+      <SwiperSlide>
+      <div >
+      <img src={x.image1}     
+        className="w-full h-36 object-fill m-0 p-0"
+      alt="Picture of the author"/>
+      </div>
+      </SwiperSlide>
+      <SwiperSlide>
+      <div >
+      <img src={x.image2}     
+        className="w-full h-36 object-fill m-0 p-0"
+      alt="Picture of the author"/>
+      </div>
+      </SwiperSlide>
+      <SwiperSlide>
+      <div >
+      <img src={x.image3}     
+        className="w-full h-36 object-fill m-0 p-0"
+      alt="Picture of the author"/>
+      </div>
+      </SwiperSlide>
+    </Swiper>
         </div>
         <div>
-        <p className='pl-3'>I make your video editting job much easier</p> 
+        <p className='pl-3'>{x.title}</p> 
         </div>
         <div>
-        {/* <FontAwesomeIcon icon={faStar} size='xs' className="text-2xl" style={{ fontSize: '2em' }}/> */}
         <p className='pl-3'>star rating here</p>
         </div>
         <div>
-            <p className='pl-3'>From: 4455</p>
+            <p className='pl-3'>From: {x.price}</p>
         </div>
+        <div>
+            <p className='pl-3'>status: {x.status ? 'approved' : 'rejected'}</p>
+        </div>
+    <div className='pl-3'>
+        <a href="/edit" className='text-blue-900'>Edit</a>
     </div>
+    </div>
+    )}
+    </>
   )
 }
