@@ -85,7 +85,6 @@ const userController = {
         const gigId = data;
 
         const objId = await GigUserModel.find({refId: gigId})
-
         const gig = await GigUserModel.findByIdAndDelete(objId[0]._id);
         console.log("gig deleted from usergig database");
       } catch (error) {

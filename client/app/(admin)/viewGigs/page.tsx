@@ -69,9 +69,9 @@ function Page() {
               <th scope="col" className="px-6 py-3">
                 Seller Name
               </th>
-              <th scope="col" className="px-8 py-3">
+              {/* <th scope="col" className="px-8 py-3">
                 Category
-              </th>
+              </th> */}
               <th scope="col" className="px-6 py-3">
                 Phone number
               </th>
@@ -102,7 +102,7 @@ function Page() {
                   {gig.title}
                 </th>
                 <td className="px-6 py-4">{gig.username}</td>
-                <td className="px-6 py-4">{gig.skills[0].value}</td>
+                {/* <td className="px-6 py-4">{gig.skills.value}</td> */}
                 <td className="px-6 py-4">{gig.phone}</td>
                 <td className="px-6 py-4">{gig.status}</td>
                 <td className="px-6 py-4">${gig.price}</td>

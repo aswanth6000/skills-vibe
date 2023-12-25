@@ -1,4 +1,3 @@
-// gigPublisher.ts
 import RabbitMQ from '../../../../messages/rabbitMQ';
 
 const gigPublisher = {

@@ -38,7 +38,7 @@ const gigController = {
             try {
                 const result = await cloudinary.uploader.upload(req.files['image1'][0].path, { public_id: `${folderName}/${req.files['image1'][0].originalname}` });
 
-                let result1, result2, video;
+                let result1: any, result2: any;
                 if (req.files['image2'] && req.files['image2'][0]) {
                     result1 = await cloudinary.uploader.upload(req.files['image2'][0].path, { public_id: `${folderName}/${req.files['image2'][0].originalname}` });
                 }
@@ -47,9 +47,9 @@ const gigController = {
                     result2 = await cloudinary.uploader.upload(req.files['image3'][0].path, { public_id: `${folderName}/${req.files['image3'][0].originalname}` });
                 }
 
-                if (req.files['video'] && req.files['video'][0]) {
-                    video = await cloudinary.uploader.upload_large(req.files['video'][0].path, { resource_type: 'video', public_id: `${folderName}/${req.files['video'][0].originalname}` });
-                }
+                // if (req.files['video'] && req.files['video'][0]) {
+                //     video = await cloudinary.uploader.upload_large(req.files['video'][0].path, { resource_type: 'video', public_id: `${folderName}/${req.files['video'][0].originalname}` });
+                // }
 
                 const newGig = new GigModel({
                     userId,
@@ -60,7 +60,7 @@ const gigController = {
                     image1: result.secure_url,
                     image2: result1?.secure_url,
                     image3: result2?.secure_url,
-                    video: video?.secure_url
+                    // video: video?.secure_url
                 });
 
                 await newGig.save();

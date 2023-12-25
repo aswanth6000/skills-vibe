@@ -124,7 +124,7 @@ export default function Login() {
           isAdmin: true,
           ...user
         }))
-        router.push('/adminhome')
+        router.push('/admindash')
       }
     } catch (error) {
       console.error('Error sending user data to server:', error);

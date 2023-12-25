@@ -6,6 +6,7 @@ import makeAnimated from 'react-select/animated';
 import axios from 'axios';
 import Image from 'next/image';
 import NextBreadcrumb from '@/components/NextBreadcrumb';
+import { useRouter } from 'next/navigation';
 
 let bearerToken: string | null;
 
@@ -27,6 +28,7 @@ interface FormData {
 }
 
 const MultiStepForm: React.FC = () => {
+  const router = useRouter()
   const initialFileValue: File | string = '';
   const animatedComponents = makeAnimated();
   const [formData, setFormData] = useState({
@@ -60,6 +62,7 @@ const MultiStepForm: React.FC = () => {
 
 
   const handleFileChange = (field: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       setFormData({
@@ -115,11 +118,13 @@ const MultiStepForm: React.FC = () => {
           },
         });
         console.log('Response from userhome:', response.data);
+        router.push('/userhome')
       } catch (error) {
         console.error(error);
       }
     }
     console.log('Form submitted:', formData);
+    
   };
 
   return (
@@ -140,7 +145,8 @@ const MultiStepForm: React.FC = () => {
             <label htmlFor="title" className="block text-sm font-medium text-gray-600">
               Gig Title
             </label>
-            <input
+            <input 
+              required
               type="text"
               id="title"
               name="title"
@@ -177,8 +183,9 @@ const MultiStepForm: React.FC = () => {
             <label htmlFor="price" className="block text-sm font-medium text-gray-600">
               Price
             </label>
-            <input
-              type="text"
+            <input 
+              required
+              type="number"
               id="price"
               name="price"
               value={formData.price}
@@ -191,7 +198,8 @@ const MultiStepForm: React.FC = () => {
             <label htmlFor="price" className="block text-sm font-medium text-gray-600">
               Tags
             </label>
-            <input
+            <input 
+              required
               type="text"
               id="tags"
               name="tags"
@@ -211,7 +219,8 @@ const MultiStepForm: React.FC = () => {
             <label htmlFor="image1" className="block text-sm font-medium text-gray-600">
               image1
             </label>
-            <input
+            <input 
+              required
               type="file"
               id="image1"
               name="image1"
@@ -224,7 +233,8 @@ const MultiStepForm: React.FC = () => {
             <label htmlFor="image2" className="block text-sm font-medium text-gray-600">
               image2
             </label>
-            <input
+            <input 
+              required
               type="file"
               id="image2"
               name="image2"
@@ -237,7 +247,8 @@ const MultiStepForm: React.FC = () => {
             <label htmlFor="image3" className="block text-sm font-medium text-gray-600">
               image3
             </label>
-            <input
+            <input 
+              required
               type="file"
               id="image3"
               name="image3"
@@ -251,11 +262,12 @@ const MultiStepForm: React.FC = () => {
             <source src={viewvideo || ''} type="video/mp4" />
             </video>}
           </div>
-          <div className='mb-3'>
+          {/* <div className='mb-3'>
             <label htmlFor="price" className="block text-sm font-medium text-gray-600">
               video
             </label>
-            <input
+            <input 
+              required
               type="file"
               id="video"
               name="video"
@@ -263,7 +275,7 @@ const MultiStepForm: React.FC = () => {
               onChange={handleVideoChange}
               className="mt-1 p-2 w-full border rounded-md"
             />
-          </div>
+          </div> */}
           <div className="flex justify-center">
             <button type="submit" className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600">
               Submit

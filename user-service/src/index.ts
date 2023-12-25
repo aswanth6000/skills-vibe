@@ -15,8 +15,8 @@ app.use(express.json());
 const PORT = process.env.PORT || 8001;
 
 userController.setup()
-userController.gigStatusEvent()
-
+// userController.gigStatusEvent()
+userController.gigDeleteEvent()
 app.use(router)
 app.use(userRouter)
 

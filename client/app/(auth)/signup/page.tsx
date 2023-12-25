@@ -39,7 +39,7 @@ export default function Signup() {
 
   const  handleSubmit  = (e: React.FormEvent<HTMLFormElement>) =>{
     localStorage.setItem('phoneNumberForVerification', phone);
-    router.push('signup/otp')
+    
     e.preventDefault()
       const userData: userDataType = {
         username: name,
@@ -48,8 +48,8 @@ export default function Signup() {
         phone: phone,
         password: password
       }
-      console.log(userData);
       sendUserData(userData)
+      router.push('/login')
 
     
   }
