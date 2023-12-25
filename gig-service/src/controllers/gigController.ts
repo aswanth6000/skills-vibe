@@ -109,7 +109,39 @@ const gigController = {
             console.error('Error updating gig status:', error);
             res.status(500).json({ error: 'Internal server error' });
           }
-    }
+    },
+    async editgig(req: Request, res: Response){
+        console.log('request recieved');
+        
+        try {
+            console.log(req.body);
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+    },
+    async deletegig(req: Request, res: Response){
+        console.log('request recieved');
+        
+        try {
+            const {refId} = req.body
+            console.log(refId);
+            
+            const deletedGig = await GigModel.findByIdAndDelete( refId );
+
+            if (!deletedGig) {
+              return res.status(404).json({ message: 'Gig not found' });
+            }
+        
+            res.status(200).json({ message: 'Gig deleted successfully' });
+            gigPublisher.gigDeleteEvent(refId)
+        
+        } catch (error) {
+            console.log(error);
+            
+        }
+    },
 };
 
 export default gigController;

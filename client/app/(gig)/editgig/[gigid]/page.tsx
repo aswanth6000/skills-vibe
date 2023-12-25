@@ -116,7 +116,6 @@ const MultiStepForm: React.FC = () => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
   
-      // Create a temporary URL for the image
       const imageUrl = URL.createObjectURL(file);
   
       setFormData({
@@ -124,7 +123,6 @@ const MultiStepForm: React.FC = () => {
         [field]: file,
       });
   
-      // Set the temporary URL as the src for the Image component
       if (field === 'image1') setviewImage1(imageUrl);
       else if (field === 'image2') setviewImage2(imageUrl);
       else if (field === 'image3') setviewImage3(imageUrl);
@@ -163,7 +161,7 @@ const MultiStepForm: React.FC = () => {
     e.preventDefault();
     if (bearerToken) {
       try {
-        const response = await axios.post('http://localhost:8001/addgig', formData, {
+        const response = await axios.post('http://localhost:8001/editgig', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${bearerToken}`,
@@ -254,10 +252,35 @@ const MultiStepForm: React.FC = () => {
                 placeholder="Enter gig Tags" />
             </div>
             <div className='mb-3 flex flex-row align-middle justify-center content-center'>
-              {viewimage1 && <Image height={500} width={500} src={viewimage1 || ''} alt='displayviewImage1' className='h-28 w-32 ml-3'></Image>}
-              {viewimage2 && <Image height={500} width={500} src={viewimage2 || ''} alt='displayviewImage1' className='h-28 w-32 ml-3'></Image>}
-              {viewimage3 && <Image height={500} width={500} src={viewimage3 || ''} alt='displayviewImage1' className='h-28 w-32 ml-3'></Image>}
-            </div>
+  {viewimage1 && (
+    <Image
+      height={500}
+      width={500}
+      src={typeof viewimage1 === 'string' ? viewimage1 : URL.createObjectURL(viewimage1)}
+      alt='displayviewImage1'
+      className='h-28 w-32 ml-3'
+    />
+  )}
+  {viewimage2 && (
+    <Image
+      height={500}
+      width={500}
+      src={typeof viewimage2 === 'string' ? viewimage2 : URL.createObjectURL(viewimage2)}
+      alt='displayviewImage1'
+      className='h-28 w-32 ml-3'
+    />
+  )}
+  {viewimage3 && (
+    <Image
+      height={500}
+      width={500}
+      src={typeof viewimage3 === 'string' ? viewimage3 : URL.createObjectURL(viewimage3)}
+      alt='displayviewImage1'
+      className='h-28 w-32 ml-3'
+    />
+  )}
+</div>
+
             <div className='mb-3'>
               <label htmlFor="image1" className="block text-sm font-medium text-gray-600">
                 Image 1

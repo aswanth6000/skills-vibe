@@ -24,6 +24,8 @@ interface Gigs{
 }
 
 export default function Page() {
+  let token: string | null;
+
     const [gig, setGig] = useState<Gigs[]>([])
     const styles ={
         outerdiv : null,
@@ -31,7 +33,7 @@ export default function Page() {
         autosec : 8000
     }
     useEffect(()=>{
-        const token = localStorage.getItem('token')
+         token = localStorage.getItem('token')
         const fetchData = async () =>{
             try {
                 console.log('send' ,token);
@@ -51,6 +53,31 @@ export default function Page() {
         };
         fetchData()
     }, [])
+
+        const handleDelete = async (refId: string) => {
+          try {
+            const response = await axios.post(
+              'http://localhost:8001/deletegig',
+              { refId },
+              {
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+            if (response.status === 200) {
+              console.log('Gig deleted successfully');
+            }
+            console.log(response);
+            
+          } catch (error) {
+            console.log(error);
+          }
+        
+    
+  }
+
 
   return (
     <>
@@ -103,6 +130,9 @@ export default function Page() {
         </div>
     <div className='pl-3'>
         <a href={`/editgig/${x.refId}`} className='text-blue-900'>Edit</a>
+    </div>
+    <div className='pl-3'>
+        <button onClick={() => handleDelete(x.refId)} className='text-red-900'>Delete</button>
     </div>
     </div>
     )}

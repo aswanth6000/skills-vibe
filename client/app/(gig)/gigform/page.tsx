@@ -114,7 +114,6 @@ const MultiStepForm: React.FC = () => {
             'Authorization': `Bearer ${bearerToken}`,
           },
         });
-
         console.log('Response from userhome:', response.data);
       } catch (error) {
         console.error(error);

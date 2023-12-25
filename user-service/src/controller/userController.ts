@@ -78,6 +78,21 @@ const userController = {
         
       }
     },
+    async gigDeleteEvent() {
+      try {
+        const data: any = await userGigConsumers.gigDeleteConsumer();
+        console.log("lslslslls", data);
+        const gigId = data;
+
+        const objId = await GigUserModel.find({refId: gigId})
+
+        const gig = await GigUserModel.findByIdAndDelete(objId[0]._id);
+        console.log("gig deleted from usergig database");
+      } catch (error) {
+       console.log(error);
+        
+      }
+    },
 
     async getUserHome(req: ExtendedRequest ,res: Response) {
         const user = req.user;
@@ -166,7 +181,6 @@ const userController = {
       try {
         const gigId = req.params.gigId
         const gigData = await GigUserModel.find({refId: gigId})
-        console.log('ddddddddddddddddddddddddddddd',gigData);
         res.status(200).json(gigData);
       } catch (error) {
         console.log(error);
