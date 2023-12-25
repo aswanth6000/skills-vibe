@@ -1,6 +1,6 @@
 import express from 'express';
 import userController from '../controller/userController';
-import verifyToken from '../middleware/verifyToken';
+import verifyToken from 'skill-vibe-express-jwt-auth'
 import multerConfig from '../config/multer';
 
 const userRouter = express.Router();
