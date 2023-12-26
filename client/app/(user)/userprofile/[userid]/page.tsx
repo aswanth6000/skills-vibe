@@ -5,25 +5,15 @@ import Navbar from '@/components/navbar';
 import axios from '../../../../config/axios';
 import { AppDispatch } from '@/redux/store';
 import { useDispatch } from 'react-redux';
-import  OptionTypeBase  from 'react-select';
 import Image from 'next/image';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
-import  ValueType from 'react-select';
-import { textarea } from '@material-tailwind/react';
-import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import useFormValidation from '@/hooks/validation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import NextBreadcrumb from '@/components/NextBreadcrumb';
 import { logIn } from '@/redux/features/authSlice';
-
-type StateManagedSelect = {
-  value: string;
-  label: string;
-};
+import { StateManagedSelect } from '@/types/gigTypes';
 
 let bearerToken: string | null 
 

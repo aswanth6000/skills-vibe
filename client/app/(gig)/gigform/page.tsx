@@ -7,25 +7,10 @@ import axios from 'axios';
 import Image from 'next/image';
 import NextBreadcrumb from '@/components/NextBreadcrumb';
 import { useRouter } from 'next/navigation';
+import { StateManagedSelect, FormData } from '@/types/gigTypes';
 
 let bearerToken: string | null;
 
-type StateManagedSelect = {
-  value: string;
-  label: string;
-};
-
-interface FormData {
-  title: string;
-  category: StateManagedSelect[];
-  description: string;
-  price: string;
-  tags: string;
-  image1: File | string;
-  image2: File | string;
-  image3: File | string;
-  video: File | string;
-}
 
 const MultiStepForm: React.FC = () => {
   const router = useRouter()

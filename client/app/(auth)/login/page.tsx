@@ -10,33 +10,12 @@ import React,{ useState } from "react";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import {app} from '../../../config/firebase'
+import { AuthState, userDataType, userDataTypeG } from "@/types/authTypes";
 
 
-interface FormValues {
-  email: string;
-  password: string;
-}
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
-interface AuthState {
-  isAuth: boolean;
-  username: string;
-  uid: string;
-  isAdmin: boolean;
-  token: string;
-  
-}
-
-interface userDataType{
-  email: string | null;
-  password: string | null,
-  google: boolean
-}
-interface userDataTypeG{
-  email: string | null;
-  google: boolean | null;
-}
 
 export default function Login() {
   const user = useAppSelector((state)=> state.auth.value)

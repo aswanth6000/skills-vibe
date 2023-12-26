@@ -1,17 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
-interface Gig {
-  _id: string;
-  title: string;
-  skills: any;
-  price: number;
-  username: string;
-  phone: number;
-  status: boolean;
-  refId: string;
-}
+import { Gig } from "@/types/adminTypes";
 
 function Page() {
   const [gigData, setGigData] = useState<Gig[]>([]);

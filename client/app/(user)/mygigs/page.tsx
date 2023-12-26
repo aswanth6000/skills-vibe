@@ -10,18 +10,7 @@ import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import Image from 'next/image';
 import Navbar from '@/components/navbar';
-
-interface Gigs{
-    _id: string,
-    title: string,
-    refId: string,
-    image1: string,
-    image2: string,
-    image3: string,
-    price: number,
-    status: boolean
-
-}
+import { Gigs } from '@/types/gigTypes';
 
 export default function Page() {
   let token: string | null;

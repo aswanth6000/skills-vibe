@@ -6,17 +6,12 @@ import {app} from '../../../config/firebase'
 import axios from '../../../config/axios'
 import useFormValidation from '@/hooks/validation';
 import { useRouter } from 'next/navigation';
+import { userDataTypeSignup } from '@/types/authTypes';
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
-interface userDataType{
-  username: string | null;
-  email: string | null;
-  google: boolean;
-  password: string | null,
-  phone: number | string | null
-}
+
 
 
 
@@ -41,7 +36,7 @@ export default function Signup() {
     localStorage.setItem('phoneNumberForVerification', phone);
     
     e.preventDefault()
-      const userData: userDataType = {
+      const userData: userDataTypeSignup = {
         username: name,
         email: email,
         google: false,
@@ -63,7 +58,7 @@ export default function Signup() {
       const credential: OAuthCredential | null = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken || '';
       const user = result.user;
-      const userData: userDataType = {
+      const userData: userDataTypeSignup = {
         username: user.displayName,
         email: user.email,
         phone: '',
@@ -81,7 +76,7 @@ export default function Signup() {
       const credential = GoogleAuthProvider.credentialFromError(error);
     });
   }
-  const sendUserData = async (userData: userDataType) => {
+  const sendUserData = async (userData: userDataTypeSignup) => {
     try {
       const response = await axios.post('/signup', userData, {
         method: 'POST',
