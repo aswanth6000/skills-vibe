@@ -120,10 +120,7 @@ const userController = {
           console.error('JWT Verification Error:', jwtError);
           res.status(401).json({ error: 'Unauthorized - Invalid token' });
           return;
-        }
-    
-        console.log('Decoded Token:', decodedToken);
-    
+        }    
         const userId = decodedToken.userId
         if (req.file) {
           const result = await cloudinary.uploader.upload(req.file.path, { public_id: `${folderName}/${req.file.originalname}` });

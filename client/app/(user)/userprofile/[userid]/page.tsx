@@ -18,6 +18,7 @@ import useFormValidation from '@/hooks/validation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import NextBreadcrumb from '@/components/NextBreadcrumb';
+import { logIn } from '@/redux/features/authSlice';
 
 type StateManagedSelect = {
   value: string;
@@ -28,6 +29,7 @@ let bearerToken: string | null
 
 const UserProfileEdit: React.FC = () => {
   const [pic, setPic] = useState('')
+  const dispatch = useDispatch<AppDispatch>()
    const skillsOptions: StateManagedSelect[] = [
     { value: 'graphic-design', label: 'Graphic Design' },
     { value: 'web-development', label: 'Web Development' },
@@ -83,7 +85,7 @@ const UserProfileEdit: React.FC = () => {
 
           const userData = response.data;
           setPic(userData.profilePicture)
-          console.log("User data:", userData);
+          
 
           setFormData({
             username: userData.username,
@@ -122,13 +124,17 @@ const UserProfileEdit: React.FC = () => {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${bearerToken}`,
         },
-      });
-      console.log(response.status);
-      
+      });      
       if(response.status === 200){
         updateSucess()
+        const updatedUser = response.data.user;
+        console.log(updatedUser);
+        dispatch(logIn({
+          ...updatedUser
+        }))
       }
-      console.log("Response from server:", response.data);
+
+      
     } catch (error) {
       console.log("Error updating user profile:", error);
     }
