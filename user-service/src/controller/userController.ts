@@ -7,15 +7,12 @@ import userPublisher from "../events/publisher/userPublisher";
 import userGigConsumers from "../events/consumer/userGigConsumer";
 import { GigUserModel } from "../models/GigUser";
 import dotenv from 'dotenv'
-dotenv.config()
+dotenv.config();
+import { ExtendedRequest } from "../types/usertypes";
 
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
-interface ExtendedRequest extends Request {
-    user?: {
-      userId: string;
-    };
-  }
+
 
 const userController = {
   async setup() {

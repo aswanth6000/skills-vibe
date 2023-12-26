@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "skill-vibe-express-jwt-auth": "^1.0.1"
+  }
+}

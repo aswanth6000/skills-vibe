@@ -1,10 +1,7 @@
 import { Request } from 'express';
 import multer, { FileFilterCallback, Multer } from 'multer';
 import path from 'path';
-
-interface ParsedQs {
-  [key: string]: string | undefined;
-}
+import {ParsedQs} from '../types/usertypes';
 
 export default  multer({
   storage: multer.diskStorage({}),

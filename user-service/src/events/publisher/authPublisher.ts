@@ -1,9 +1,6 @@
-import RabbitMQ from '../../../../messages/rabbitMQ'
+import RabbitMQ from '../../../../common/src/messages/rabbitMQ'
 
-interface UserLoggedInEvent {
-    userId: string;
-    timestamp: Date;
-  }
+import { UserLoggedInEvent } from '../../types/usertypes';
 
 
 const publisher = {

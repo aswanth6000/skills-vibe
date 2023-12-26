@@ -1,4 +1,4 @@
-import RabbitMQ from "../../../../messages/rabbitMQ";
+import RabbitMQ from "../../../../common/src/messages/rabbitMQ";
 
 const userGigConsumers ={
     async gigCreatedConsumer(){

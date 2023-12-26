@@ -1,10 +1,7 @@
 
-import RabbitMQ from '../../../../messages/rabbitMQ';
+import RabbitMQ from '../../../../common/src/messages/rabbitMQ';
+import { UserLoggedInEvent } from '../../types/gigTypes';
 
-interface UserLoggedInEvent {
-    userId: string;
-    timestamp: Date;
-}
 const consumers = { 
     async listenForUserLoggedInEvent() {
         try {

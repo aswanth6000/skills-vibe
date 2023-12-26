@@ -1,33 +1,5 @@
-import { Schema, model, Types, ObjectId } from "mongoose";
-
-interface GigUser { 
-  _id: Types.ObjectId,
-  userId: string,
-  username: string;
-  phone: number;
-  email: string;
-  password: string;
-  profilePicture: string;
-  role: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  status: boolean;
-  clients: Types.ObjectId[];
-  skills: any;
-  availability: boolean;
-  portfolio: Types.ObjectId;
-  orders: Types.ObjectId;
-  description: string
-  title: string;
-  gigdescription: string;
-  price: number;
-  tags: string;
-  image1: string;
-  image2: string;
-  image3: string;
-  video: string;
-  refId: string;
-}
+import { Schema, model } from "mongoose";
+import { GigUser } from "../types/usertypes";
 
 const skillSchema = new Schema({
   value: String,

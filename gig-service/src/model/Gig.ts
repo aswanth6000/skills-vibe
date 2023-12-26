@@ -1,19 +1,7 @@
 // models/gig.ts
 import { Schema, Document, model } from 'mongoose';
+import { Gig } from '../types/gigTypes';
 
-interface Gig {
-    title: string;
-    gigdescription: string;
-    price: number;
-    tags: string;
-    image1: string; 
-    image2: string; 
-    image3: string; 
-    video: string;   
-    userId: string;
-    status: boolean;
-    refId: string;
-}
 
 interface GigModel extends Gig, Document {}
 

@@ -1,23 +1,6 @@
 import { Schema, model, Types, ObjectId } from "mongoose";
+import { User } from "../types/usertypes";
 
-interface User {
-  _id: Types.ObjectId,
-  username: string;
-  phone: number;
-  email: string;
-  password: string;
-  profilePicture: string;
-  role: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  status: boolean;
-  clients: Types.ObjectId[];
-  skills: any;
-  availability: boolean;
-  portfolio: Types.ObjectId;
-  orders: Types.ObjectId;
-  description: string
-}
 
 const skillSchema = new Schema({
   value: String,
