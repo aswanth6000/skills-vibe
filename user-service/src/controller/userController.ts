@@ -10,6 +10,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 import { ExtendedRequest } from "../types/usertypes";
 
+
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
 

@@ -1,4 +1,5 @@
 import { Types, ObjectId } from "mongoose";
+import { Request, Response } from "express";
 
 export  interface ParsedQs {
     [key: string]: string | undefined;
