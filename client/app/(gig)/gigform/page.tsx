@@ -8,11 +8,13 @@ import Image from 'next/image';
 import NextBreadcrumb from '@/components/NextBreadcrumb';
 import { useRouter } from 'next/navigation';
 import { StateManagedSelect, FormData } from '@/types/gigTypes';
+import Loading from '@/components/loading';
 
 let bearerToken: string | null;
 
 
 const MultiStepForm: React.FC = () => {
+  const [loader, setLoader] = useState(false)
   const router = useRouter()
   const initialFileValue: File | string = '';
   const animatedComponents = makeAnimated();
@@ -93,6 +95,7 @@ const MultiStepForm: React.FC = () => {
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setLoader(true)
     e.preventDefault();
     if (bearerToken) {
       try {
@@ -103,8 +106,10 @@ const MultiStepForm: React.FC = () => {
           },
         });
         console.log('Response from userhome:', response.data);
+        setLoader(false)
         router.push('/userhome')
       } catch (error) {
+        setLoader(false)
         console.error(error);
       }
     }
@@ -115,6 +120,7 @@ const MultiStepForm: React.FC = () => {
   return (
     <div className='bg-bodywhite h-auto  pb-12'>
       <Navbar />
+     
       <NextBreadcrumb
         homeElement={'Home'}
         separator={<span> &gt;  </span>}
@@ -262,9 +268,9 @@ const MultiStepForm: React.FC = () => {
             />
           </div> */}
           <div className="flex justify-center">
-            <button type="submit" className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600">
+            {loader ? <Loading/> : <button type="submit" className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600">
               Submit
-            </button>
+            </button>}
           </div>
         </form>
       </div>

@@ -45,15 +45,12 @@ const userController = {
             refId: data.refId
           }
           const newGigUser = new GigUserModel(gigUserData);
-          const savedGigUser = newGigUser.save();
+          const savedGigUser = await newGigUser.save();
           console.log("gigAdded success", savedGigUser);
         }else{
           console.log("no user and data");
           
         }
-        
-
-
         console.log('[User Controller]: RabbitMQ setup completed');
     } catch (error) {
         console.error('[User Controller]: Error setting up RabbitMQ:', error);
