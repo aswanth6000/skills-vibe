@@ -22,7 +22,7 @@ const MultiStepForm: React.FC = () => {
   const [data, setData] = useState<FormData>({
     title: '',
     category: [],
-    description: '',
+    gigdescription: '',
     price: '',
     tags: '',
     image1: '',
@@ -66,7 +66,7 @@ const MultiStepForm: React.FC = () => {
   const [formData, setFormData] = useState({
     title: data.title,
     category: data.category as StateManagedSelect[],
-    description: data.description,
+    description: data.gigdescription,
     price: data.price,
     tags: data.tags,
     image1: data.image1,

@@ -6,7 +6,7 @@ export interface StateManagedSelect  {
  export interface FormData {
     title: string;
     category: StateManagedSelect[];
-    description: string;
+    gigdescription: string;
     price: string;
     tags: string;
     image1: File | string;

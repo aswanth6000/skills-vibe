@@ -116,7 +116,7 @@ export default function Page() {
             <p className='pl-3'>From: {x.price}</p>
         </div>
         <div>
-            <p className='pl-3'>status: {x.status ? 'approved' : 'rejected'}</p>
+            <p className='pl-3'>status: {x.status ? 'pending' : x.status   }</p>
         </div>
     <div className='pl-3'>
         <a href={`/editgig/${x.refId}`} className='text-blue-900'>Edit</a>

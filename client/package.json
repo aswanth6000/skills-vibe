@@ -29,6 +29,7 @@
     "react-dom": "^18",
     "react-google-button": "^0.7.2",
     "react-loader-spinner": "^6.1.6",
+    "react-loading-skeleton": "^3.3.1",
     "react-redux": "^9.0.4",
     "react-select": "^5.8.0",
     "react-timer-hook": "^3.0.7",

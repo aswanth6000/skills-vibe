@@ -14,10 +14,13 @@ import 'react-toastify/dist/ReactToastify.css'
 import NextBreadcrumb from '@/components/NextBreadcrumb';
 import { logIn } from '@/redux/features/authSlice';
 import { StateManagedSelect } from '@/types/gigTypes';
+import Skeleton from 'react-loading-skeleton';
+
 
 let bearerToken: string | null 
 
 const UserProfileEdit: React.FC = () => {
+  const [load, setLoad] = useState(false)
   const [pic, setPic] = useState('')
   const dispatch = useDispatch<AppDispatch>()
    const skillsOptions: StateManagedSelect[] = [
@@ -109,6 +112,7 @@ const UserProfileEdit: React.FC = () => {
     
     console.log("Updated user data:", updatedUserData);
     try {
+      setLoad(true)
       const response = await axios.put('/userProfileUpdate', updatedUserData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -116,6 +120,7 @@ const UserProfileEdit: React.FC = () => {
         },
       });      
       if(response.status === 200){
+        setLoad(false)
         updateSucess()
         const updatedUser = response.data.user;
         console.log(updatedUser);
@@ -160,7 +165,7 @@ const UserProfileEdit: React.FC = () => {
         capitalizeLinks
       />
       
-      <div className="bg-bodywhite min-h-screen flex">
+      {load ? <Skeleton/> : <div className="bg-bodywhite min-h-screen flex">
         <div className="w-1/3 bg-navwhite h-auto ml-5 rounded-2xl border-black flex flex-col mt-2 items-center p-4 mb-12">
           <div className="w-56 h-56 rounded-full cursor-pointer overflow-hidden">
             <input
@@ -281,7 +286,7 @@ const UserProfileEdit: React.FC = () => {
             Change Password
           </button>
         </div>
-      </div>
+      </div>}
       <ToastContainer
         position="bottom-center"
         autoClose={5000}
