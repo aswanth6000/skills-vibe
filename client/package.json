@@ -21,6 +21,7 @@
     "axios": "^1.6.2",
     "firebase": "^10.7.1",
     "install": "^0.13.0",
+    "lottie-react": "^2.4.0",
     "next": "14.0.4",
     "nextjs-toploader": "^1.6.4",
     "npm": "^10.2.5",

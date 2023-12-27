@@ -35,7 +35,7 @@ const userController = {
             availablity: user.availability,
             portfolio: user.portfolio,
             title: data.title,
-            gigdescription: data.description,
+            gigdescription: data.gigdescription,
             price: data.price,
             tags: data.tags,
             image1: data.image1,
