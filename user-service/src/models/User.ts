@@ -61,7 +61,9 @@ const userSchema = new Schema<User>({
   },
   orders: {
     type: Schema.Types.ObjectId,
-    ref: "Order", // Assuming 'Order' is the name of the model
+  },
+  ordersRecieved: {
+    type: Schema.Types.ObjectId,
   },
 });
 

@@ -24,6 +24,7 @@ export  interface ParsedQs {
     email: string;
     password: string;
     profilePicture: string;
+    ordersRecieved: Types.ObjectId
     role: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -52,6 +53,7 @@ export  interface ParsedQs {
     password: string;
     profilePicture: string;
     role: boolean;
+    ordersRecieved: Types.ObjectId
     createdAt: Date;
     updatedAt: Date;
     status: boolean;

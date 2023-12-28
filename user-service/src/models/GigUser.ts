@@ -36,6 +36,9 @@ const GigUserSchema = new Schema<GigUser>({
     type: Boolean,
     default: false
   },
+  ordersRecieved:{
+    type: Schema.Types.ObjectId
+  },
   skills: {
     type: [skillSchema],
     default: [],
