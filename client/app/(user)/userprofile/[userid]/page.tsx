@@ -5,29 +5,24 @@ import Navbar from '@/components/navbar';
 import axios from '../../../../config/axios';
 import { AppDispatch } from '@/redux/store';
 import { useDispatch } from 'react-redux';
-import  OptionTypeBase  from 'react-select';
 import Image from 'next/image';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
-import  ValueType from 'react-select';
-import { textarea } from '@material-tailwind/react';
-import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import useFormValidation from '@/hooks/validation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import NextBreadcrumb from '@/components/NextBreadcrumb';
+import { logIn } from '@/redux/features/authSlice';
+import { StateManagedSelect } from '@/types/gigTypes';
+import Skeleton from 'react-loading-skeleton';
 
-type StateManagedSelect = {
-  value: string;
-  label: string;
-};
 
 let bearerToken: string | null 
 
 const UserProfileEdit: React.FC = () => {
+  const [load, setLoad] = useState(false)
   const [pic, setPic] = useState('')
+  const dispatch = useDispatch<AppDispatch>()
    const skillsOptions: StateManagedSelect[] = [
     { value: 'graphic-design', label: 'Graphic Design' },
     { value: 'web-development', label: 'Web Development' },
@@ -83,7 +78,7 @@ const UserProfileEdit: React.FC = () => {
 
           const userData = response.data;
           setPic(userData.profilePicture)
-          console.log("User data:", userData);
+          
 
           setFormData({
             username: userData.username,
@@ -117,18 +112,24 @@ const UserProfileEdit: React.FC = () => {
     
     console.log("Updated user data:", updatedUserData);
     try {
+      setLoad(true)
       const response = await axios.put('/userProfileUpdate', updatedUserData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${bearerToken}`,
         },
-      });
-      console.log(response.status);
-      
+      });      
       if(response.status === 200){
+        setLoad(false)
         updateSucess()
+        const updatedUser = response.data.user;
+        console.log(updatedUser);
+        dispatch(logIn({
+          ...updatedUser
+        }))
       }
-      console.log("Response from server:", response.data);
+
+      
     } catch (error) {
       console.log("Error updating user profile:", error);
     }
@@ -164,7 +165,7 @@ const UserProfileEdit: React.FC = () => {
         capitalizeLinks
       />
       
-      <div className="bg-bodywhite min-h-screen flex">
+      {load ? <Skeleton/> : <div className="bg-bodywhite min-h-screen flex">
         <div className="w-1/3 bg-navwhite h-auto ml-5 rounded-2xl border-black flex flex-col mt-2 items-center p-4 mb-12">
           <div className="w-56 h-56 rounded-full cursor-pointer overflow-hidden">
             <input
@@ -262,7 +263,9 @@ const UserProfileEdit: React.FC = () => {
 
         <div className="w-1/3 flex flex-col  items-center bg-navwhite h-auto ml-5 rounded-2xl border-black  mt-2 p-4 mb-12 mr-4 justify-center">
           <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
+            <Link href='/order'>
             Orders
+            </Link>
           </button>
           <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
             Portfolio
@@ -282,10 +285,12 @@ const UserProfileEdit: React.FC = () => {
             Dashboard
           </button>
           <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
+          <Link href='/changepassword'>
             Change Password
+          </Link>
           </button>
         </div>
-      </div>
+      </div>}
       <ToastContainer
         position="bottom-center"
         autoClose={5000}

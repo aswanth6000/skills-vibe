@@ -10,18 +10,8 @@ import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import Image from 'next/image';
 import Navbar from '@/components/navbar';
-
-interface Gigs{
-    _id: string,
-    title: string,
-    refId: string,
-    image1: string,
-    image2: string,
-    image3: string,
-    price: number,
-    status: boolean
-
-}
+import { Gigs } from '@/types/gigTypes';
+import Empty from '@/components/empty';
 
 export default function Page() {
   let token: string | null;
@@ -35,9 +25,7 @@ export default function Page() {
     useEffect(()=>{
          token = localStorage.getItem('token')
         const fetchData = async () =>{
-            try {
-                console.log('send' ,token);
-                
+            try {                
                 const response = await  axios.get('http://localhost:8000/mygigs',
                 {headers: {
                     'Authorization': `Bearer ${token}`,
@@ -82,7 +70,7 @@ export default function Page() {
   return (
     <>
     <Navbar/>
-    { gig.map((x)=>
+    { gig ? gig.map((x)=>
     <div key={x.refId} className='w-72 h-auto flex flex-col justify-start border rounded mt-3 mb-3 ml-3'>
     <div >
         <Swiper
@@ -126,7 +114,7 @@ export default function Page() {
             <p className='pl-3'>From: {x.price}</p>
         </div>
         <div>
-            <p className='pl-3'>status: {x.status ? 'approved' : 'rejected'}</p>
+            <p className='pl-3'>status: {x.status ? 'pending' : x.status   }</p>
         </div>
     <div className='pl-3'>
         <a href={`/editgig/${x.refId}`} className='text-blue-900'>Edit</a>
@@ -135,7 +123,7 @@ export default function Page() {
         <button onClick={() => handleDelete(x.refId)} className='text-red-900'>Delete</button>
     </div>
     </div>
-    )}
+    ) : <Empty/>}
     </>
   )
 }

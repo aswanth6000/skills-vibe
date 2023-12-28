@@ -10,35 +10,16 @@ import React,{ useState } from "react";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import {app} from '../../../config/firebase'
+import { AuthState, userDataType, userDataTypeG } from "@/types/authTypes";
+import Loading from "@/components/loading";
 
 
-interface FormValues {
-  email: string;
-  password: string;
-}
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
-interface AuthState {
-  isAuth: boolean;
-  username: string;
-  uid: string;
-  isAdmin: boolean;
-  token: string;
-  
-}
-
-interface userDataType{
-  email: string | null;
-  password: string | null,
-  google: boolean
-}
-interface userDataTypeG{
-  email: string | null;
-  google: boolean | null;
-}
 
 export default function Login() {
+  const [load, setLoad] = useState(false)
   const user = useAppSelector((state)=> state.auth.value)
   const router = useRouter()
   useEffect(() => {
@@ -89,6 +70,7 @@ export default function Login() {
   }
   const sendUserData = async (userData: userDataType | userDataTypeG) => {
     try {
+      setLoad(true)
       const response = await axios.post('/login', userData, {
         headers: {
           "Content-Type": 'application/json'
@@ -101,29 +83,34 @@ export default function Login() {
       console.log(response.status);
       if(response.status === 200){
         localStorage.setItem('token', token);
+        
         dispatch(logIn({
           isAuth: true,
           token: token,
           isAdmin: false,
           ...user
         }))
-        
         router.push('/userhome')
+        setLoad(false)
       }
       else if(response.status === 203){
+        setLoad(false)
         setErr(response.data.message)
       }
       else if(response.status === 207){
+        setLoad(false)
         setError(response.data.message)
         
       }
       else if(response.status === 204){
+        
         dispatch(logIn({
           isAuth: true,
           token: token,
           isAdmin: true,
           ...user
         }))
+        setLoad(false)
         router.push('/admindash')
       }
     } catch (error) {
@@ -184,12 +171,12 @@ export default function Login() {
                 {errors.password && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{errors.password}</p>}
                 {err && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{err}</p>}
                 {error && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{error}</p>}
-                <button
+                {load ? <Loading /> : <button
                   type="submit"
                   className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                 >
                   Sign in
-                </button>
+                </button>}
                 <p className="ml-44">Or</p>
                 <div className="ml-20">
                 <GoogleButton 

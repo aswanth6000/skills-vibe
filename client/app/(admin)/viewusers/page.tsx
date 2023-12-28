@@ -2,14 +2,8 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { User } from "@/types/adminTypes";
 
-interface User {
-  _id: string;
-  profilePicture: string;
-  username: string;
-  email: string;
-  phone: string;
-}
 
 function Page() {
   const [userData, setUserData] = useState<User[]>([]);

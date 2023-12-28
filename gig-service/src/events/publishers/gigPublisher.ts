@@ -55,7 +55,7 @@ const gigPublisher = {
       const exchangeName = 'gig-exchange';
       const routingKey = 'gig-delete-created';
 
-      console.log('Asserting RabbitMQ exchange');
+      console.log('Asserting RabbitMQ exchange delete');
 
       await channel.assertExchange(exchangeName, 'direct', { durable: false });
       channel.publish(exchangeName, routingKey, Buffer.from(JSON.stringify(gigStatusData)));

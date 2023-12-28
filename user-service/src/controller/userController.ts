@@ -10,6 +10,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 import { ExtendedRequest } from "../types/usertypes";
 
+
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
 
@@ -34,7 +35,7 @@ const userController = {
             availablity: user.availability,
             portfolio: user.portfolio,
             title: data.title,
-            gigdescription: data.description,
+            gigdescription: data.gigdescription,
             price: data.price,
             tags: data.tags,
             image1: data.image1,
@@ -44,15 +45,12 @@ const userController = {
             refId: data.refId
           }
           const newGigUser = new GigUserModel(gigUserData);
-          const savedGigUser = newGigUser.save();
+          const savedGigUser = await newGigUser.save();
           console.log("gigAdded success", savedGigUser);
         }else{
           console.log("no user and data");
           
         }
-        
-
-
         console.log('[User Controller]: RabbitMQ setup completed');
     } catch (error) {
         console.error('[User Controller]: Error setting up RabbitMQ:', error);
@@ -119,10 +117,7 @@ const userController = {
           console.error('JWT Verification Error:', jwtError);
           res.status(401).json({ error: 'Unauthorized - Invalid token' });
           return;
-        }
-    
-        console.log('Decoded Token:', decodedToken);
-    
+        }    
         const userId = decodedToken.userId
         if (req.file) {
           const result = await cloudinary.uploader.upload(req.file.path, { public_id: `${folderName}/${req.file.originalname}` });
@@ -181,6 +176,22 @@ const userController = {
       } catch (error) {
         console.log(error);
         res.status(500).json({message: "internal server error"})
+        
+      }
+    },
+    async getallgig (req: Request, res: Response){
+      try{
+        const token = req.headers.authorization?.split(' ')[1];
+        if(!token){
+          return res.status(401).json({message: "unauthorized access no token"})
+        }
+        const decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+        const userId = decodedToken.userId;
+        const allgigs = await GigUserModel.find({userId: {$ne: userId}, status: true})
+        return res.status(200).json({message: 'fetched Successfully', allgigs})       
+        
+      }catch(err){
+        console.log(err);
         
       }
     }

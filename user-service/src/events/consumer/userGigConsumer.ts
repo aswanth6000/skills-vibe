@@ -68,7 +68,7 @@ const userGigConsumers ={
             console.log("starting rabbit mq channel ");
             const channel = await RabbitMQ.createChannel();
             const exchangeName = 'gig-exchange';
-            const queueName = 'gig-service-queue';
+            const queueName = 'gig-delete-queue';
             await channel.assertExchange(exchangeName, 'direct', {durable: false});
             const {queue} = await channel.assertQueue(queueName, {durable: false});
             const routingKey = 'gig-delete-created';
