@@ -6,8 +6,30 @@ import Popular from '@/components/popular'
 import Footer from "@/components/footer"
 import { useAppSelector } from "@/redux/store"
 import { useRouter } from "next/navigation"
+import axios from 'axios'
+import { useEffect } from "react"
 export default function Home() {
   const user  = useAppSelector((state)=> state.auth.value)
+  useEffect(()=>{
+    const token = localStorage.getItem('token')
+    const fetchData = async () =>{
+      try{
+        const response = await axios.get('http://localhost:8000/getallgig',
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            "Content-Type": 'application/json'
+          }, })
+          if(response.status === 200){
+            console.log(response.data.allgigs);
+          }
+      }catch(err){
+        console.log(err);
+      }
+    }
+    fetchData();
+
+  }, [])
   const router = useRouter()
   if(user.isAuth === false){
     router.push('/login')

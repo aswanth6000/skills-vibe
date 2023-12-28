@@ -25,9 +25,7 @@ export default function Page() {
     useEffect(()=>{
          token = localStorage.getItem('token')
         const fetchData = async () =>{
-            try {
-                console.log('send' ,token);
-                
+            try {                
                 const response = await  axios.get('http://localhost:8000/mygigs',
                 {headers: {
                     'Authorization': `Bearer ${token}`,

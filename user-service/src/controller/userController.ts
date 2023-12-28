@@ -178,6 +178,22 @@ const userController = {
         res.status(500).json({message: "internal server error"})
         
       }
+    },
+    async getallgig (req: Request, res: Response){
+      try{
+        const token = req.headers.authorization?.split(' ')[1];
+        if(!token){
+          return res.status(401).json({message: "unauthorized access no token"})
+        }
+        const decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+        const userId = decodedToken.userId;
+        const allgigs = await GigUserModel.find({userId: {$ne: userId}})
+        return res.status(200).json({message: 'fetched Successfully', allgigs})       
+        
+      }catch(err){
+        console.log(err);
+        
+      }
     }
 
 }

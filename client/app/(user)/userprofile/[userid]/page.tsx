@@ -263,7 +263,9 @@ const UserProfileEdit: React.FC = () => {
 
         <div className="w-1/3 flex flex-col  items-center bg-navwhite h-auto ml-5 rounded-2xl border-black  mt-2 p-4 mb-12 mr-4 justify-center">
           <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
+            <Link href='/order'>
             Orders
+            </Link>
           </button>
           <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
             Portfolio
