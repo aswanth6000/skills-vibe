@@ -187,7 +187,7 @@ const userController = {
         }
         const decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
         const userId = decodedToken.userId;
-        const allgigs = await GigUserModel.find({userId: {$ne: userId}})
+        const allgigs = await GigUserModel.find({userId: {$ne: userId}, status: true})
         return res.status(200).json({message: 'fetched Successfully', allgigs})       
         
       }catch(err){

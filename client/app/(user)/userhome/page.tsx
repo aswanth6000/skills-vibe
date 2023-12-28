@@ -7,8 +7,11 @@ import Footer from "@/components/footer"
 import { useAppSelector } from "@/redux/store"
 import { useRouter } from "next/navigation"
 import axios from 'axios'
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { Gigs } from "@/types/gigTypes"
+
 export default function Home() {
+  const [data, setData] = useState<Gigs[]>([])
   const user  = useAppSelector((state)=> state.auth.value)
   useEffect(()=>{
     const token = localStorage.getItem('token')
@@ -22,6 +25,7 @@ export default function Home() {
           }, })
           if(response.status === 200){
             console.log(response.data.allgigs);
+            setData(response.data.allgigs)
           }
       }catch(err){
         console.log(err);
@@ -43,10 +47,7 @@ export default function Home() {
     <div className="bg-bodywhite">
     <Navbar/>
     <CarouselDefault stl={styles}/>
-    <Grid/>
-    <Grid/>
-    <Grid/>
-    <Grid/>
+    <Grid props={data}/>
     <Popular/>
     <Footer/>
     </div>
