@@ -1,14 +1,74 @@
-import orderConsumer from "../events/consumer/orderconsumer"
+import orderConsumer from '../events/consumer/orderconsumer';
+import OrderModel from '../models/OrderModel';
 
+interface OrderData {
+    userId: string;
+    refId: string;
+    username: string;
+    phone: string;
+    email: string;
+    profilePicture: string;
+    title: string;
+    price: number;
+    tags: string[];
+    buyerId: string,
+    buyeremail: string,
+    buyername: string,
+    buyerphone: number,
+    buyerProfile: string
+}
 
 const orderController = {
-    async orderRecieved ()  {
-        const orderdata = await orderConsumer.orderDetailsConsumer()        
-        console.log(orderdata);
-        
-    }
-}
-export default orderController
+    async orderReceived() {
+        try {
+            const orderdata = await orderConsumer.orderDetailsConsumer();
+            const {
+                userId,
+                refId,
+                username,
+                phone,
+                email,
+                profilePicture,
+                title,
+                price,
+                tags,
+                buyerId,
+                buyeremail,
+                buyername,
+                buyerphone,
+                buyerProfile
+            } = orderdata as OrderData;
+
+            const order = new OrderModel({
+                sellerId: userId,
+                orderStatus: 'pending',
+                paymentStatus: 'pending',
+                gigId: refId,
+                sellerName: username,
+                sellerPhone: phone,
+                sellerEmail: email,
+                sellerPic: profilePicture,
+                gigTitle: title,
+                gigPrice: price,
+                tags: tags,
+                buyerId,
+                buyername,
+                buyeremail,
+                buyerphone,
+                buyerProfile
+            });
+
+            await order.save();
+
+            console.log('Order saved successfully');
+        } catch (error) {
+            console.error('Error in orderReceived:', error);
+        }
+    },
+};
+
+export default orderController;
+
 
 // {
 //     _id: '658c4856740484642ea26f8e',

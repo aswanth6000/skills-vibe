@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 8002;
 
 // app.use(router)
 
-orderController.orderRecieved()
+orderController.orderReceived()
 
 const mongoUrl: string | undefined = process.env.MONGO_URL
 
