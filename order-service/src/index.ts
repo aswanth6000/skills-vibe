@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 8002;
 
 // app.use(router)
 
-orderController.orderReceived()
+
 
 const mongoUrl: string | undefined = process.env.MONGO_URL
 
@@ -31,6 +31,8 @@ mongoose.connect(mongoUrl).then(()=>{
     console.log("Database connection error", err);
     
 })
+
+orderController.orderReceived()
 
 app.listen(PORT, ()=>{
     console.log(`server running on ${PORT}`);

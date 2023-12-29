@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const styles = {
   outerdiv: "flex h-full w-full items-center justify-center",
@@ -27,7 +28,8 @@ interface OrderGig {
 }
 
 export default function Page() {
-  let bearerToken: string | null;
+  const router = useRouter()
+  let bearerToken: string | null = localStorage.getItem("token");
   const params = useParams<{ tag: string; gigid: string }>();
   const [data, setData] = useState<OrderGig>({
     title: "",
@@ -41,25 +43,8 @@ export default function Page() {
     profilePicture: ''
   });
   const gigid = params.gigid;
-
-  async function buyNow(){
-    try {
-      const response = await axios.get(`http://localhost:8000/ordergig/${gigid}`, {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-          "Content-Type": "application/json",
-        }
-      })
-      console.log(response);
-      
-    } catch (error) {
-      console.log(error);
-      
-    }
-  }
-
   useEffect(() => {
-    bearerToken = localStorage.getItem("token");
+     
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -78,6 +63,29 @@ export default function Page() {
     };
     fetchData();
   }, []);
+
+  async function buyNow(){
+    console.log("klik");
+    console.log(bearerToken);
+    
+    
+    try {
+      const response = await axios.get(`http://localhost:8000/ordergig/${gigid}`, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+          "Content-Type": "application/json",
+        }
+      })
+      console.log(response);
+      router.push('/payment')
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
   console.log(data);
 
   return (

@@ -57,10 +57,14 @@ const orderController = {
                 buyerphone,
                 buyerProfile
             });
-
-            await order.save();
-
-            console.log('Order saved successfully');
+            try {
+                console.log(" saving...");
+                await order.save();
+                console.log('Order saved successfully');
+            } catch (saveError) {
+                console.error('Error saving order:', saveError);
+            }
+            
         } catch (error) {
             console.error('Error in orderReceived:', error);
         }
