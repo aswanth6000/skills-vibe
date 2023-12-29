@@ -194,6 +194,17 @@ const userController = {
         console.log(err);
         
       }
+    },
+    async viewgig(req: Request, res: Response){
+      try {
+        const gigId = req.params.id;
+        console.log(gigId);
+        const gig =await GigUserModel.find({refId:gigId})
+        return res.status(200).json({message: 'success', gig})
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json("internal server error")
+      }
     }
 
 }
