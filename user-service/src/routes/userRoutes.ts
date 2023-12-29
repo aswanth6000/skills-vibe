@@ -13,6 +13,6 @@ userRouter.get('/mygigs', userController.mygigs)
 userRouter.get('/editgig/:gigId',userController.getgig)
 userRouter.get('/getallgig', userController.getallgig)
 userRouter.get('/viewgig/:id', userController.viewgig);
-
+userRouter.get('/ordergig/:id', userController.orderGig)
 
 export default userRouter;

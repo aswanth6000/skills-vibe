@@ -27,6 +27,7 @@ interface OrderGig {
 }
 
 export default function Page() {
+  let bearerToken: string | null;
   const params = useParams<{ tag: string; gigid: string }>();
   const [data, setData] = useState<OrderGig>({
     title: "",
@@ -40,8 +41,25 @@ export default function Page() {
     profilePicture: ''
   });
   const gigid = params.gigid;
+
+  async function buyNow(){
+    try {
+      const response = await axios.get(`http://localhost:8000/ordergig/${gigid}`, {
+        headers: {
+          Authorization: `Bearer ${bearerToken}`,
+          "Content-Type": "application/json",
+        }
+      })
+      console.log(response);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
   useEffect(() => {
-    const bearerToken = localStorage.getItem("token");
+    bearerToken = localStorage.getItem("token");
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -135,7 +153,8 @@ export default function Page() {
         <div className="w-1/4 bg-black h-screen flex justify-center">
           <div className="w-11/12 rounded-2xl h-64 mt-16 bg-white">
             <h1 className="font-bold ml-4">Price: {data.price}</h1>
-            <button className="w-11/12 h-16 bg-red-600 rounded-md hover:bg-red-900 m-2">
+            <button className="w-11/12 h-16 bg-red-600 rounded-md hover:bg-red-900 m-2"
+            onClick={buyNow}>
               Buy Now
             </button>
             <button className="w-11/12 h-16 bg-red-600 rounded-md hover:bg-red-900 m-2">

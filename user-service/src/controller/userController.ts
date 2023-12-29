@@ -6,7 +6,8 @@ import jwt, { Secret ,JwtPayload } from 'jsonwebtoken'
 import userPublisher from "../events/publisher/userPublisher";
 import userGigConsumers from "../events/consumer/userGigConsumer";
 import { GigUserModel } from "../models/GigUser";
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
+import orderPublisher from "../events/publisher/orderPublisher";
 dotenv.config();
 import { ExtendedRequest } from "../types/usertypes";
 
@@ -205,7 +206,47 @@ const userController = {
         console.log(error);
         return res.status(500).json("internal server error")
       }
+    },
+    async orderGig(req: Request, res: Response) {
+      try {
+        const token = req.headers.authorization?.split(' ')[1];
+        console.log(token);
+    
+        if (!token) {
+          return res.status(401).json({ message: 'Unauthorized access, no token' });
+        }
+    
+        const decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+        const buyerId = decodedToken.userId;
+    
+        const buyer = await UserModel.findById(buyerId);
+    
+        const gigId = req.params.id;
+        console.log(gigId);
+    
+        const gig = await GigUserModel.findOne({ refId: gigId });
+    
+        if (!gig) {
+          return res.status(404).json({ message: 'Gig not found' });
+        }
+    
+        const orderDetails = {
+          ...gig.toObject(), // Use toObject to convert Mongoose document to plain JavaScript object
+          buyerId,
+          buyername: buyer?.username,
+          buyeremail: buyer?.email,
+          buyerphone: buyer?.phone,
+          buyerProfile: buyer?.profilePicture,
+        };
+        console.log('dddddddddddddddd', orderDetails);
+        orderPublisher.orderEvent(orderDetails)
+        return res.status(200).json({ orderDetails });
+      } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+      }
     }
+    
 
 }
 

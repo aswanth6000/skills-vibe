@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 // import router from './routes/orderRoutes'
 import cors from 'cors'
+import orderController from './controllers/orderController';
 const app = express();
 app.use(cors())
 
@@ -14,7 +15,7 @@ const PORT = process.env.PORT || 8002;
 
 // app.use(router)
 
-
+orderController.orderRecieved()
 
 const mongoUrl: string | undefined = process.env.MONGO_URL
 
