@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
-// import router from './routes/orderRoutes'
+import paymentRouter from './routes/paymentRoute'
 import cors from 'cors'
 const app = express();
 app.use(cors())
@@ -15,7 +15,9 @@ const PORT = process.env.PORT || 8003;
 
 
 
-const mongoUrl: string | undefined = process.env.MONGO_URL
+const mongoUrl: string | undefined = process.env.MONGO_URL;
+
+app.use(paymentRouter)
 
 if (!mongoUrl) {
     console.error('MongoDB connection URL is not defined.');

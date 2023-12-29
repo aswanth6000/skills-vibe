@@ -9,6 +9,7 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const styles = {
   outerdiv: "flex h-full w-full items-center justify-center",
@@ -64,29 +65,10 @@ export default function Page() {
     fetchData();
   }, []);
 
-  async function buyNow(){
-    console.log("klik");
-    console.log(bearerToken);
-    
-    
-    try {
-      const response = await axios.get(`http://localhost:8000/ordergig/${gigid}`, {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-          "Content-Type": "application/json",
-        }
-      })
-      console.log(response);
-      router.push('/payment')
-      
-    } catch (error) {
-      console.log(error);
-      
-    }
-  }
 
 
-  console.log(data);
+
+  console.log('jjjjjjjj',data);
 
   return (
     <>
@@ -162,8 +144,10 @@ export default function Page() {
           <div className="w-11/12 rounded-2xl h-64 mt-16 bg-white">
             <h1 className="font-bold ml-4">Price: {data.price}</h1>
             <button className="w-11/12 h-16 bg-red-600 rounded-md hover:bg-red-900 m-2"
-            onClick={buyNow}>
+              >
+                <Link href={`/orderconfirm/${gigid}`}>
               Buy Now
+                </Link>
             </button>
             <button className="w-11/12 h-16 bg-red-600 rounded-md hover:bg-red-900 m-2">
               Message Seller
