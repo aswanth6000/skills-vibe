@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import paymentRouter from './routes/paymentRoute'
 import cors from 'cors'
+import paymentController from './controllers/paymentController';
 const app = express();
 app.use(cors())
 
@@ -22,7 +23,8 @@ app.use(paymentRouter)
 if (!mongoUrl) {
     console.error('MongoDB connection URL is not defined.');
     process.exit(1);
-  }
+}
+paymentController.orderReceived()
 
 mongoose.connect(mongoUrl).then(()=>{
     console.log('database connected..');

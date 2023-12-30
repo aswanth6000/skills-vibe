@@ -4,9 +4,10 @@ import mongoose from 'mongoose'
 // import router from './routes/orderRoutes'
 import cors from 'cors'
 import orderController from './controllers/orderController';
+import orderRouter from './routes/orderRoutes';
 const app = express();
 app.use(cors())
-
+app.use(orderRouter)
 
 dotenv.config()
 app.use(express.urlencoded({ extended: true }))
@@ -32,7 +33,9 @@ mongoose.connect(mongoUrl).then(()=>{
     
 })
 
-orderController.orderReceived()
+
+
+// orderController.orderReceived()
 
 app.listen(PORT, ()=>{
     console.log(`server running on ${PORT}`);

@@ -15,7 +15,6 @@ export default function Page() {
 
         <p className="mb-4">Your order has been successfully placed!</p>
         {/* <p className="mb-4">Your order ID is:</p> */}
-
         <button
           className="bg-white text-green-500 px-6 py-2 rounded-full font-semibold hover:bg-green-100 focus:outline-none focus:shadow-outline-green"
           

@@ -54,46 +54,47 @@ const OrderConfirmation: React.FC = () => {
           }
         );
         setData(response.data.gig[0]);
-        console.log("hhhhhhhhhhh", response.data.gig);
       } catch (error) {
         console.log("error occurred", error);
       }
     };
     fetchData();
   }, []);
-  console.log(data);
 
-  // async function buyNow(){
-  //   console.log("klik");
-  //   console.log(bearerToken);
-  //   try {
-  //     const response = await axios.get(`http://localhost:8000/ordergig/${gigid}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${bearerToken}`,
-  //         "Content-Type": "application/json",
-  //       }
-  //     })
-  //     console.log(response);
-  //     router.push('/payment')
+  useEffect(()=>{
+    async function buyNow(){
+      console.log("klik");
+      console.log(bearerToken);
+      try {
+        const response = await axios.get(`http://localhost:8000/ordergig/${gigid}`, {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+            "Content-Type": "application/json",
+          }
+        })
+        console.log(response);
+  
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    buyNow()
+  },[])
 
-  //   } catch (error) {
-  //     console.log(error);
-
-  //   }
-  // }
   async function payNow() {
     try {
       const {
         data: { key },
-      } = await axios.get("http://localhost:8003/getkey");
-      console.log("Razorpay Key:", key);
-
+      } = await axios.get("http://localhost:8002/getkey");
+      console.log('let:',key);
       const sendData = {
         ...data,
       };
+      console.log('llllllll',sendData);
+      
 
       const response = await axios.post(
-        `http://localhost:8003/payment/${gigid}`,
+        `http://localhost:8002/payment/${gigid}`,
         sendData,
         {
           headers: {
@@ -108,13 +109,13 @@ const OrderConfirmation: React.FC = () => {
       if (window.Razorpay) {
         const options = {
           key,
-          amount: sendData.price, // Make sure `sendData` contains the 'price' field
+          amount: sendData.price,
           currency: "INR",
           name: "Skill vibe",
           description: "Razorpay Tutorial",
           image: "https://img.freepik.com/premium-vector/sv-letter-logo-design-black-background-initial-monogram-letter-sv-logo-design-vector-template_634196-1210.jpg",
           order_id: response.data.order.id,
-          callback_url: "http://localhost:8003/paymentverification",
+          callback_url: "http://localhost:8002/paymentverification",
           prefill: {
             name: "Sagar Gupta",
             email: "anandguptasir@gmail.com",

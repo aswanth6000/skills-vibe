@@ -231,7 +231,7 @@ const userController = {
         }
     
         const orderDetails = {
-          ...gig.toObject(), // Use toObject to convert Mongoose document to plain JavaScript object
+          ...gig.toObject(), 
           buyerId,
           buyername: buyer?.username,
           buyeremail: buyer?.email,

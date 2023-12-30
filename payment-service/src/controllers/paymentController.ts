@@ -1,14 +1,16 @@
 import paymentConsumer from '../events/consumer/consumer';
 import PaymentModel from '../models/PaymentModel';
 import razorpay from 'razorpay'
-import RazorpayInstance from '../config/razorPayConfig';
+import RazorpayInstance from '../../../order-service/src/config/razorPayConfig';
 import dotenv from 'dotenv'
 import crypto from 'crypto'
 import { Response, Request } from 'express';
+import paymentPublisher from '../events/publisher/publisher';
 
 dotenv.config()
 
 interface OrderData {
+    _id: string;
     userId: string;
     refId: string;
     username: string;
@@ -26,104 +28,61 @@ interface OrderData {
 }
 
 const paymentController = {
-    async orderReceived() {
+    async orderReceived() { 
         try {
-            const orderdata = await paymentConsumer.orderDetailsConsumer()
-            const {
-                userId,
-                refId,
-                username,
-                phone,
-                email,
-                profilePicture,
-                title,
-                price,
-                tags,
-                buyerId,
-                buyeremail,
-                buyername,
-                buyerphone,
-                buyerProfile
-            } = orderdata as OrderData;
-
-            const order = new PaymentModel({
-                sellerId: userId,
-                orderStatus: 'pending',
-                paymentStatus: 'pending',
-                gigId: refId,
-                sellerName: username,
-                sellerPhone: phone,
-                sellerEmail: email,
-                sellerPic: profilePicture,
-                gigTitle: title,
-                gigPrice: price,
-                tags: tags,
-                buyerId,
-                buyername,
-                buyeremail,
-                buyerphone,
-                buyerProfile
-            });
-            try {
-                console.log(" saving...");
-                await order.save();
-                console.log('Order saved successfully');
-            } catch (saveError) {
-                console.error('Error saving order:', saveError);
-            }
+          const orderdata = await paymentConsumer.orderDetailsConsumer()
+                    const {
+                        _id,
+                        userId,
+                        refId,
+                        username,
+                        phone,
+                        email,
+                        profilePicture,
+                        title,
+                        price,
+                        tags,
+                        buyerId,
+                        buyeremail,
+                        buyername,
+                        buyerphone,
+                        buyerProfile
+                    } = orderdata as OrderData;
+        
+                    const order = new PaymentModel({
+                        orderId: _id,
+                        sellerId: userId,
+                        orderStatus: 'pending',
+                        paymentStatus: 'pending',
+                        gigId: refId,
+                        sellerName: username,
+                        sellerPhone: phone,
+                        sellerEmail: email,
+                        sellerPic: profilePicture,
+                        gigTitle: title,
+                        gigPrice: price,
+                        tags: tags,
+                        buyerId,
+                        buyername,
+                        buyeremail,
+                        buyerphone,
+                        buyerProfile
+                    });
+                    console.log("lll",order);
+                    
+                    try {
+                        console.log(" saving...");
+                        await order.save();
+                        console.log('Order saved successfully');
+                    } catch (saveError) {
+                        console.error('Error saving order:', saveError);
+                    }
 
         } catch (error) {
             console.error('Error in orderReceived:', error);
         }
     },
-    async payment(req: Request, res: Response) {
-        const { price, title } = req.body
-        try {
-            // const PriceINPaisa = price / 100
-            // console.log(PriceINPaisa);
-            // console.log(Number(PriceINPaisa * 100));
-            
-            const options = {
-                amount: Number(price * 100),
-                currency: "INR"
-            }
-            const order = await RazorpayInstance.orders.create(options)
-            console.log(order);
-            res.status(200).json({message:"success", order})
-        } catch (error) {
-            console.log(error);
-            
-        }
 
-    },
-    async paymentVerification(req: Request, res: Response) {
-        console.log('htlll');
-        try {
-            const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-            const body = razorpay_order_id + "|" + razorpay_payment_id;
-            const expectedSignature = crypto.createHmac('sha256', process.env.PAYMENT_KEY_SECRET || '').update(body.toString()).digest('hex')
-            const isAuth = expectedSignature === razorpay_signature
-            //     if(isAuth){
-            //         await Payment.create({
-            //             razorpay_order_id,razorpay_payment_id,razorpay_signature 
-            //         })
-            // }
-            res.redirect(`http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`)
-            
-            // else{
-            //     res.status(400).json({success:false});
-            //    }
-
-        } catch (error) {
-            console.log(error);
-
-        }
-    },
-    getKey(req: Request, res: Response){
-        console.log('send');
-        return res.status(200).json({key:process.env.PAYMENT_KEY_ID})
-        
-    }
 
 }
 
