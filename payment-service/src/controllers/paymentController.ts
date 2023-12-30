@@ -78,16 +78,26 @@ const paymentController = {
     },
     async payment(req: Request, res: Response) {
         const { price, title } = req.body
-
-        const options = {
-            amount: Number(price * 100),
-            currency: "INR"
+        try {
+            // const PriceINPaisa = price / 100
+            // console.log(PriceINPaisa);
+            // console.log(Number(PriceINPaisa * 100));
+            
+            const options = {
+                amount: Number(price * 100),
+                currency: "INR"
+            }
+            const order = await RazorpayInstance.orders.create(options)
+            console.log(order);
+            res.status(200).json({message:"success", order})
+        } catch (error) {
+            console.log(error);
+            
         }
-        const order = await RazorpayInstance.orders.create(options)
-        console.log(order);
 
     },
     async paymentVerification(req: Request, res: Response) {
+        console.log('htlll');
         try {
             const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
             const body = razorpay_order_id + "|" + razorpay_payment_id;
@@ -99,6 +109,7 @@ const paymentController = {
             //         })
             // }
             res.redirect(`http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`)
+            
             // else{
             //     res.status(400).json({success:false});
             //    }

@@ -34,6 +34,7 @@ export default function Home() {
     fetchData();
 
   }, [])
+  console.log(data)
   const router = useRouter()
   if(user.isAuth === false){
     router.push('/login')
