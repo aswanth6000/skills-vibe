@@ -94,16 +94,12 @@ const OrderConfirmation: React.FC = () => {
       
 
       const response = await axios.post(
-        `http://localhost:8002/payment/${gigid}`,
-        sendData,
-        {
+        `http://localhost:8002/payment/${gigid}`, sendData, {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-
-
       console.log("Payment Response:", response.data.order);
 
       if (window.Razorpay) {

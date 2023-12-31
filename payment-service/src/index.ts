@@ -24,13 +24,13 @@ if (!mongoUrl) {
     console.error('MongoDB connection URL is not defined.');
     process.exit(1);
 }
-paymentController.orderReceived()
+// paymentController.orderReceived()
 
 mongoose.connect(mongoUrl).then(()=>{
-    console.log('database connected..');
+    console.log(' payment service database connected..');
 })
 .catch((err)=>{
-    console.log("Database connection error", err);
+    console.log(" Payment serviceDatabase connection error", err);
     
 })
 

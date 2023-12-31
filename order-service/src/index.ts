@@ -1,13 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
-// import router from './routes/orderRoutes'
+import orderRouter from './routes/orderRoutes';
 import cors from 'cors'
 import orderController from './controllers/orderController';
-import orderRouter from './routes/orderRoutes';
 const app = express();
 app.use(cors())
-app.use(orderRouter)
 
 dotenv.config()
 app.use(express.urlencoded({ extended: true }))
@@ -19,6 +17,7 @@ const PORT = process.env.PORT || 8002;
 
 
 const mongoUrl: string | undefined = process.env.MONGO_URL
+app.use(orderRouter)
 
 if (!mongoUrl) {
     console.error('MongoDB connection URL is not defined.');
@@ -26,15 +25,12 @@ if (!mongoUrl) {
   }
 
 mongoose.connect(mongoUrl).then(()=>{
-    console.log('database connected..');
+    console.log('order service database connected..');
 })
 .catch((err)=>{
-    console.log("Database connection error", err);
+    console.log("Order service Database connection error", err);
     
 })
-
-
-
 // orderController.orderReceived()
 
 app.listen(PORT, ()=>{
