@@ -195,14 +195,13 @@ interface OrderData {
 
 
 class OrderController {
-    private orderdata: OrderData | unknown = null;
+    public orderdata: OrderData | unknown = null;
 
     constructor() {
-        // Fetch orderdata during class instantiation
         this.fetchOrderData();
     }
 
-    private async fetchOrderData() {
+    public async fetchOrderData() {
         try {
             this.orderdata = await orderConsumer.orderDetailsConsumer();
         } catch (error) {
@@ -210,7 +209,7 @@ class OrderController {
         }
     }
 
-    public async payment(req: Request, res: Response) {
+    async payment(req: Request, res: Response) {
         try {
             const { price, title } = req.body;
             const options = {
@@ -225,7 +224,7 @@ class OrderController {
         }
     }
 
-    public async paymentVerification(req: Request, res: Response) {
+     async paymentVerification(req: Request, res: Response) {
         try {
             const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
             const body = razorpay_order_id + '|' + razorpay_payment_id;
@@ -338,7 +337,7 @@ class OrderController {
         }
     }
 
-    public getKey(req: Request, res: Response) {
+     getKey(req: Request, res: Response) {
         console.log(process.env.PAYMENT_KEY_ID);
         console.log('Sending key...');
         return res.status(200).json({ key: process.env.PAYMENT_KEY_ID });
