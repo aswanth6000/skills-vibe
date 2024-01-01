@@ -33,6 +33,9 @@ mongoose.connect(mongoUrl).then(()=>{
 })
 // orderController.orderReceived()
 
+const OrderController = new orderController()
+OrderController.fetchOrderData()
+
 app.listen(PORT, ()=>{
     console.log(`server running on ${PORT}`);
 })

@@ -197,13 +197,13 @@ interface OrderData {
 class OrderController {
     public orderdata: OrderData | unknown = null;
 
-    constructor() {
-        this.fetchOrderData();
-    }
+
 
     public async fetchOrderData() {
         try {
             this.orderdata = await orderConsumer.orderDetailsConsumer();
+            console.log("called");
+            
         } catch (error) {
             console.error('Error fetching order data:', error);
         }
