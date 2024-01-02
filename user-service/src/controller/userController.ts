@@ -77,7 +77,6 @@ const userController = {
     async gigDeleteEvent() {
       try {
         const data: any = await userGigConsumers.gigDeleteConsumer();
-        console.log("lslslslls", data);
         const gigId = data;
 
         const objId = await GigUserModel.find({refId: gigId})
@@ -199,7 +198,6 @@ const userController = {
     async viewgig(req: Request, res: Response){
       try {
         const gigId = req.params.id;
-        console.log(gigId);
         const gig =await GigUserModel.find({refId:gigId})
         return res.status(200).json({message: 'success', gig})
       } catch (error) {
@@ -209,9 +207,7 @@ const userController = {
     },
     async orderGig(req: Request, res: Response) {
       try {
-        const token = req.headers.authorization?.split(' ')[1];
-        console.log(token);
-    
+        const token = req.headers.authorization?.split(' ')[1];    
         if (!token) {
           return res.status(401).json({ message: 'Unauthorized access, no token' });
         }
@@ -222,7 +218,6 @@ const userController = {
         const buyer = await UserModel.findById(buyerId);
     
         const gigId = req.params.id;
-        console.log(gigId);
     
         const gig = await GigUserModel.findOne({ refId: gigId });
     

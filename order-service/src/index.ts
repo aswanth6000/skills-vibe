@@ -10,7 +10,7 @@ app.use(cors())
 dotenv.config()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-const PORT = process.env.PORT || 8002;
+const PORT = process.env.PORT || 8003;
 
 // app.use(router)
 
@@ -33,8 +33,8 @@ mongoose.connect(mongoUrl).then(()=>{
 })
 // orderController.orderReceived()
 
-const OrderController = new orderController()
-OrderController.fetchOrderData()
+orderController.fetchOrderData()
+app.use(orderRouter)
 
 app.listen(PORT, ()=>{
     console.log(`server running on ${PORT}`);
