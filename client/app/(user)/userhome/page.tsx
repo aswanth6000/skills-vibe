@@ -6,7 +6,7 @@ import Popular from '@/components/popular'
 import Footer from "@/components/footer"
 import { useAppSelector } from "@/redux/store"
 import { useRouter } from "next/navigation"
-import axios from 'axios'
+import axios from '../../../config/axios'
 import { useEffect, useState } from "react"
 import { Gigs } from "@/types/gigTypes"
 
@@ -17,7 +17,7 @@ export default function Home() {
     const token = localStorage.getItem('token')
     const fetchData = async () =>{
       try{
-        const response = await axios.get('http://localhost:8000/getallgig',
+        const response = await axios.get('/getallgig',
         {
           headers: {
             'Authorization': `Bearer ${token}`,

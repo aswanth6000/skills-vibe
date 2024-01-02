@@ -238,7 +238,6 @@ const userController = {
           buyerphone: buyer?.phone,
           buyerProfile: buyer?.profilePicture,
         };
-        console.log('dddddddddddddddd', orderDetails);
         orderPublisher.orderEvent(orderDetails)
         return res.status(200).json({ orderDetails });
       } catch (error) {

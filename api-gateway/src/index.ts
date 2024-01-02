@@ -7,8 +7,7 @@ app.use(cors())
 app.use(express.json());
 
 
-app.use('/auth', proxy("http://localhost:8000"))
-app.use('/user', proxy("http://localhost:8001"))
+app.use('/', proxy("http://localhost:8001"))
 app.use('/gig', proxy("http://localhost:8002"))
 app.use('/order', proxy("http://localhost:8003"))
 

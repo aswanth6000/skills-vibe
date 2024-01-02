@@ -4,7 +4,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { useParams } from "next/navigation";
-import axios from "axios";
+import axios from "../../../../config/axios";
 import Image from "next/image";
 import NextBreadcrumb from "@/components/NextBreadcrumb";
 import { StateManagedSelect, FormData } from "@/types/gigTypes";
@@ -33,7 +33,7 @@ const MultiStepForm: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/editgig/${gigid}`,
+          `/editgig/${gigid}`,
           {
             headers: {
               Authorization: `Bearer ${bearerToken}`,
@@ -153,7 +153,7 @@ const MultiStepForm: React.FC = () => {
     if (bearerToken) {
       try {
         const response = await axios.post(
-          "http://localhost:8001/editgig",
+          "/gig/editgig",
           formData,
           {
             headers: {

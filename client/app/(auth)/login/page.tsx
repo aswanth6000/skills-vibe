@@ -73,7 +73,7 @@ export default function Login() {
       setLoad(true)
       const response = await axios.post('/login', userData, {
         headers: {
-          "Content-Type": 'application/json'
+          "Content-Type": 'application/json' 
         }
       });
       console.log('User data sent to server:', response.data);
