@@ -7,6 +7,7 @@ const orderRouter = express.Router();
 orderRouter.post('/payment/:id',orderController.payment );
 orderRouter.post('/paymentverification',orderController.paymentVerification);
 orderRouter.get('/getkey',orderController.getKey)
+orderRouter.get('/myorders', orderController.myorders)
 
 
 // paymentRouter.post('/payment/:id',paymentController.payment)

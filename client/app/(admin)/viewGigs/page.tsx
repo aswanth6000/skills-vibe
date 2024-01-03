@@ -7,7 +7,6 @@ function Page() {
   const [gigData, setGigData] = useState<Gig[]>([]);
   const [gigId, setgigId] = useState<string>();
   const [app, setApp] = useState<boolean>(false);
-  console.log(gigId);
 
   useEffect(() => {
     const fetchData = async () => {

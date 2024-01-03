@@ -4,7 +4,7 @@ import { Types } from 'mongoose';
 import { Request, Response } from 'express';
 import RazorpayInstance from '../config/razorPayConfig';
 import dotenv from 'dotenv'
-import jwt, {JwtPayload, Secret, GetPublicKeyOrSecret} from 'jsonwebtoken'
+import jwt, { JwtPayload, Secret, GetPublicKeyOrSecret } from 'jsonwebtoken'
 dotenv.config()
 import crypto from 'crypto'
 const jwtSecret: Secret | GetPublicKeyOrSecret = process.env.JWT_KEY || 'defaultkey'
@@ -28,25 +28,25 @@ interface OrderData {
 
 // const orderController = {
 //     // async orderReceived() {
-        
+
 //     // },
 //     // async paymentStatus(){
 //     //     try {
 //     //         const paymentData: any = await orderConsumer.paymentDetailsConsumer();
 //     //         const orderId = paymentData.orderId
 //     //         console.log(orderId);
-            
-        
+
+
 //     //         const order = await OrderModel.findById(orderId);
-        
+
 //     //         if (!order) {
 //     //           console.log('Order not found');
 //     //           return;
 //     //         }
-        
+
 //     //         order.set(paymentData);
 //     //         const updatedOrder = await order.save();
-        
+
 //     //         console.log('Updated Order:', updatedOrder);
 //     //       } catch (error) {
 //     //         console.error('Error in paymentStatus:', error);
@@ -61,16 +61,16 @@ interface OrderData {
 //             }
 //             const order = await RazorpayInstance.orders.create(options)
 //             res.status(200).json({message:"success", order})
-            
+
 //         } catch (error) {
 //             res
 //             console.log(error);
-            
+
 //         }
 
 //     },
 //     async paymentVerification(req: Request, res: Response) {
-        
+
 //         try {
 //             const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 //             const body = razorpay_order_id + "|" + razorpay_payment_id;
@@ -120,12 +120,12 @@ interface OrderData {
 //                         } catch (saveError) {
 //                             console.error('Error saving order:', saveError);
 //                         }
-                        
+
 //                     } catch (error) {
 //                         console.error('Error in orderReceived:', error);
 //                     }
 //                     // paymentPublisher.orderEvent(paymentSuccesData)
-                   
+
 //                     res.redirect(`http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`)
 //             }else{
 //                 try {
@@ -146,7 +146,7 @@ interface OrderData {
 //                         buyerphone,
 //                         buyerProfile
 //                     } = orderdata as OrderData;
-        
+
 //                     const order = new OrderModel({
 //                         sellerId: userId,
 //                         orderStatus: 'failed',
@@ -172,7 +172,7 @@ interface OrderData {
 //                     } catch (saveError) {
 //                         console.error('Error saving order:', saveError);
 //                     }
-                    
+
 //                 } catch (error) {
 //                     console.error('Error in orderReceived:', error);
 //                 }
@@ -189,169 +189,174 @@ interface OrderData {
 //         console.log(process.env.PAYMENT_KEY_ID);
 //         console.log('send');
 //         return res.status(200).json({key:process.env.PAYMENT_KEY_ID})
-        
+
 //     }
 // };
 
 var orderdata: OrderData | any
 const orderController = {
-    
-async  fetchOrderData(): Promise<OrderData | unknown> {
-    try {
-        orderdata = await orderConsumer.orderDetailsConsumer();
-        return orderdata;
-    } catch (error) {
-        console.error('Error fetching order data:', error);
-        return null;
-    }
-},
 
-async  payment(req: Request, res: Response): Promise<void> {
-    try {
-        const { price, title } = req.body;
-        const options = {
-            amount: Number(price * 100),
-            currency: 'INR',
-        };
-        const order = await RazorpayInstance.orders.create(options);
-        res.status(200).json({ message: 'success', order });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
-    }
-},
-
-async  paymentVerification(req: Request, res: Response): Promise<void> {
-    try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-        const body = razorpay_order_id + '|' + razorpay_payment_id;
-        const expectedSignature = crypto.createHmac('sha256', process.env.PAYMENT_KEY_SECRET || '').update(body.toString()).digest('hex');
-        const isAuth = expectedSignature === razorpay_signature;
-
-        if (isAuth) {
-            try {
-
-                const {
-                    userId,
-                    refId,
-                    username,
-                    phone,
-                    email,
-                    profilePicture,
-                    title,
-                    price,
-                    tags,
-                    buyerId,
-                    buyeremail,
-                    buyername,
-                    buyerphone,
-                    buyerProfile,
-                } = orderdata;
-
-                const order = new OrderModel({
-                    sellerId: userId,
-                    orderStatus: 'confirmed',
-                    paymentStatus: 'paid',
-                    gigId: refId,
-                    sellerName: username,
-                    sellerPhone: phone,
-                    sellerEmail: email,
-                    sellerPic: profilePicture,
-                    gigTitle: title,
-                    gigPrice: price,
-                    tags: tags,
-                    buyerId,
-                    buyername,
-                    buyeremail,
-                    buyerphone,
-                    buyerProfile,
-                });
-
-                try {
-                    console.log('Saving order...');
-                    await order.save();
-                    console.log('Order saved successfully');
-                } catch (saveError) {
-                    console.error('Error saving order:', saveError);
-                }
-            } catch (error) {
-                console.error('Error in orderReceived:', error);
-            }
-
-            res.redirect(`http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`);
-        } else {
-            try {
-
-                const {
-                    userId,
-                    refId,
-                    username,
-                    phone,
-                    email,
-                    profilePicture,
-                    title,
-                    price,
-                    tags,
-                    buyerId,
-                    buyeremail,
-                    buyername,
-                    buyerphone,
-                    buyerProfile,
-                } = orderdata;
-
-                const order = new OrderModel({
-                    sellerId: userId,
-                    orderStatus: 'failed',
-                    paymentStatus: 'failed',
-                    gigId: refId,
-                    sellerName: username,
-                    sellerPhone: phone,
-                    sellerEmail: email,
-                    sellerPic: profilePicture,
-                    gigTitle: title,
-                    gigPrice: price,
-                    tags: tags,
-                    buyerId,
-                    buyername,
-                    buyeremail,
-                    buyerphone,
-                    buyerProfile,
-                });
-
-                try {
-                    console.log('Saving order...');
-                    await order.save();
-                    console.log('Order saved successfully');
-                } catch (saveError) {
-                    console.error('Error saving order:', saveError);
-                }
-            } catch (error) {
-                console.error('Error in orderReceived:', error);
-            }
-
-            res.status(400).json({ success: false });
+    async fetchOrderData(): Promise<OrderData | unknown> {
+        try {
+            orderdata = await orderConsumer.orderDetailsConsumer();
+            return orderdata;
+        } catch (error) {
+            console.error('Error fetching order data:', error);
+            return null;
         }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
-    }
-},
+    },
 
- getKey(req: Request, res: Response): void {
-    console.log(process.env.PAYMENT_KEY_ID);
-    res.status(200).json({ key: process.env.PAYMENT_KEY_ID });
-},
-async myorders(req: Request, res: Response){
-    const token = req.headers.authorization?.split(' ')[1];
-    if(!token){
-        return res.status(401).json({message: "Unauthorized acces, No token provided"});
+    async payment(req: Request, res: Response): Promise<void> {
+        try {
+            const { price, title } = req.body;
+            const options = {
+                amount: Number(price * 100),
+                currency: 'INR',
+            };
+            const order = await RazorpayInstance.orders.create(options);
+            res.status(200).json({ message: 'success', order });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ success: false, error: 'Internal Server Error' });
+        }
+    },
+
+    async paymentVerification(req: Request, res: Response): Promise<void> {
+        try {
+            const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+            const body = razorpay_order_id + '|' + razorpay_payment_id;
+            const expectedSignature = crypto.createHmac('sha256', process.env.PAYMENT_KEY_SECRET || '').update(body.toString()).digest('hex');
+            const isAuth = expectedSignature === razorpay_signature;
+
+            if (isAuth) {
+                try {
+
+                    const {
+                        userId,
+                        refId,
+                        username,
+                        phone,
+                        email,
+                        profilePicture,
+                        title,
+                        price,
+                        tags,
+                        buyerId,
+                        buyeremail,
+                        buyername,
+                        buyerphone,
+                        buyerProfile,
+                    } = orderdata;
+
+                    const order = new OrderModel({
+                        sellerId: userId,
+                        orderStatus: 'confirmed',
+                        paymentStatus: 'paid',
+                        gigId: refId,
+                        sellerName: username,
+                        sellerPhone: phone,
+                        sellerEmail: email,
+                        sellerPic: profilePicture,
+                        gigTitle: title,
+                        gigPrice: price,
+                        tags: tags,
+                        buyerId,
+                        buyername,
+                        buyeremail,
+                        buyerphone,
+                        buyerProfile,
+                    });
+
+                    try {
+                        console.log('Saving order...');
+                        await order.save();
+                        console.log('Order saved successfully');
+                    } catch (saveError) {
+                        console.error('Error saving order:', saveError);
+                    }
+                } catch (error) {
+                    console.error('Error in orderReceived:', error);
+                }
+
+                res.redirect(`http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`);
+            } else {
+                try {
+
+                    const {
+                        userId,
+                        refId,
+                        username,
+                        phone,
+                        email,
+                        profilePicture,
+                        title,
+                        price,
+                        tags,
+                        buyerId,
+                        buyeremail,
+                        buyername,
+                        buyerphone,
+                        buyerProfile,
+                    } = orderdata;
+
+                    const order = new OrderModel({
+                        sellerId: userId,
+                        orderStatus: 'failed',
+                        paymentStatus: 'failed',
+                        gigId: refId,
+                        sellerName: username,
+                        sellerPhone: phone,
+                        sellerEmail: email,
+                        sellerPic: profilePicture,
+                        gigTitle: title,
+                        gigPrice: price,
+                        tags: tags,
+                        buyerId,
+                        buyername,
+                        buyeremail,
+                        buyerphone,
+                        buyerProfile,
+                    });
+
+                    try {
+                        console.log('Saving order...');
+                        await order.save();
+                        console.log('Order saved successfully');
+                    } catch (saveError) {
+                        console.error('Error saving order:', saveError);
+                    }
+                } catch (error) {
+                    console.error('Error in orderReceived:', error);
+                }
+
+                res.status(400).json({ success: false });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ success: false, error: 'Internal Server Error' });
+        }
+    },
+
+    getKey(req: Request, res: Response): void {
+        console.log(process.env.PAYMENT_KEY_ID);
+        res.status(200).json({ key: process.env.PAYMENT_KEY_ID });
+    },
+    async myorders(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization?.split(' ')[1];
+            if (!token) {
+                return res.status(401).json({ message: "Unauthorized acces, No token provided" });
+            }
+            const decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+            const userId = decodedToken.userId;
+            const order = await OrderModel.find({ buyerId: userId });
+            return res.status(200).json(order);
+        } catch (error) {
+            console.error(error);
+            return res.status(501).json({ message: "Internal server error"})
+
+        }
     }
-    const decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
-    const userId = decodedToken.userId;
-    const order = await OrderModel.find({buyerId: userId});
-    console.log(order);
-    res.status(200).json(order);
-}
 }
 
 export default orderController;
