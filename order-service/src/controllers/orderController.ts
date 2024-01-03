@@ -4,11 +4,11 @@ import { Types } from 'mongoose';
 import { Request, Response } from 'express';
 import RazorpayInstance from '../config/razorPayConfig';
 import dotenv from 'dotenv'
-
-
+import jwt, {JwtPayload, Secret, GetPublicKeyOrSecret} from 'jsonwebtoken'
 dotenv.config()
-
 import crypto from 'crypto'
+const jwtSecret: Secret | GetPublicKeyOrSecret = process.env.JWT_KEY || 'defaultkey'
+
 interface OrderData {
     userId: string;
     refId: string;
@@ -338,10 +338,19 @@ async  paymentVerification(req: Request, res: Response): Promise<void> {
 },
 
  getKey(req: Request, res: Response): void {
-    console.log('recieved');
     console.log(process.env.PAYMENT_KEY_ID);
-    console.log('Sending key...');
     res.status(200).json({ key: process.env.PAYMENT_KEY_ID });
+},
+async myorders(req: Request, res: Response){
+    const token = req.headers.authorization?.split(' ')[1];
+    if(!token){
+        return res.status(401).json({message: "Unauthorized acces, No token provided"});
+    }
+    const decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+    const userId = decodedToken.userId;
+    const order = await OrderModel.find({buyerId: userId});
+    console.log(order);
+    res.status(200).json(order);
 }
 }
 

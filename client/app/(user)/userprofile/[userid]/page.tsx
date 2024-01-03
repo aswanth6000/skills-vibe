@@ -268,6 +268,11 @@ const UserProfileEdit: React.FC = () => {
             </Link>
           </button>
           <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
+            <Link href='/myorders'>
+            My Orders
+            </Link>
+          </button>
+          <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
             Portfolio
           </button>
           <button className="w-2/3 mb-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none">
