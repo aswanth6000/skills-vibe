@@ -356,7 +356,23 @@ const orderController = {
             return res.status(501).json({ message: "Internal server error"})
 
         }
-    }
+    },
+    async orders(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization?.split(' ')[1];
+            if (!token) {
+                return res.status(401).json({ message: "Unauthorized acces, No token provided" });
+            }
+            const decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+            const userId = decodedToken.userId;
+            const order = await OrderModel.find({ sellerId: userId });
+            return res.status(200).json(order);
+        } catch (error) {
+            console.error(error);
+            return res.status(501).json({ message: "Internal server error"})
+
+        }
+    },
 }
 
 export default orderController;
