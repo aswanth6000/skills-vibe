@@ -142,6 +142,22 @@ const gigController = {
             
         }
     },
+    async rejectgig(req: Request, res: Response){
+        const {gigId} = req.body; 
+        console.log(req.body);
+        
+        try {
+            const updateGig = await GigModel.findByIdAndUpdate(gigId, {status: false}, {new: true});
+            console.log(updateGig);
+            
+            return res.status(200).json({
+                message: "success", updateGig
+            })
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({message: 'internal server error'})
+        }
+    }
 };
 
 export default gigController;

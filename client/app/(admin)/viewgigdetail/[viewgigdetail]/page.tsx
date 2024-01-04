@@ -28,7 +28,7 @@ interface GigUser {
   video?: string;
 }
 
-const Page: React.FC = () => {
+const Page = () => {
   const [gigUser, setGigUser] = useState<GigUser | null>(null);
   const params = useParams()
   const gigId = params.viewgigdetail;
@@ -46,7 +46,28 @@ const Page: React.FC = () => {
 
     fetchGigUser();
   }, []);
-  console.log(gigUser);
+  const handleReject = async (gigId: any) =>{
+    const gigSendId= {
+      gigId: gigId 
+    }
+    console.log(gigSendId);
+    
+    try {
+      const response = await axios.post('http://localhost:8002/rejectgig', gigSendId, {
+        headers:{
+          "Content-Type": 'application/json' 
+        }
+      });
+      console.log(response);
+      
+
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
+
+  }
   
 
   if (!gigUser) {
@@ -70,7 +91,8 @@ const Page: React.FC = () => {
       <img src={gigUser.image3} alt={gigUser.username} className="ml-2 w-36 h-3w-36" />
       </div>
       <div>
-        <button className='h-12 w-52 rounded-2xl bg-red-600 text-white '>Reject</button>
+        <button className='h-12 w-52 rounded-2xl bg-red-600 text-white '
+        onClick={()=>handleReject(gigId)}>Reject</button>
         <button className='h-12 w-52 rounded-2xl bg-green-600 text-white ml-4'>Approve</button>
       </div>
       <ul>

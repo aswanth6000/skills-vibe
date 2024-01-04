@@ -59,20 +59,11 @@ function Page() {
               <th scope="col" className="px-6 py-3">
                 Seller Name
               </th>
-              {/* <th scope="col" className="px-8 py-3">
-                Category
-              </th> */}
               <th scope="col" className="px-6 py-3">
                 Phone number
               </th>
               <th scope="col" className="px-6 py-3">
-                Available
-              </th>
-              <th scope="col" className="px-6 py-3">
                 Price
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Weight
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -92,40 +83,15 @@ function Page() {
                   {gig.title}
                 </th>
                 <td className="px-6 py-4">{gig.username}</td>
-                {/* <td className="px-6 py-4">{gig.skills.value}</td> */}
                 <td className="px-6 py-4">{gig.phone}</td>
-                <td className="px-6 py-4">{gig.status}</td>
                 <td className="px-6 py-4">${gig.price}</td>
-                <td className="px-6 py-4">3.0 lb.</td>
                 <td className="flex items-center flex-col px-6 py-4 pb-3">
                   <Link
-                    // onClick={() => setgigId(gig._id.toString())}
                     href={`viewgigdetail/${gig._id}`}
                     className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                   >
                     View
                   </Link>
-                  {app ? (
-                    <button
-                      onClick={() => {
-                        setgigId(gig.refId);
-                        approval();
-                      }}
-                      className="font-medium text-green-600 dark:text-green-500 hover:underline"
-                    >
-                      Approve
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        setgigId(gig.refId);
-                        approval();
-                      }}
-                      className="font-medium text-red-600 dark:text-red-500 hover:underline ms-3"
-                    >
-                      Reject
-                    </button>
-                  )}
                 </td>
               </tr>
             ))}
