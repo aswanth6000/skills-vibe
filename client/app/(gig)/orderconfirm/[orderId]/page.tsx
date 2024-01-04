@@ -2,7 +2,6 @@
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Script from "next/script";
@@ -38,7 +37,6 @@ const OrderConfirmation: React.FC = () => {
     profilePicture: "",
   });
   const gigid = params.orderId;
-  const router = useRouter();
 
   useEffect(() => {
     console.log(bearerToken);

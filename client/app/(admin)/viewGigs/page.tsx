@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Gig } from "@/types/adminTypes";
+import Link from "next/link";
 
 function Page() {
   const [gigData, setGigData] = useState<Gig[]>([]);
@@ -97,12 +98,13 @@ function Page() {
                 <td className="px-6 py-4">${gig.price}</td>
                 <td className="px-6 py-4">3.0 lb.</td>
                 <td className="flex items-center flex-col px-6 py-4 pb-3">
-                  <button
-                    onClick={() => setgigId(gig._id.toString())}
+                  <Link
+                    // onClick={() => setgigId(gig._id.toString())}
+                    href={`viewgigdetail/${gig._id}`}
                     className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                   >
                     View
-                  </button>
+                  </Link>
                   {app ? (
                     <button
                       onClick={() => {
