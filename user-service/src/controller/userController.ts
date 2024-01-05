@@ -37,6 +37,7 @@ const userController = {
           portfolio: user.portfolio,
           title: data.title,
           gigdescription: data.gigdescription,
+          gigstatus: data.status,
           price: data.price,
           tags: data.tags,
           image1: data.image1,
@@ -244,7 +245,7 @@ const userController = {
     try {
       const gigId = req.params.gigId;
       console.log(gigId);
-      const gig = await GigUserModel.find({_id:gigId});
+      const gig = await GigUserModel.find({refId:gigId})
       return res.status(200).json({ message: 'Success', gig })
     } catch (error) {
       console.log(error);

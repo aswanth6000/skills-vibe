@@ -56,6 +56,10 @@ const GigUserSchema = new Schema<GigUser>({
   gigdescription: {
     type: String,
   },
+  gigstatus: {
+    type: Boolean,
+    default: false
+  },
   price: {
     type: Number,
   },

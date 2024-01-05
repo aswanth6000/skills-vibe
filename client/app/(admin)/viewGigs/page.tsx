@@ -87,7 +87,7 @@ function Page() {
                 <td className="px-6 py-4">${gig.price}</td>
                 <td className="flex items-center flex-col px-6 py-4 pb-3">
                   <Link
-                    href={`viewgigdetail/${gig._id}`}
+                    href={`viewgigdetail/${gig.refId}`}
                     className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                   >
                     View
