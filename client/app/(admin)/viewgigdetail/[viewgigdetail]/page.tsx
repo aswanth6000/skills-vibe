@@ -30,7 +30,7 @@ interface GigUser {
 }
 
 const Page = () => {
-  const [click, setClick] = useState(false);
+  const [status, setStatus] = useState(false);
   const [gigUser, setGigUser] = useState<GigUser | null>(null);
   const params = useParams()
   const gigId = params.viewgigdetail;
@@ -45,14 +45,12 @@ const Page = () => {
         console.error('Error fetching gig user:', error);
       }
     };
-
     fetchGigUser();
   }, []);
   const handleReject = async (gigId: any) =>{
     const gigSendId= {
       gigId: gigId 
     }
-    setClick(true)
     try {
       const response = await axios.post('http://localhost:8002/rejectgig', gigSendId, {
         headers:{
@@ -68,7 +66,6 @@ const Page = () => {
     const gigSendId= {
       gigId: gigId 
     }
-    setClick(true)
     try {
       const response = await axios.post('http://localhost:8002/acceptgig', gigSendId, {
         headers:{
@@ -103,11 +100,23 @@ const Page = () => {
       <img src={gigUser.image3} alt={gigUser.username} className="ml-2 w-36 h-3w-36" />
       </div>
       <div>
-        {gigUser.gigstatus === true ? <button className='h-12 w-52 rounded-2xl bg-red-600 text-white '
-        onClick={()=>handleReject(gigId)}>Reject</button> :
-        <button className='h-12 w-52 rounded-2xl bg-green-600 text-white ml-4'
-        onClick={()=>handleAccept(gigId)}>Approve</button>}
-      </div>
+  {gigUser.gigstatus ? (
+    <button
+      className='h-12 w-52 rounded-2xl bg-red-600 text-white '
+      onClick={() => handleReject(gigId)}
+    >
+      Reject
+    </button>
+  ) : (
+    <button
+      className='h-12 w-52 rounded-2xl bg-green-600 text-white ml-4'
+      onClick={() => handleAccept(gigId)}
+    >
+      Approve
+    </button>
+  )}
+</div>
+
       <ul>
         {gigUser.skills?.map((skill) => (
           <li key={skill.value}>{skill.label}</li>

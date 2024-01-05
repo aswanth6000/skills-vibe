@@ -14,7 +14,6 @@ const consumers = {
                 const { queue } = await channel.assertQueue(queueName, { durable: false });
                 const routingKey = 'user-logged-in';
                 await channel.bindQueue(queue, exchangeName, routingKey);
-        
                 return new Promise((resolve, reject) => {
                     channel.consume(queue, (message) => {
                       if (message) {

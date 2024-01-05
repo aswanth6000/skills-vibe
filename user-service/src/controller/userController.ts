@@ -263,6 +263,27 @@ const userController = {
     const gig = await GigUserModel.findOneAndUpdate({refId: gigId} ,{gigstatus: false}, {new: true})
     console.log('accept status updated success', gig);
   },
+  async userBlock(req: Request, res: Response){
+    const {userId} = req.body;
+    try {
+      console.log(userId);
+      const user = await  UserModel.findByIdAndUpdate(userId, {status: false})
+      return res.status(200).json({message: "user blocked"})
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  async userUnblock(req: Request, res: Response){
+    const {userId} = req.body
+    try {
+      console.log(userId);
+      const user = await  UserModel.findByIdAndUpdate(userId, {status: true})
+      return res.status(200).json({message: "user un blocked"})
+    } catch (error) {
+      console.error(error);
+    }
+     
+  }
 }
 
 export default userController
