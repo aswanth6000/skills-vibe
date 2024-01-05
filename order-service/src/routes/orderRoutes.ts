@@ -9,6 +9,7 @@ orderRouter.post('/paymentverification',orderController.paymentVerification);
 orderRouter.get('/getkey',orderController.getKey)
 orderRouter.get('/myorders', orderController.myorders)
 orderRouter.get('/orders', orderController.orders)
+orderRouter.get('/vieworders', orderController.viewOrders)
 
 
 // paymentRouter.post('/payment/:id',paymentController.payment)

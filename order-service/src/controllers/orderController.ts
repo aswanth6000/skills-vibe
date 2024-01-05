@@ -373,6 +373,15 @@ const orderController = {
 
         }
     },
+    async viewOrders(req: Request, res: Response){
+        try {
+            const orders = await OrderModel.find()
+            res.status(200).json({message: 'success', orders})
+        } catch (error) {
+            console.error(error);
+            res.status(501).json({message: 'internal server error'})
+        }
+    }
 }
 
 export default orderController;
