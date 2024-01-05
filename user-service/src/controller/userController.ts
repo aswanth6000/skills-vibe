@@ -244,16 +244,25 @@ const userController = {
   async viewgigdetail(req: Request, res: Response) {
     try {
       const gigId = req.params.gigId;
-      console.log(gigId);
       const gig = await GigUserModel.find({refId:gigId})
       return res.status(200).json({ message: 'Success', gig })
     } catch (error) {
       console.log(error);
       return res.status(501).json({ message: 'Internal error'})
     }
-  }
-
-
+  },
+  async gigAccept(){
+    const gigId = await userGigConsumers.gigAcceptConsumer()
+    console.log('recieved gig id', gigId);
+    const gig = await GigUserModel.findOneAndUpdate({refId: gigId} ,{gigstatus: true}, {new: true})
+    console.log('accept status updated success', gig);
+  },
+  async gigReject(){
+    const gigId = await userGigConsumers.gigAcceptConsumer()
+    console.log('recieved gig id', gigId);
+    const gig = await GigUserModel.findOneAndUpdate({refId: gigId} ,{gigstatus: false}, {new: true})
+    console.log('accept status updated success', gig);
+  },
 }
 
 export default userController

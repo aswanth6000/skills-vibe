@@ -20,6 +20,7 @@ interface GigUser {
   portfolio?: string;
   title?: string;
   gigdescription?: string;
+  gigstatus: boolean;
   price?: number;
   tags?: string;
   image1?: string;
@@ -29,6 +30,7 @@ interface GigUser {
 }
 
 const Page = () => {
+  const [click, setClick] = useState(false);
   const [gigUser, setGigUser] = useState<GigUser | null>(null);
   const params = useParams()
   const gigId = params.viewgigdetail;
@@ -50,8 +52,7 @@ const Page = () => {
     const gigSendId= {
       gigId: gigId 
     }
-    console.log(gigSendId);
-    
+    setClick(true)
     try {
       const response = await axios.post('http://localhost:8002/rejectgig', gigSendId, {
         headers:{
@@ -59,14 +60,25 @@ const Page = () => {
         }
       });
       console.log(response);
-      
-
     } catch (error) {
       console.log(error);
-      
     }
-    
-
+  }
+  const handleAccept = async (gigId: any) =>{
+    const gigSendId= {
+      gigId: gigId 
+    }
+    setClick(true)
+    try {
+      const response = await axios.post('http://localhost:8002/acceptgig', gigSendId, {
+        headers:{
+          "Content-Type": 'application/json' 
+        }
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   }
   
 
@@ -91,9 +103,10 @@ const Page = () => {
       <img src={gigUser.image3} alt={gigUser.username} className="ml-2 w-36 h-3w-36" />
       </div>
       <div>
-        <button className='h-12 w-52 rounded-2xl bg-red-600 text-white '
-        onClick={()=>handleReject(gigId)}>Reject</button>
-        <button className='h-12 w-52 rounded-2xl bg-green-600 text-white ml-4'>Approve</button>
+        {gigUser.gigstatus === true ? <button className='h-12 w-52 rounded-2xl bg-red-600 text-white '
+        onClick={()=>handleReject(gigId)}>Reject</button> :
+        <button className='h-12 w-52 rounded-2xl bg-green-600 text-white ml-4'
+        onClick={()=>handleAccept(gigId)}>Approve</button>}
       </div>
       <ul>
         {gigUser.skills?.map((skill) => (
