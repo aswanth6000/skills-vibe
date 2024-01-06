@@ -10,7 +10,7 @@ app.use(cors())
 dotenv.config()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.PORT || 8002;
 
 app.use(router)
 

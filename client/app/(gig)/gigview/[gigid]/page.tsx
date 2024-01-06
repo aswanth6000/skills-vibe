@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/navbar";
 import { CarouselDefault } from "@/components/carousel";
-import axios from "axios";
+import axios from "../../../../config/axios";
 import { useParams } from "next/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -49,7 +49,7 @@ export default function Page() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/viewgig/${gigid}`,
+          `/viewgig/${gigid}`,
           {
             headers: {
               Authorization: `Bearer ${bearerToken}`,

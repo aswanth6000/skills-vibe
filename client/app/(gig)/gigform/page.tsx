@@ -3,7 +3,7 @@ import Navbar from '@/components/navbar';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import axios from 'axios';
+import axios from "../../../config/axios";
 import Image from 'next/image';
 import NextBreadcrumb from '@/components/NextBreadcrumb';
 import { useRouter } from 'next/navigation';
@@ -99,7 +99,7 @@ const MultiStepForm: React.FC = () => {
     e.preventDefault();
     if (bearerToken) {
       try {
-        const response = await axios.post('http://localhost:8001/addgig', formData, {
+        const response = await axios.post('http://localhost:8002/addgig', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${bearerToken}`,

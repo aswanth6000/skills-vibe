@@ -1,6 +1,6 @@
 'use client'
 import { CarouselDefault } from '@/components/carousel'
-import axios from 'axios'
+import axios from '../../../config/axios'
 import React, { useEffect, useState } from 'react'
 import { FC } from 'react';
 
@@ -26,7 +26,7 @@ export default function Page() {
          token = localStorage.getItem('token')
         const fetchData = async () =>{
             try {                
-                const response = await  axios.get('http://localhost:8000/mygigs',
+                const response = await  axios.get('/mygigs',
                 {headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',  
@@ -45,7 +45,7 @@ export default function Page() {
         const handleDelete = async (refId: string) => {
           try {
             const response = await axios.post(
-              'http://localhost:8001/deletegig',
+              '/gig/deletegig',
               { refId },
               {
                 headers: {

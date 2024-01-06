@@ -3,7 +3,6 @@ import { UserModel } from "../models/User";
 import bcrypt from 'bcrypt'
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import publisher from "../events/publisher/authPublisher";
 
 dotenv.config()
 
@@ -29,7 +28,6 @@ const authController = {
 
           await newUser.save();
           try {
-            await publisher.userCreatedEvent(newUser);
             console.log('User logged in event published successfully');
           } catch (error) {
             console.error('Error publishing user logged in event:', error);
@@ -60,7 +58,6 @@ const authController = {
 
           await newUser.save();
           try {
-            await publisher.userCreatedEvent(newUser);
             console.log('User created event published successfully');
           } catch (error) {
             console.error('Error publishing user created event:', error);
@@ -121,7 +118,6 @@ const authController = {
           const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
           res.cookie('jwt', token, { httpOnly: true, maxAge: 300000 });
           try {
-            await publisher.publishUserLoggedInEvent(user._id);
             console.log('User logged in event published successfully');
           } catch (error) {
             console.error('Error publishing user logged in event:', error);
@@ -154,6 +150,12 @@ const authController = {
       }
     }
   },
+  async sendOtp(req: Request, res: Response){
+    const {email} = req.body;
+    console.log('otp send to otp', email);
+    const user = await UserModel.find({email: email});
+    
+  }
 
 
 };

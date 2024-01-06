@@ -118,7 +118,7 @@ export default function Navbar() {
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
-                        href="/account-settings"
+                        href="/myorders"
                       >
                         Orders
                       </a>
@@ -130,7 +130,7 @@ export default function Navbar() {
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
-                        href="/documentation"
+                        href="/mygigs"
                       >
                         Gigs
                       </a>
@@ -142,7 +142,7 @@ export default function Navbar() {
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
-                        href="/documentation"
+                        href={`/userprofile/${user._id}`}
                       >
                         Profile
                       </a>
@@ -154,7 +154,7 @@ export default function Navbar() {
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
-                        href="/documentation"
+                        href="/earnings"
                       >
                         Earnings
                       </a>

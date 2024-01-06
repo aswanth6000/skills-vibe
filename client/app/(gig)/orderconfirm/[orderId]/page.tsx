@@ -2,7 +2,6 @@
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Script from "next/script";
@@ -38,7 +37,6 @@ const OrderConfirmation: React.FC = () => {
     profilePicture: "",
   });
   const gigid = params.orderId;
-  const router = useRouter();
 
   useEffect(() => {
     console.log(bearerToken);
@@ -85,16 +83,14 @@ const OrderConfirmation: React.FC = () => {
     try {
       const {
         data: { key },
-      } = await axios.get("http://localhost:8002/getkey");
+      } = await axios.get("http://localhost:8003/getkey");
       console.log('let:',key);
       const sendData = {
         ...data,
-      };
-      console.log('llllllll',sendData);
-      
+      };      
 
       const response = await axios.post(
-        `http://localhost:8002/payment/${gigid}`, sendData, {
+        `http://localhost:8003/payment/${gigid}`, sendData, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -111,7 +107,7 @@ const OrderConfirmation: React.FC = () => {
           description: "Razorpay Tutorial",
           image: "https://img.freepik.com/premium-vector/sv-letter-logo-design-black-background-initial-monogram-letter-sv-logo-design-vector-template_634196-1210.jpg",
           order_id: response.data.order.id,
-          callback_url: "http://localhost:8002/paymentverification",
+          callback_url: "http://localhost:8003/paymentverification",
           prefill: {
             name: "Sagar Gupta",
             email: "anandguptasir@gmail.com",

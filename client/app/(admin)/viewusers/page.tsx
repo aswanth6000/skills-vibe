@@ -19,7 +19,40 @@ function Page() {
       }
     };
     fetchData();
-  }, []);
+  }, [userData]);
+
+  const userBlock = async(userId: string) =>{
+    const sendBlock = {
+      userId: userId
+    }
+    try {
+      const response = await axios.post(`http://localhost:8000/block`, sendBlock,{
+        headers:{
+          "Content-Type": 'application/json' 
+        }
+      })      
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+      
+    }
+  }
+  const userUnblock =async(userId: string) =>{
+    const sendUnblock = {
+      userId: userId
+    }
+    try {
+      const response = await axios.post(`http://localhost:8000/unblock`, sendUnblock,{
+        headers:{
+          "Content-Type": 'application/json' 
+        }
+      })      
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+      
+    }
+  }
 
   return (
     <div>
@@ -66,20 +99,26 @@ function Page() {
                 </th>
                 <td className="px-6 py-4">{user.phone}</td>
                 <td className="px-6 py-4">
-                  {/* <div className="flex items-center">
+                  <div className="flex items-center">
                     <div
-                      className={`h-2.5 w-2.5 rounded-full ${user.online ? 'bg-green-500' : 'bg-red-500'} me-2`}
+                      className={`h-2.5 w-2.5 rounded-full ${user.status ? 'bg-green-500' : 'bg-red-500'} me-2`}
                     ></div>{' '}
-                    {user.online ? 'Online' : 'Offline'}
-                  </div> */}
+                    {user.status ? 'Active' : 'Blocked'}
+                  </div>
                 </td>
                 <td className="px-6 py-4">
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  {!user.status ? <button
+                    onClick={()=>userUnblock(user._id)}                  
+                    className="font-medium text-green-600 dark:text-green-500 hover:underline"
                   >
-                    Edit user
-                  </a>
+                    UnBlock
+                  </button> : 
+                  <button
+                  onClick={()=>userBlock(user._id)}    
+                    className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                  >
+                    Block
+                  </button>}
                 </td>
               </tr>
             ))}

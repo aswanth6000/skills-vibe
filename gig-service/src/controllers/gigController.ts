@@ -81,35 +81,35 @@ const gigController = {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     },
-    async gigStatus(req: Request, res: Response){
+    // async gigStatus(req: Request, res: Response){
         
-        try {
+    //     try {
             
-            const objectId = req.body.gigId;
+    //         const objectId = req.body.gigId;
             
-            if (!isValidObjectId(objectId)) {
-                return res.status(400).json({ error: 'Invalid ObjectId' });
-              }
+    //         if (!isValidObjectId(objectId)) {
+    //             return res.status(400).json({ error: 'Invalid ObjectId' });
+    //           }
             
-            const gigData = {
-              status: req.body.status,
-            };     
+    //         const gigData = {
+    //           status: req.body.status,
+    //         };     
                     
-            const gig = await GigModel.findByIdAndUpdate(objectId, gigData, { new: true });
-            // if (!gig) {
-            //   return res.status(404).json({ error: 'Gig not found' });
-            // }
-            const eventData = {
-                objectId : req.body.gigId,
-                status: req.body.status
-            }
-            gigPublisher.gigStatusEvent(eventData)
-            res.status(200).json({ message: 'Gig status updated successfully', gig });
-          } catch (error) {
-            console.error('Error updating gig status:', error);
-            res.status(500).json({ error: 'Internal server error' });
-          }
-    },
+    //         const gig = await GigModel.findByIdAndUpdate(objectId, gigData, { new: true });
+    //         // if (!gig) {
+    //         //   return res.status(404).json({ error: 'Gig not found' });
+    //         // }
+    //         const eventData = {
+    //             objectId : req.body.gigId,
+    //             status: req.body.status
+    //         }
+    //         gigPublisher.gigStatusEvent(eventData)
+    //         res.status(200).json({ message: 'Gig status updated successfully', gig });
+    //       } catch (error) {
+    //         console.error('Error updating gig status:', error);
+    //         res.status(500).json({ error: 'Internal server error' });
+    //       }
+    // },
     async editgig(req: Request, res: Response){
         console.log('request recieved');
         
@@ -142,6 +142,37 @@ const gigController = {
             
         }
     },
+    async rejectgig(req: Request, res: Response){
+        const {gigId} = req.body; 
+        console.log(req.body);
+        
+        try {
+            const updateGig = await GigModel.findByIdAndUpdate(gigId, {status: false}, {new: true});
+            await gigPublisher.gigStatusRejectEvent(gigId)            
+            return res.status(200).json({
+                message: "success", updateGig
+            })
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({message: 'internal server error'})
+        }
+    },
+    async acceptgig(req: Request, res: Response){
+        const {gigId} = req.body; 
+        console.log(req.body);
+        
+        try {
+            const updateGig = await GigModel.findByIdAndUpdate(gigId, {status: true}, {new: true});
+            console.log(updateGig);
+            
+            return res.status(200).json({
+                message: "success", updateGig
+            })
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({message: 'internal server error'})
+        }
+    }
 };
 
 export default gigController;

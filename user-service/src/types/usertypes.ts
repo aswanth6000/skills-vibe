@@ -18,6 +18,7 @@ export  interface ParsedQs {
 
   export interface GigUser { 
     _id: Types.ObjectId,
+    gigstatus: boolean
     userId: string,
     username: string;
     phone: number;

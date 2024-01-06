@@ -2,13 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Layout, Button, Avatar, Menu, Dropdown, theme } from "antd";
+import Vieworder from "@/app/(admin)/vieworders/page";
 import AdminMenuList from "./adminMenuList";
 import Navbar from "./adminNav";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
-  PaperClipOutlined
+  PaperClipOutlined,
+  RiseOutlined
 } from "@ant-design/icons";
 import {default as Viewusers} from "@/app/(admin)/viewusers/page";
 import {default as ViewGigs} from '@/app/(admin)/viewGigs/page'
@@ -79,6 +81,11 @@ function AdminSideBar() {
               key: '2',
               icon: <PaperClipOutlined />,
               label: 'Gigs',
+            },
+            {
+              key: '3',
+              icon: <RiseOutlined />,
+              label: 'Orders',
             },
           ]}
         />
@@ -201,6 +208,9 @@ function AdminSideBar() {
           <Content className="mt-6 mr-4 ml-6 p-10 min-h-min bg-teal-300">
            {selectedMenuKey === '1' && <Viewusers/>}
            {selectedMenuKey === '2' && <ViewGigs/>}
+           {selectedMenuKey === '3' && <Vieworder/>}
+
+
         
           </Content>
         
