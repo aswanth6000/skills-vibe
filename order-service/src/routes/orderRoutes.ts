@@ -10,6 +10,7 @@ orderRouter.get('/getkey',orderController.getKey)
 orderRouter.get('/myorders', orderController.myorders)
 orderRouter.get('/orders', orderController.orders)
 orderRouter.get('/vieworders', orderController.viewOrders)
+orderRouter.post('/ordercancel', orderController.orderCancel)
 
 
 // paymentRouter.post('/payment/:id',paymentController.payment)

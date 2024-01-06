@@ -25,8 +25,10 @@ export default function Login() {
   useEffect(() => {
     if (user.isAuth && user.isAdmin === false) {
       router.push('/userhome');
-    }else if(user.isAuth && user.isAdmin){
-      router.push('/adminhome')
+    }else if(user.isAuth && user.isAdmin){ 
+      router.push('/admindash')
+    }else if(!user.isAuth){
+      router.push('/login')
     }
   }, [user.isAuth,user.isAdmin, router]);
   console.log('User State:', user);

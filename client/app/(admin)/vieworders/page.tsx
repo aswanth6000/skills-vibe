@@ -26,7 +26,7 @@ interface OrderDetails {
   
   
 export default function Vieworder() {
-    const [orderData, setOrderData] = useState<OrderDetails[]>()
+    const [orderData, setOrderData] = useState<OrderDetails[]>([])
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -34,7 +34,7 @@ export default function Vieworder() {
             console.log(response.data);
             
             if (response.status === 200) {
-              setOrderData(response.data.orders[0]);
+              setOrderData(response.data.orders);
             }
           } catch (error) {
             console.error('Error fetching user data:', error);
@@ -43,6 +43,7 @@ export default function Vieworder() {
         fetchData();
       }, []);
       console.log(orderData);
+      
       
   return (
     <div>
@@ -60,9 +61,6 @@ export default function Vieworder() {
               Buyer Name
             </th>
             <th scope="col" className="px-6 py-3">
-              Gig title
-            </th>
-            <th scope="col" className="px-6 py-3">
               Order status
             </th>
             <th scope="col" className="px-6 py-3">
@@ -73,24 +71,25 @@ export default function Vieworder() {
             </th>
           </tr>
         </thead>
-        {/* <tbody>
-          {gigData.map((gig) => (
+        <tbody>
+          {orderData?.map((order) => (
             <tr
-              key={gig._id.toString()}
+              key={order._id.toString()}
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
               <th
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-                {gig.title}
+                {order.gigTitle}
               </th>
-              <td className="px-6 py-4">{gig.username}</td>
-              <td className="px-6 py-4">{gig.phone}</td>
-              <td className="px-6 py-4">${gig.price}</td>
+              <td className="px-6 py-4">{order.sellerName}</td>
+              <td className="px-6 py-4">{order.buyername}</td>
+              <td className="px-6 py-4">{order.orderStatus}</td>
+              <td className="px-6 py-4">${order.gigPrice}</td>
               <td className="flex items-center flex-col px-6 py-4 pb-3">
                 <Link
-                  href={`viewgigdetail/${gig.refId}`}
+                  href={`vieworderdetail/${order._id}`}
                   className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   View
@@ -98,7 +97,7 @@ export default function Vieworder() {
               </td>
             </tr>
           ))}
-        </tbody> */}
+        </tbody> 
       </table>
     </div>
   </div>

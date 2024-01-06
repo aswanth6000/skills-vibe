@@ -381,6 +381,17 @@ const orderController = {
             console.error(error);
             res.status(501).json({message: 'internal server error'})
         }
+    },
+    async orderCancel(req: Request, res: Response){
+        const {orderId} = req.body;
+        console.log(orderId);
+        try {
+            const order = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'cancelled'}, {new:true})
+            res.status(200).json({message: 'order cancelled', order})
+        } catch (error) {
+            console.error(error);
+            res.status(501).json({message: 'Internal server error'})
+        }
     }
 }
 
