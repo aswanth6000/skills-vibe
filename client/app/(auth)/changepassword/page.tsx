@@ -15,11 +15,32 @@ export default function Page() {
   const user = useAppSelector((state) => state.auth.value);
   const email = user.email;
   const handleChangePassword = () => {};
-  const sendOtpFun = () => {
-    setStep(1)
+  const sendOtpFun = async (email: string) => {
+    console.log("clicked");
+  
+    setStep(1);
+    const sendEmail = {
+      email: email,
+    };
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/sendotp",
+        sendEmail,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    }
   };
+  
   const submitOtp = () => {
-    setStep(2)
+    setStep(2);
   };
 
   return (
@@ -42,14 +63,14 @@ export default function Page() {
                 </h1>
                 <button
                   type="button"
-                  onClick={sendOtpFun}
-                  className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                  onClick={() => sendOtpFun(email)}
+                  className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                 >
                   Get otp
                 </button>
               </div>
             )}
-            { step === 1 && 
+            {step === 1 && (
               <form className="space-y-4 md:space-y-6">
                 <div>
                   <label
@@ -63,21 +84,21 @@ export default function Page() {
                     name="otp"
                     id="otp"
                     value={otp}
-                    // onChange={submitOtp}
+                    onChange={(e) => setOtp(e.target.value)}
                     className="bg-white-50 border border-white-300 text-white-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-black dark:focus:ring-green-500 dark:focus:border-green-500 focus:outline-none"
-                    placeholder="Eneter the otp recieved"
+                    placeholder="Enter the OTP received"
                     required
                   />
                 </div>
                 <button
-                    type="submit"
-                    onClick={submitOtp}
-                    className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                  >
-                    Sign in
-                  </button>
+                  type="submit"
+                  onClick={submitOtp}
+                  className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                >
+                  Sign in
+                </button>
               </form>
-            }
+            )}
             {step === 2 && (
               <form
                 className="space-y-4 md:space-y-6"

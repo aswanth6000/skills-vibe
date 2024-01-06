@@ -150,6 +150,12 @@ const authController = {
       }
     }
   },
+  async sendOtp(req: Request, res: Response){
+    const {email} = req.body;
+    console.log('otp send to otp', email);
+    const user = await UserModel.find({email: email});
+    
+  }
 
 
 };
