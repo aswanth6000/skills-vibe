@@ -3,6 +3,7 @@ import { UserModel } from "../models/User";
 import bcrypt from 'bcrypt'
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import transporter from '../config/nodemailer'
 
 dotenv.config()
 
@@ -152,13 +153,22 @@ const authController = {
   },
   async sendOtp(req: Request, res: Response){
     const {email} = req.body;
-    console.log('otp send to otp', email);
-    const user = await UserModel.find({email: email});
-    
+    const user = await UserModel.find({email: email}); 
+    const sixDigitOTP =  Math.floor(100000 + Math.random() * 900000).toString()
+    var mailOptions = {
+      from: 'gadgetease.info@gmail.com',
+      to: email,
+      subject: 'OTP for changing password',
+      text: `Your OTP for changing password is ${sixDigitOTP}`
+    };
+    transporter.sendMail(mailOptions, function(error: Error | null, info: any){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+        console.log('otp ',sixDigitOTP);
+      }
+    });
   }
-
-
 };
-
-
 export default authController;
