@@ -169,6 +169,11 @@ const authController = {
         console.log('otp ',sixDigitOTP);
       }
     });
-  }
+  },
+  // async submitOtp(req: Request, res: Response){
+  //   const {otp} = req.body;
+  //   if(otp ==== )
+    
+  // }
 };
 export default authController;

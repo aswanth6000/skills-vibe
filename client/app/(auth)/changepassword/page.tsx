@@ -39,8 +39,27 @@ export default function Page() {
     }
   };
   
-  const submitOtp = () => {
+  const submitOtp = async() => {
     setStep(2);
+    try {
+      const sendOtp = {
+        otp: otp
+      }
+      const response = await axios.post(
+        "http://localhost:8000/submitotp",
+        sendOtp,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    }
+
   };
 
   return (
