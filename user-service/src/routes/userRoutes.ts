@@ -11,7 +11,7 @@ userRouter.get('/viewallgigs', userController.getAllGigs)
 userRouter.put('/userProfileUpdate', multerConfig.single('uploadPic'), userController.userProfileUpdate);
 userRouter.get('/mygigs', userController.mygigs)
 userRouter.get('/editgig/:gigId',userController.getgig)
-userRouter.get('/getallgig', userController.getallgig)
+userRouter.get('/getallgig', userController.getallgig) 
 userRouter.get('/viewgig/:id', userController.viewgig);
 userRouter.get('/ordergig/:id', userController.orderGig)
 userRouter.get('/viewgigdetail/:gigId', userController.viewgigdetail)

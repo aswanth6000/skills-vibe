@@ -11,6 +11,8 @@ orderRouter.get('/myorders', orderController.myorders)
 orderRouter.get('/orders', orderController.orders)
 orderRouter.get('/vieworders', orderController.viewOrders)
 orderRouter.post('/ordercancel', orderController.orderCancel)
+orderRouter.post('/orderaccept', orderController.orderAccept)
+orderRouter.post('/orderreject', orderController.orderReject)
 
 
 // paymentRouter.post('/payment/:id',paymentController.payment)
