@@ -64,6 +64,5 @@ export  interface ParsedQs {
     portfolio: Types.ObjectId;
     orders: Types.ObjectId;
     description: string
-  }
-
-  
+    otp: string | undefined
+}
