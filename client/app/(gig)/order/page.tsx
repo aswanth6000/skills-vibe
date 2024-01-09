@@ -28,11 +28,29 @@ interface OrderData {
 
 export default function Page() {
   const [data, setData] = useState<OrderData[]>([]);
-  const handleApprove = () =>{
-
+  const handleApprove = async (orderId: string) =>{
+    const sendStatus = {
+      status: 'ongoing',
+      orderId: orderId
+    }
+    const response = await axios.post('http://localhost:8003/orderAccept', sendStatus, {
+      headers:{
+        'Authorization': 'application/json'
+      }
+    })
+    console.log(response.data);
   } 
-  const handleReject = () =>{
-    
+  const handleReject = async (orderId: string) =>{
+    const sendStatus = {
+      status: 'rejected by seller',
+      orderId: orderId
+    }
+    const response = await axios.post('http://localhost:8003/orderReject', sendStatus, {
+      headers:{
+        'Authorization': 'application/json'
+      }
+    })
+    console.log(response.data);
   }
 
   useEffect(() => {
@@ -56,15 +74,14 @@ export default function Page() {
     fetchData();
   }, []);
 
-  console.log(data);
   return (
     <div>
       <Navbar />
-      <div className="flex justify-center">
+      <div className="flex justify-center content-center items-center flex-col">
         {data.map((x) => (
           <div
             key={x._id}
-            className="m-4 w-11/12 bg-bodywhite outline-dashed h-44 rounded-2xl"
+            className="m-4 w-fit  bg-bodywhite outline-dashed h-44 rounded-2xl"
           >
             <div className="flex justify-between m-3">
               <div className="flex flex-col  align-middle justify-center items-center">
@@ -83,22 +100,33 @@ export default function Page() {
                   <p className="text-gray-500">
                     Payment Status: {x.paymentStatus}
                   </p>
+                  <p className="text-gray-500">
+                    Order Status: {x.orderStatus}
+                  </p>
                   <p className="text-green-700 font-bold">${x.gigPrice}</p>
                 </div>
               </div>
               <div className="flex flex-col">
-                <button className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1"
-                onClick={handleApprove}>
-                  Approve
-                </button>
-                <button className="h-10 w-60 bg-red-400 hover:bg-red-600 rounded-2xl m-1"
-                onClick={handleReject}>
-                  Reject
-                </button>
-                <button className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1">
-                  Message
-                </button>
-              </div>
+    {(x.orderStatus === 'confirmed' || x.orderStatus === 'failed') && (
+        <>
+            <button
+                className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1"
+                onClick={() => handleApprove(x._id)}
+            >
+                Approve
+            </button>
+            <button
+                className="h-10 w-60 bg-red-400 hover:bg-red-600 rounded-2xl m-1"
+                onClick={() => handleReject(x._id)}
+            >
+                Reject
+            </button>
+        </>
+    )}
+    <button className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1">
+        Message
+    </button>
+</div>
             </div>
           </div>
         ))}

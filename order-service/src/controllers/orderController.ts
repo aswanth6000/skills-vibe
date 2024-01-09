@@ -392,6 +392,26 @@ const orderController = {
             console.error(error);
             res.status(501).json({message: 'Internal server error'})
         }
+    },
+    async orderAccept(req: Request, res: Response){
+        const {orderId, status} = req.body;
+        try {
+            const order = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'ongoing'} ,{new: true})
+            res.status(200).json({message: 'successfully send'})
+        } catch (error) {
+            console.error(error);
+        }
+    },
+    async orderReject(req: Request, res: Response){
+        const {orderId, status} = req.body;
+        try {
+            const order = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'rejected by seller' }, {new: true});
+            res.status(200).json({message: 'success'})
+        } catch (error) {
+            console.error(error);
+            res.status(501).json({message: "Internal server error"})
+            
+        }
     }
 }
 

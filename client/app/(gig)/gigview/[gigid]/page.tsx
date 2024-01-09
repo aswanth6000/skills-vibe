@@ -68,7 +68,6 @@ export default function Page() {
 
 
 
-  console.log('jjjjjjjj',data);
 
   return (
     <>
