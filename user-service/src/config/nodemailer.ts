@@ -4,7 +4,6 @@ dotenv.config()
 
 const EMAIL = process.env.EMAIL;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
-console.log( EMAIL_PASSWORD);
 
 
 const transporter = nodemailer.createTransport({

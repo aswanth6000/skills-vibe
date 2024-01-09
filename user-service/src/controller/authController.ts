@@ -10,7 +10,6 @@ dotenv.config()
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
 
-
 const authController = {
   // @DESC users can signup to the website by validation
   // @METHOD  post
@@ -151,29 +150,67 @@ const authController = {
       }
     }
   },
-  async sendOtp(req: Request, res: Response){
-    const {email} = req.body;
-    const user = await UserModel.find({email: email}); 
-    const sixDigitOTP =  Math.floor(100000 + Math.random() * 900000).toString()
-    var mailOptions = {
-      from: 'gadgetease.info@gmail.com',
-      to: email,
-      subject: 'OTP for changing password',
-      text: `Your OTP for changing password is ${sixDigitOTP}`
-    };
-    transporter.sendMail(mailOptions, function(error: Error | null, info: any){
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Email sent: ' + info.response);
-        console.log('otp ',sixDigitOTP);
+  async sendOtp(req: Request, res: Response) {
+    const { email } = req.body;
+    try {
+      const user = await UserModel.findOne({ email: email });
+      const sixDigitOTP = Math.floor(100000 + Math.random() * 900000).toString()
+      var mailOptions = {
+        from: 'gadgetease.info@gmail.com',
+        to: email,
+        subject: 'OTP for changing password',
+        text: `Your OTP for changing password is ${sixDigitOTP}`
+      };
+      transporter.sendMail(mailOptions, function (error: Error | null, info: any) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+          console.log('otp ', sixDigitOTP);
+        }
+      });
+      if (user) {
+        user.otp = sixDigitOTP;
+        await user.save();
       }
-    });
+    } catch (error) {
+      console.error(error)
+    }
   },
-  // async submitOtp(req: Request, res: Response){
-  //   const {otp} = req.body;
-  //   if(otp ==== )
-    
-  // }
+  async submitOtp(req: Request, res: Response) {
+    const { otp, email } = req.body;
+    try {
+      const user = await UserModel.findOne({ email, otp });
+      if(!user){
+        return res.status(404).json({message: "no user found"})
+      }
+      if (otp === user?.otp) {
+        res.status(200).json({ message: 'OTP Verification Successfull' });
+      } else {
+        res.status(401).json({ messge: 'OTP missmatch' });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  async changePassword(req: Request, res: Response){
+    const {otp, email, password} = req.body;
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10)
+      const user = await UserModel.findOne({email, otp});
+      if(!user){
+        return 
+      }
+      if(otp === user.otp){
+        user.password = hashedPassword;
+        await user.save()
+        res.status(200).json({message: 'password changed successfully'})
+      }else{
+        res.redirect('http://localhost:3000/userhome')
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 };
 export default authController;
