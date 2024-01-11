@@ -17,20 +17,22 @@ export default function Page() {
             "Content-Type": "application/json",
           }
         })
-        console.log(response.data);
-        setData(response.data)
+        console.log(response.data.orders);
+        setData(response.data.orders)
       } catch (error) {
         console.error(error);
         
       }
     }
     fetchData()
-  })
+  },[])
+  console.log('ssssss',data);
+  
 
   return (
     <div>
       <div className='flex flex-row'>
-        <ChatAllUsers />
+        <ChatAllUsers data={data} />
         <ChatMessages/>
         <ChatSenderInfo/>
       </div>
