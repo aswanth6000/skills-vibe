@@ -2,6 +2,7 @@
 import Navbar from "@/components/navbar";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 interface OrderData {
   buyerId: string;
@@ -27,6 +28,7 @@ interface OrderData {
 
 export default function Page() {
   const [data, setData] = useState<OrderData[]>([]);
+  const [cancel, setCancel] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,12 +46,11 @@ export default function Page() {
       }
     };
     fetchData();
-  }, []);
+  }, [cancel]);
 
   console.log(data);
   const handleCancel = async (orderId: string) =>{
-    console.log(orderId);
-    
+    setCancel(true)    
       const sendId = {
         orderId: orderId
       }
@@ -58,7 +59,6 @@ export default function Page() {
           "Content-Type": 'application/json'
         }
       })
-      console.log(response);
   }
 
   return (
@@ -73,10 +73,15 @@ export default function Page() {
             <p className="text-gray-500">Order Status: {x.orderStatus}</p>
             <p className="text-gray-500">Payment Status: {x.paymentStatus}</p>
             <p className="text-green-700 font-bold">${x.gigPrice}</p>
-            {x.orderStatus !=='cancelled' && <button className="w-64 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+            {(x.orderStatus !=='cancelled' && x.orderStatus !=='ongoing') && <button className="w-64 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
             onClick={()=>handleCancel(x._id)}>
               cancel
             </button>}
+            <Link href='/messages'>
+              {x.orderStatus !=='cancelled' && <button className="w-64 ml-3 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700  dark:focus:ring-blue-800">
+                Message Seller
+              </button>}
+            </Link>
           </div>
         ))}
       </div>
