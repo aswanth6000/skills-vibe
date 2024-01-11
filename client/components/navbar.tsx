@@ -29,8 +29,7 @@ export default function Navbar() {
      dispatch(logOut())
      router.push('/login')
   }
-
-
+  
   return (
     <div className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-navwhite ">
       <div className="container px-3 mx-auto flex flex-wrap items-center justify-between">
