@@ -2,7 +2,7 @@ import React from "react";
 
 export default function ChatAllUsers() {
   return (
-    <div className=" w-1/4 h-screen overflow-scroll">
+    <div className=" w-1/4 h-screen overflow-x-hidden">
       <div className="flex flex-row   mb-3 w-full justify-center mt-3">
         <input
           type="text"

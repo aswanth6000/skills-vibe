@@ -11,6 +11,8 @@
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-brands-svg-icons": "^6.5.1",
+    "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@headlessui/react": "^1.7.17",
@@ -19,6 +21,7 @@
     "@types/redux-persist": "^4.3.1",
     "antd": "^5.12.4",
     "axios": "^1.6.2",
+    "emoji-picker-react": "^4.6.8",
     "firebase": "^10.7.1",
     "install": "^0.13.0",
     "lottie-react": "^2.4.0",
