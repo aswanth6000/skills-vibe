@@ -2,6 +2,7 @@ import { Schema, model, Types, ObjectId } from "mongoose";
 
 interface User {
     _id: Types.ObjectId,
+    userId: Types.ObjectId;
     username: string;
     phone: number;
     email: string;
@@ -31,6 +32,9 @@ const userSchema = new Schema<User>({
   username: {
     type: String,
     required: true,
+  },
+  userId: {
+    type: Schema.Types.ObjectId
   },
   otp: {
     type: String,
@@ -67,27 +71,7 @@ const userSchema = new Schema<User>({
     type: Boolean,
     default: true
   },
-  clients: [{
-    type: Types.ObjectId,
-    ref: "User", // Assuming 'User' is the name of the model
-  }],
-  skills: {
-    type: [skillSchema], // Expecting an array of skillSchema objects
-    default: [],
-  },
-  availability: {
-    type: Boolean,
-  },
-  portfolio: {
-    type: Schema.Types.ObjectId,
-    ref: "Portfolio", // Assuming 'Portfolio' is the name of the model
-  },
-  orders: {
-    type: Schema.Types.ObjectId,
-  },
-  ordersRecieved: {
-    type: Schema.Types.ObjectId,
-  },
+
 });
 
 const UserModel = model<User>("User", userSchema);

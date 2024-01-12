@@ -1,10 +1,13 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import messageController from './controller/messageontroller';
 
 const app = express()
 app.use(cors())
 app.use(express.json());
+
+messageController.userSave()
 
 
 mongoose.connect("mongodb://localhost/messageservice")
