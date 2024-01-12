@@ -1,7 +1,29 @@
-import React from "react";
+'use client'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-export default function ChatAllUsers({data}: any) {
-  console.log('lllllll',data);
+export default function ChatAllUsers() {
+  const [data, setData] = useState([])
+  useEffect(()=>{
+    const fetchData = async () =>{
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get('http://localhost:8003/vorders',{
+          headers:{
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          }
+        })
+        console.log(response.data.orders);
+        setData(response.data.orders)
+      } catch (error) {
+        console.error(error);
+        
+      }
+    }
+    fetchData()
+  },[])
+  console.log('ssssss',data);
   
   return (
     <div className=" w-1/4 h-screen overflow-x-hidden">
@@ -27,10 +49,6 @@ export default function ChatAllUsers({data}: any) {
           <div>
           </div>
         </div>))}
-
-        
-       
-        
       </div>
       <div>
       </div>

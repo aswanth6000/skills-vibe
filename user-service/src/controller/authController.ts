@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import transporter from '../config/nodemailer'
+import userMessagePublisher from "../events/publisher/userMessagePublisher";
 
 dotenv.config()
 
@@ -27,12 +28,8 @@ const authController = {
           });
 
           await newUser.save();
-          try {
-            console.log('User logged in event published successfully');
-          } catch (error) {
-            console.error('Error publishing user logged in event:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
-          }
+          userMessagePublisher.userMessageEvent(newUser)
+
 
           console.log('User created');
           const token = jwt.sign({ userId: newUser._id }, jwtSecret, { expiresIn: '1h' });
@@ -57,12 +54,7 @@ const authController = {
           });
 
           await newUser.save();
-          try {
-            console.log('User created event published successfully');
-          } catch (error) {
-            console.error('Error publishing user created event:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
-          }
+          userMessagePublisher.userMessageEvent(newUser)
 
           console.log('User created');
           res.status(201).json({ user: 'created' });
