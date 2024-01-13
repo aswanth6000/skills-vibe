@@ -3,13 +3,16 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import messageController from './controller/messagecontroller';
 import router from './routes/messageRouter';
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 const app = express()
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 messageController.userSave()
-app.use(router)
+app.use(router);
 
 
 mongoose.connect("mongodb://localhost/messageservice")
