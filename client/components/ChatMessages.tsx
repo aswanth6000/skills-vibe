@@ -7,7 +7,7 @@ import Picker from "emoji-picker-react";
 import { EmojiStyle } from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
 
-export default function ChatMessages() {
+export default function ChatMessages({props}: any) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [message, setMessage] = useState("");
   const [sendM, setSendM] = useState('')
@@ -22,9 +22,11 @@ export default function ChatMessages() {
     setSendM(message)
     setMessage('')
   }
+  console.log('lllllllll', props.width);
+  
   return (
-    <div className="bg-bodywhite w-1/2 h-screen relative overflow-y-scroll ">
-      <div className="w-1/2 h-16 border-y bg-bodywhite z-50 flex items-center p-2 fixed ">
+    <div className={`bg-bodywhite w-${props.width} h-screen relative overflow-y-scroll `}>
+      <div className={`w-${props.width} h-16 border-y bg-bodywhite z-50 flex items-center p-2 fixed `}>
         <div className="h-10 w-10 bg-black rounded-3xl"></div>
         <div className="flex flex-col ml-2">
           <div className="text-md font-semibold">Git tiltle goes here</div>
@@ -48,7 +50,7 @@ export default function ChatMessages() {
 
       </div>
       <div>{showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}</div>
-      <div className=" border-y w-6/12 h-14 bg-bodywhite fixed flex flex-row justify-center items-center bottom-0  ">
+      <div className={`border-y w-${props.width} h-16 bg-bodywhite fixed flex flex-row justify-center items-center bottom-0`}>
         <button
           className="mr-2"
           onClick={(e) => {
