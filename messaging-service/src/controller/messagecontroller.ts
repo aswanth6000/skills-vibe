@@ -30,17 +30,15 @@ const messageController = {
             console.log("UserId param not sent with request");
             return res.status(400).json({ message: 'nouserFound' });
         }
-        
           var isChat = await chatModel.find({
-            isGroupChat: false,
-            $and: [
-              { users: { $elemMatch: { $eq: req.user._id } } },
-              { users: { $elemMatch: { $eq: userId } } },
-            ],
+            // $and: [
+            //   { users: { $elemMatch: { $eq: req.user._id } } },
+            //   { users: { $elemMatch: { $eq: userId } } },
+            // ],
           })
             .populate("users")
             .populate("latestMessage");
-    }
+    },
 }
 
 export default messageController
