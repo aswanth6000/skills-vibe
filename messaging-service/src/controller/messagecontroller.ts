@@ -33,6 +33,7 @@ const messageController = {
   },
   async accessChat(req: Request, res: Response) {
     const { userId } = req.body;
+    
 
     if (!userId) {
       console.log("UserId param not sent with request");
@@ -70,6 +71,7 @@ const messageController = {
 
     if (isChat.length > 0) {
       res.send(isChat[0]);
+      
     } else {
       var chatData = {
         chatName: "sender",
@@ -82,7 +84,9 @@ const messageController = {
         const FullChat = await chatModel.findOne({ _id: createdChat._id }).populate(
           "users",
         );
+        console.log(FullChat);
         res.status(200).json(FullChat);
+        
       } catch (error) {
         res.status(400).json({ message: 'page not found' })
       }
@@ -121,8 +125,10 @@ const messageController = {
   async allMessages(req: Request, res: Response) {
     try {
       const messages = await messageModel.find({ chat: req.params.chatId })
-        .populate("sender", "name pic email")
+        .populate("sender", "username profilePicture email")
         .populate("chat");
+        console.log(messages);
+        
       res.json(messages);
     } catch (error) {
       res.status(400).json({ error })
