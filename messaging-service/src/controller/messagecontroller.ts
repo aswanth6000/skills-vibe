@@ -132,7 +132,6 @@ const messageController = {
     }
   },
   async sendMessage(req: Request, res: Response) {
-    console.log(req.body);
     
     const { content, chatId } = req.body;
 
@@ -205,6 +204,39 @@ const messageController = {
 
     const users = await UserModel.find(keyword).find({ _id: { $ne: decodedToken.userId } });
     res.send(users);
+  },
+  async findChats(req: Request, res: Response){
+    const token = req.headers.authorization?.split(' ')[1]
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized - Token not provided' });
+    }
+
+    let decodedToken: JwtPayload;
+
+    try {
+      decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+      const myId = decodedToken.userId
+      var isChat: any = await chatModel.find({ users: myId })
+        .populate("users")
+        .populate("latestMessage");
+
+
+        console.log("idcfdt: ", isChat);
+        
+  
+      isChat = await UserModel.populate(isChat, {
+        path: "latestMessage.sender",
+        select: "username profilePicture email",
+      });
+  
+      if (isChat.length > 0) {
+        return res.send(isChat[0]);
+        
+      }
+    } catch (jwtError) {
+      console.log('JWT Verification Error:', jwtError);
+      return res.status(401).json({ error: 'Unauthorized - Invalid token' });
+    }
   }
 
 }

@@ -70,6 +70,8 @@ export default function Page() {
   const params = useParams<{ tag: string; userId: string }>();
 
   const userId = params.userId;
+  console.log('errrrrrrrrr',userId);
+  
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages]: any = useState("");
   const [loading, setLoading] = useState(false);
@@ -94,6 +96,8 @@ export default function Page() {
 
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
+    console.log('ojoihoiuh',selectedChat);
+    
 
     if (bearerToken) {
       const fetchChats = async () => {
@@ -107,7 +111,7 @@ export default function Page() {
             }
           );
           const chatData = response.data;
-          dispatch(setChats(chatData))
+          
           
           setMessages(chatData);
           
@@ -137,7 +141,6 @@ export default function Page() {
             }
           );
           const userData = response.data;
-          console.log("kkkk",userData);
           
 
           setAccessData({
@@ -146,7 +149,7 @@ export default function Page() {
             sellerName: userData.users[1].username,
             sellerProfilePicture: userData.users[1].profilePicture,
           });
-          console.log(userData.latestMessage.chat);
+          console.log('ggggggg',userData.latestMessage.chat);
           
           dispatch(
             setSelectedChat(
