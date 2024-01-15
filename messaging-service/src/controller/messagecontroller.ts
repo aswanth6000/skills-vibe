@@ -33,7 +33,6 @@ const messageController = {
   },
   async accessChat(req: Request, res: Response) {
     const { userId } = req.body;
-    
 
     if (!userId) {
       console.log("UserId param not sent with request");

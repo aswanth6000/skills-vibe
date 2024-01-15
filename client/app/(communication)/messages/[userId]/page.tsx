@@ -10,9 +10,11 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
-import { chatAll } from "@/redux/features/chatSlice";
+import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from "@/config/chatLogics";
+import { Avatar, Tooltip } from '@chakra-ui/react';
 import ScrollableFeed from "react-scrollable-feed";
-import { isSameSender } from "@/config/chatLogics";
+import ChatAllUsers from "@/components/chatAllUsers";
+import { setChats, setSelectedChat } from "@/redux/features/chatSlice";
 
 interface Pokedex {
   username: string;
@@ -74,6 +76,10 @@ export default function Page() {
   const [newMessage, setNewMessage]: any = useState();
   const [sendM, setSendM] = useState("");
   const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
+  console.log("state: ",selectedChat);
+  
+  const user = useAppSelector((state)=> state.auth.value)
+
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     console.log(emojiData);
@@ -101,7 +107,10 @@ export default function Page() {
             }
           );
           const chatData = response.data;
+          dispatch(setChats(chatData))
+          
           setMessages(chatData);
+          
         } catch (error) {
           console.error(error);
         }
@@ -109,6 +118,8 @@ export default function Page() {
       fetchChats();
     }
   }, [selectedChat]);
+
+
 
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
@@ -126,6 +137,8 @@ export default function Page() {
             }
           );
           const userData = response.data;
+          console.log("kkkk",userData);
+          
 
           setAccessData({
             username: userData.users[0].username,
@@ -133,13 +146,12 @@ export default function Page() {
             sellerName: userData.users[1].username,
             sellerProfilePicture: userData.users[1].profilePicture,
           });
+          console.log(userData.latestMessage.chat);
+          
           dispatch(
-            chatAll({
-              selectedChat: userData.latestMessage.chat,
-              user: null,
-              notification: [],
-              chats: null,
-            })
+            setSelectedChat(
+              userData.latestMessage.chat
+            )
           );
         } catch (error) {
           console.error(error);
@@ -150,6 +162,7 @@ export default function Page() {
   }, []);
 
   const handleSendButton = async (e: any) => {
+
     if (newMessage) {
       try {
         const sendData = {
@@ -168,7 +181,7 @@ export default function Page() {
             },
           }
         );
-
+        
         setMessages([...messages, data]);
         console.log(data);
       } catch (error) {
@@ -176,16 +189,16 @@ export default function Page() {
       }
     }
   };
-  const user = useAppSelector((state) => state.auth.value);
-
+  
   return (
     <div>
       <div className="flex flex-row">
+        <ChatAllUsers/>
         <div
-          className={`bg-bodywhite w-3/4 h-screen relative overflow-y-scroll `}
+          className={`bg-bodywhite w-1/2 h-screen relative overflow-y-scroll `}
         >
           <div
-            className={`w-3/4 h-16 border-y bg-bodywhite z-50 flex items-center p-2 fixed `}
+            className={`w-1/2 h-16 border-y bg-bodywhite z-50 flex items-center p-2 fixed `}
           >
             <img
               src={accessData.profilePicture}
@@ -196,33 +209,42 @@ export default function Page() {
               <div className="text-sm font-semibold">{accessData.username}</div>
             </div>
           </div>
+          <ScrollableFeed className="mt-16">
           {messages &&
-            messages.map((m: any, i: any) => (
-              <div
-                key={m._id}
-                className="flex flex-col mt-20 pb-20 absolute w-full  z-0"
-              >
-                {isSameSender(messages, m, i, user._id) && (
-                  <div className="flex justify-end mb-2">
-                    <div className="h-5/6  bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white w-auto p-3 flex justify-end  ">
-                      {m.content}
-                    </div>
-                  </div>
-                )}
-                {!isSameSender(messages, m, i, user._id) && (
-                  <div className="flex justify-start mb-2">
-                    <div className="h-5/6 bg-blue-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white w-auto p-3 flex justify-start  ">
-                      {m.content}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+        messages.map((m: any, i: any) => (
+          <div style={{ display: "flex" }} key={m._id}>
+            {(isSameSender(messages, m, i, user._id) ||
+              isLastMessage(messages, i, user._id)) && (
+              <Tooltip label={m.sender.name} placement="bottom-start" hasArrow>
+                <img
+                  className="w-6 h-6 mr-1 ml-1 mt-2 rounded-full"
+                  alt={m.sender.username}
+                  src={m.sender.profilePicture}
+                />
+              </Tooltip>
+            )}
+            <span
+              style={{
+                backgroundColor: `${
+                  m.sender._id === user._id ? "#BEE3F8" : "#B9F5D0"
+                }`,
+                marginLeft: isSameSenderMargin(messages, m, i, user._id),
+                marginTop: isSameUser(messages, m, i) ? 3 : 10,
+                borderRadius: "20px",
+                padding: "5px 15px",
+                maxWidth: "75%",
+              }}
+            >
+              {m.content}
+            </span>
+          </div>
+        ))}
+          </ScrollableFeed>
           <div>
             {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
           </div>
           <div
-            className={`border-y w-3/4 h-16 bg-bodywhite fixed flex flex-row justify-center items-center bottom-0`}
+            className={`border-y w-1/2 h-16 bg-bodywhite fixed flex flex-row justify-center items-center bottom-0`}
           >
             <button
               className="mr-2"
