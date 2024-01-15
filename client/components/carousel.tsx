@@ -28,7 +28,7 @@ export const CarouselDefault: FC<CarouselDefaultProps> = ({stl}) => {
     >
       <SwiperSlide>
       <div >
-      <img src='https://c4.wallpaperflare.com/wallpaper/553/119/620/windows-10-windows-10x-windows-11-minimalism-material-minimal-hd-wallpaper-preview.jpg'     
+      <img  src='https://c4.wallpaperflare.com/wallpaper/553/119/620/windows-10-windows-10x-windows-11-minimalism-material-minimal-hd-wallpaper-preview.jpg'     
         className={stl.innerdiv}
       alt="Picture of the author"/>
       </div>

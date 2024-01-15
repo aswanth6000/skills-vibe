@@ -18,7 +18,7 @@ export default function Card() {
             <CarouselDefault stl={styles}/>
         </div>
         <div>
-        <p className='pl-3'>I make your video editting job much easier</p> 
+        <div className='pl-3 font-semibold'>I make your video editting job much easier</div> 
         </div>
         <div>
         {/* <FontAwesomeIcon icon={faStar} size='xs' className="text-2xl" style={{ fontSize: '2em' }}/> */}

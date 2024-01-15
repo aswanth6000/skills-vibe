@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import authReducer from './features/authSlice';
+import chatReducer from './features/chatSlice'
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -10,10 +11,12 @@ const persistConfig = {
 };
 
 const persistedAuthReducer = persistReducer(persistConfig, authReducer);
+const persistedChatReducer = persistReducer(persistConfig, chatReducer);
 
 const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
+    chat: persistedChatReducer
   },
 });
 
