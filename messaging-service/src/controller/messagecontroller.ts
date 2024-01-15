@@ -126,15 +126,15 @@ const messageController = {
     try {
       const messages = await messageModel.find({ chat: req.params.chatId })
         .populate("sender", "username profilePicture email")
-        .populate("chat");
-        console.log(messages);
-        
+        .populate("chat");        
       res.json(messages);
     } catch (error) {
       res.status(400).json({ error })
     }
   },
   async sendMessage(req: Request, res: Response) {
+    console.log(req.body);
+    
     const { content, chatId } = req.body;
 
     const token = req.headers.authorization?.split(' ')[1]

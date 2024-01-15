@@ -8,105 +8,175 @@ import { EmojiStyle } from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
 import axios from "axios";
 import { useParams } from "next/navigation";
+import { AppDispatch, useAppSelector } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { chatAll } from "@/redux/features/chatSlice";
+import ScrollableFeed from "react-scrollable-feed";
+import { isSameSender } from "@/config/chatLogics";
 
- interface Pokedex {
-  username: string,
+interface Pokedex {
+  username: string;
   profilePicture: string;
   sellerName: string;
   sellerProfilePicture: string;
 }
 
- interface ID {
+interface ID {
   $oid: string;
 }
 
- interface LatestMessage {
-  _id:       ID;
-  sender:    Sender;
-  content:   string;
-  chat:      ID;
-  readBy:    any[];
+interface LatestMessage {
+  _id: ID;
+  sender: Sender;
+  content: string;
+  chat: ID;
+  readBy: any[];
   createdAt: Date;
   updatedAt: Date;
 }
 
- interface Sender {
-  _id:            ID;
-  username:       string;
-  email:          string;
+interface Sender {
+  _id: ID;
+  username: string;
+  email: string;
   profilePicture: string;
 }
 
- interface User {
-  _id:            ID;
-  username:       string;
-  phone:          number;
-  email:          string;
+interface User {
+  _id: ID;
+  username: string;
+  phone: number;
+  email: string;
   profilePicture: string;
-  createdAt:      Date;
-  updatedAt:      Date;
-  status:         boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  status: boolean;
 }
-
-
 
 let bearerToken: string | null;
 export default function Page() {
   const [accessData, setAccessData] = useState<Pokedex>({
-  username: '',
-  profilePicture: '',
-  sellerName: '',
-  sellerProfilePicture: '',
+    username: "",
+    profilePicture: "",
+    sellerName: "",
+    sellerProfilePicture: "",
+  });
+  const dispatch = useDispatch<AppDispatch>();
 
-  })
+  const chat = useAppSelector((state: any) => state.chat.value);
 
   const params = useParams<{ tag: string; userId: string }>();
-  
-  const userId = params.userId
+
+  const userId = params.userId;
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [message, setMessage] = useState("");
+  const [messages, setMessages]: any = useState("");
+  const [loading, setLoading] = useState(false);
+  const [newMessage, setNewMessage]: any = useState();
   const [sendM, setSendM] = useState("");
+  const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     console.log(emojiData);
 
-    let newMessage = message + emojiData.emoji;
-    setMessage(newMessage);
+    let newMessages = newMessage + emojiData.emoji;
+    setNewMessage(newMessages);
   };
-  const handleSendButton = () => {
-    setSendM(message);
-    setMessage("");
+
+  const typingHandler = (e: any) => {
+    setNewMessage(e.target.value);
   };
 
   useEffect(() => {
-    bearerToken = localStorage.getItem('token');
-        
+    bearerToken = localStorage.getItem("token");
+
+    if (bearerToken) {
+      const fetchChats = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8004/getmessage/${selectedChat}`,
+            {
+              headers: {
+                Authorization: `Bearer ${bearerToken}`,
+              },
+            }
+          );
+          const chatData = response.data;
+          setMessages(chatData);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchChats();
+    }
+  }, [selectedChat]);
+
+  useEffect(() => {
+    bearerToken = localStorage.getItem("token");
+
     if (bearerToken) {
       const fetchData = async () => {
         try {
-          const response = await axios.post(`http://localhost:8004/accesschat`,{userId}, {
-            headers: {
-              'Authorization': `Bearer ${bearerToken}`,
-            },
-          });
+          const response = await axios.post(
+            `http://localhost:8004/accesschat`,
+            { userId },
+            {
+              headers: {
+                Authorization: `Bearer ${bearerToken}`,
+              },
+            }
+          );
           const userData = response.data;
-          console.log(userData);
+
           setAccessData({
             username: userData.users[0].username,
             profilePicture: userData.users[0].profilePicture,
             sellerName: userData.users[1].username,
-            sellerProfilePicture: userData.users[1].profilePicture
+            sellerProfilePicture: userData.users[1].profilePicture,
           });
-          
+          dispatch(
+            chatAll({
+              selectedChat: userData.latestMessage.chat,
+              user: null,
+              notification: [],
+              chats: null,
+            })
+          );
         } catch (error) {
           console.error(error);
         }
-      }
+      };
       fetchData();
     }
-  },[]);
+  }, []);
 
-  console.log(accessData);
+  const handleSendButton = async (e: any) => {
+    if (newMessage) {
+      try {
+        const sendData = {
+          content: newMessage,
+          chatId: selectedChat,
+        };
+        console.log(sendData);
+        setNewMessage("");
+        const { data } = await axios.post(
+          "http://localhost:8004/sendmessage",
+          sendData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearerToken}`,
+            },
+          }
+        );
+
+        setMessages([...messages, data]);
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  const user = useAppSelector((state) => state.auth.value);
 
   return (
     <div>
@@ -117,26 +187,37 @@ export default function Page() {
           <div
             className={`w-3/4 h-16 border-y bg-bodywhite z-50 flex items-center p-2 fixed `}
           >
-            <img src={accessData.profilePicture} className="h-10 w-10 rounded-3xl"></img>
+            <img
+              src={accessData.profilePicture}
+              className="h-10 w-10 rounded-3xl"
+            ></img>
             <div className="flex flex-col ml-2">
               <div className="text-md font-semibold">Git tiltle goes here</div>
               <div className="text-sm font-semibold">{accessData.username}</div>
             </div>
           </div>
-          <div className="flex flex-col mt-20 pb-20 absolute w-full  z-0">
-            <div className="flex justify-end mb-2">
-              {sendM && (
-                <div className="h-5/6  bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white w-auto p-3 flex justify-end  ">
-                  {sendM}
-                </div>
-              )}
-            </div>
-            <div className="flex justify-start mb-2">
-              <div className="h-5/6 bg-blue-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white w-auto p-3 flex justify-start  ">
-                Other person sends a message
+          {messages &&
+            messages.map((m: any, i: any) => (
+              <div
+                key={m._id}
+                className="flex flex-col mt-20 pb-20 absolute w-full  z-0"
+              >
+                {isSameSender(messages, m, i, user._id) && (
+                  <div className="flex justify-end mb-2">
+                    <div className="h-5/6  bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white w-auto p-3 flex justify-end  ">
+                      {m.content}
+                    </div>
+                  </div>
+                )}
+                {!isSameSender(messages, m, i, user._id) && (
+                  <div className="flex justify-start mb-2">
+                    <div className="h-5/6 bg-blue-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white w-auto p-3 flex justify-start  ">
+                      {m.content}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          </div>
+            ))}
           <div>
             {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
           </div>
@@ -163,8 +244,8 @@ export default function Page() {
               className="w-9/12 h-7 outline-none "
               placeholder="Type something"
               autoComplete="off"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              value={newMessage}
+              onChange={typingHandler}
               name="message"
             />
             <button
@@ -179,7 +260,10 @@ export default function Page() {
           </div>
         </div>
         <div className="  flex flex-col items-center  w-1/4 h-screen">
-          <img src={accessData.sellerProfilePicture} className="h-48 w-48  rounded-full mt-16"></img>
+          <img
+            src={accessData.sellerProfilePicture}
+            className="h-48 w-48  rounded-full mt-16"
+          ></img>
           <div className="text-md font-semibold">{accessData.sellerName}</div>
           <div className="">
             <button className="bg-blue-400 p-1 mt-4 font-semibold text-white rounded-md">
