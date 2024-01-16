@@ -26,14 +26,42 @@ interface OrderData {
   __v: number;
   _id: string;
 }
+let bearerToken: string | null;
+
 
 export default function Page() {
   const [data, setData] = useState<OrderData[]>([]);
+
+  useEffect(() => {
+    bearerToken = localStorage.getItem("token");
+  }, [])
+
+    const handleOrder = async (userId: any) => {
+      console.log("handle order user Id",userId);
+      
+      try {
+        const response = await axios.post(
+          `http://localhost:8004/accesschat`,
+          { userId },
+          {
+            headers: {
+              Authorization: `Bearer ${bearerToken}`,
+            },
+          }
+        );
+        const userData = response.data;
+        
+      } catch (error) {
+        console.error(error);
+      }
+    };
   const handleApprove = async (orderId: string) => {
     const sendStatus = {
       status: "ongoing",
       orderId: orderId,
     };
+  
+
     const response = await axios.post(
       "http://localhost:8003/orderAccept",
       sendStatus,
@@ -133,8 +161,11 @@ export default function Page() {
                 )}
                 <Link
                   href={`/messages`}
-                  className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1"
                 >
+                  <button className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1"
+                  onClick={()=>handleOrder(x.buyerId)}>
+
+                  </button>
                   Message
                 </Link>
               </div>

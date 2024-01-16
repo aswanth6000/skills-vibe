@@ -127,37 +127,37 @@ export default function Page() {
 
 
 
-  useEffect(() => {
-    bearerToken = localStorage.getItem("token");
+  // useEffect(() => {
+  //   bearerToken = localStorage.getItem("token");
 
-    if (bearerToken) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.post(
-            `http://localhost:8004/accesschat`,
-            { userId },
-            {
-              headers: {
-                Authorization: `Bearer ${bearerToken}`,
-              },
-            }
-          );
-          const userData = response.data;
+  //   if (bearerToken) {
+  //     const fetchData = async () => {
+  //       try {
+  //         const response = await axios.post(
+  //           `http://localhost:8004/accesschat`,
+  //           { userId },
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${bearerToken}`,
+  //             },
+  //           }
+  //         );
+  //         const userData = response.data;
           
 
-          setAccessData({
-            username: userData.users[0].username,
-            profilePicture: userData.users[0].profilePicture,
-            sellerName: userData.users[1].username,
-            sellerProfilePicture: userData.users[1].profilePicture,
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchData();
-    }
-  }, []);
+  //         setAccessData({
+  //           username: userData.users[0].username,
+  //           profilePicture: userData.users[0].profilePicture,
+  //           sellerName: userData.users[1].username,
+  //           sellerProfilePicture: userData.users[1].profilePicture,
+  //         });
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //     };
+  //     fetchData();
+  //   }
+  // }, []);
 
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
@@ -230,13 +230,13 @@ console.log("Messages:",messages);
           <div
             className={`w-1/2 h-16 border-y bg-bodywhite z-50 flex items-center p-2 fixed `}
           >
-            <img
+            {/* <img
               src={accessData.profilePicture}
               className="h-10 w-10 rounded-3xl"
-            ></img>
+            ></img> */}
             <div className="flex flex-col ml-2">
               <div className="text-md font-semibold">Git tiltle goes here</div>
-              <div className="text-sm font-semibold">{accessData.username}</div>
+              {/* <div className="text-sm font-semibold">{accessData.username}</div> */}
             </div>
           </div>
           <ScrollableFeed className="mt-16">
@@ -312,11 +312,11 @@ console.log("Messages:",messages);
           </div>
         </div>
         <div className="  flex flex-col items-center  w-1/4 h-screen">
-          <img
+          {/* <img
             src={accessData.sellerProfilePicture}
             className="h-48 w-48  rounded-full mt-16"
-          ></img>
-          <div className="text-md font-semibold">{accessData.sellerName}</div>
+          ></img> */}
+          {/* <div className="text-md font-semibold">{accessData.sellerName}</div> */}
           <div className="">
             <button className="bg-blue-400 p-1 mt-4 font-semibold text-white rounded-md">
               View Profile
