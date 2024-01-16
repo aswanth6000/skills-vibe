@@ -69,7 +69,6 @@ export default function Page() {
 
   const params = useParams<{ tag: string; userId: string }>();
 
-  const userId = params.userId;
   
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages]: any = useState("");
@@ -77,7 +76,8 @@ export default function Page() {
   const [newMessage, setNewMessage]: any = useState();
   const [sendM, setSendM] = useState("");
   
-  const user = useAppSelector((state)=> state.auth.value)
+  const user = useAppSelector((state)=> state.auth.value);
+  const userId = user._id;
   const chats = useAppSelector((state)=> state.chat.chats)
 
 
@@ -100,23 +100,18 @@ export default function Page() {
 
     if (bearerToken) {
       const fetchChats = async () => {
-        const sendData={
-          s: selectedChat
-        }
-        console.log("Send Data:", sendData);
-        
         try {
-          
-          const response = await axios.post(
-            `http://localhost:8004/getmessage`,{selectedChat},
+          const response = await axios.get(
+            `http://localhost:8004/getmessage/${selectedChat._id}`,
             {
               headers: {
-                "Content-Type": "application/json",
                 Authorization: `Bearer ${bearerToken}`,
               },
             }
           );
           const chatData = response.data;
+          console.log("chat data: ", chatData);
+          
           setMessages(chatData);
           
         } catch (error) {

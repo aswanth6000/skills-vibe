@@ -67,7 +67,6 @@ const messageController = {
       path: "latestMessage.sender",
       select: "username profilePicture email",
     });
-    console.log("is chat is: ", isChat);
     
 
     if (isChat.length > 0) {
@@ -124,11 +123,10 @@ const messageController = {
     }
   },
   async allMessages(req: Request, res: Response) {
-    const {s} = req.body;
-    console.log("body req: ",req.body);
+    console.log("Params: ",req.params);
     
     try {
-      const messages = await messageModel.find({ chat: s })
+      const messages = await messageModel.find({ chat: req.params.chatId })
         .populate("sender", "username profilePicture email")
         .populate("chat");      
       res.json(messages);
@@ -140,7 +138,7 @@ const messageController = {
     
     const { content, chatId } = req.body;
 
-    const token = req.headers.authorization?.split(' ')[1]
+    const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized - Token not provided' });
     }
