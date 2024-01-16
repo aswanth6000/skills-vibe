@@ -1,23 +1,12 @@
 "use clinet"
-import { Stack, HStack, VStack } from '@chakra-ui/react'
-import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const ChatLoading = () => {
   return (
-    <Stack>
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-    </Stack>
+    <div>
+<Skeleton count={5} /> 
+    </div>
   );
 };
 

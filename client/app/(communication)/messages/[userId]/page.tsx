@@ -156,6 +156,7 @@ export default function Page() {
               userData.latestMessage.chat
             )
           );
+          dispatch(setChats(userData))
         } catch (error) {
           console.error(error);
         }
