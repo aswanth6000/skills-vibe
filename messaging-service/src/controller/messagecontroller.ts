@@ -148,6 +148,8 @@ const messageController = {
       console.log('JWT Verification Error:', jwtError);
       return res.status(401).json({ error: 'Unauthorized - Invalid token' });
     }
+    console.log(content, chatId);
+    
 
     if (!content || !chatId) {
       console.log("Invalid data passed into request");

@@ -64,21 +64,20 @@ export default function Page() {
     sellerProfilePicture: "",
   });
   const dispatch = useDispatch<AppDispatch>();
-
+  
+  const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
   const chat = useAppSelector((state: any) => state.chat.value);
 
   const params = useParams<{ tag: string; userId: string }>();
 
   const userId = params.userId;
-  console.log('errrrrrrrrr',userId);
+  dispatch(setSelectedChat(userId))
   
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages]: any = useState("");
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage]: any = useState();
   const [sendM, setSendM] = useState("");
-  const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
-  console.log("state: ",selectedChat);
   
   const user = useAppSelector((state)=> state.auth.value)
 
@@ -111,8 +110,6 @@ export default function Page() {
             }
           );
           const chatData = response.data;
-          
-          
           setMessages(chatData);
           
         } catch (error) {
@@ -149,7 +146,6 @@ export default function Page() {
             sellerName: userData.users[1].username,
             sellerProfilePicture: userData.users[1].profilePicture,
           });
-          console.log('ggggggg',userData.latestMessage.chat);
           
           dispatch(
             setSelectedChat(
@@ -194,6 +190,8 @@ export default function Page() {
     }
   };
   
+
+
   return (
     <div>
       <div className="flex flex-row">
@@ -243,10 +241,10 @@ export default function Page() {
             </span>
           </div>
         ))}
-          </ScrollableFeed>
           <div>
-            {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
+            {showEmojiPicker && <Picker className="mb-5" onEmojiClick={handleEmojiClick} />}
           </div>
+          </ScrollableFeed>
           <div
             className={`border-y w-1/2 h-16 bg-bodywhite fixed flex flex-row justify-center items-center bottom-0`}
           >
