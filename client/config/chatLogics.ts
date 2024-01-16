@@ -6,7 +6,8 @@ interface Message {
   
   interface User {
     _id: string;
-    name: string;
+    username: string;
+    profilePicture: string;
   }
   
   export const isSameSenderMargin = (
@@ -62,10 +63,15 @@ interface Message {
   };
   
   export const getSender = (loggedUser: User, users: User[]): string => {
-    return users[0]?._id === loggedUser?._id ? users[1].name : users[0].name;
+    return users[0]?._id !== loggedUser?._id ? users[1].username : users[0].username;
+  };
+  export const getSenderImg = (loggedUser: User, users: User[]): string => {
+    return users[0]?._id !== loggedUser?._id ? users[1].profilePicture : users[0].profilePicture;
   };
   
   export const getSenderFull = (loggedUser: User, users: User[]): User => {
+    console.log("chat Users:", users);
+    
     return users[0]._id === loggedUser._id ? users[1] : users[0];
   };
   

@@ -5,17 +5,27 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { Text } from "@chakra-ui/react";
-import { setChats } from "@/redux/features/chatSlice";
+import { setChats, setSelectedChat } from "@/redux/features/chatSlice";
 import ChatLoading from "./chatLoading";
+import { getSender, getSenderImg } from "@/config/chatLogics";
 
 
 let bearerToken: string | null;
 
+
 export default function ChatAllUsers() {
+  const userAuth = useAppSelector((state: any)=> state.auth.value)
+  
+  const [loggedUser, setLoggedUser]: any = useState('')
   useEffect(()=>{
     bearerToken = localStorage.getItem("token");
-  })
+    setLoggedUser(userAuth._id)
+  }, [])
+  console.log("Logged user",loggedUser);
+  
+
   const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
+  
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
   const [chat, setChat] = useState([]);
@@ -49,7 +59,7 @@ export default function ChatAllUsers() {
               },
             });
             setLoading(false)
-            // if (!chats.find((c: any) => c._id === data._id)) setChats([data, ...chats]);
+            if (!chats.find((c: any) => c._id === data._id)) setChats([data, ...chats]);
             setSearchResult(data);
           } catch (error) {
             toast.error('An error occoured', {
@@ -69,6 +79,7 @@ export default function ChatAllUsers() {
       }
 
   };
+
 
 
 console.log(searchResult);
@@ -116,6 +127,22 @@ console.log(searchResult);
             {/* <div className="text-sm font-semibold">ads</div> */}
           </div>
         </div>)) : <ChatLoading />}
+
+        {chats ? chats.map((x: any)=>(
+        <button onClick={() => dispatch(setSelectedChat(chat))} key={x._id} className="bg-bodywhite  h-16 rounded-md shadow-md w-11/12 flex border  mb-2 items-center p-2">
+          <img src={getSenderImg(loggedUser, x.users)} className="h-10 w-10 rounded-3xl"/>
+          <div className="ml-2">
+            <div className="text-md font-bold">{getSender(loggedUser, x.users)}</div>
+            {x.latestMessage && (
+                  <div className="text-sm font-semibold">
+                    <b>{x.latestMessage.sender.name} : </b>
+                    {x.latestMessage.content.length > 50
+                      ? x.latestMessage.content.substring(0, 51) + "..."
+                      : x.latestMessage.content}
+                  </div>
+                )}
+          </div>
+        </button>)) : <ChatLoading />}
       </div>
       <div></div>
     </div>

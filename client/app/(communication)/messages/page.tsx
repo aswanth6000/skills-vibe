@@ -66,12 +66,10 @@ export default function Page() {
   const dispatch = useDispatch<AppDispatch>();
   
   const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
-  const chat = useAppSelector((state: any) => state.chat.value);
 
   const params = useParams<{ tag: string; userId: string }>();
 
   const userId = params.userId;
-  dispatch(setSelectedChat(userId))
   
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages]: any = useState("");
@@ -80,6 +78,7 @@ export default function Page() {
   const [sendM, setSendM] = useState("");
   
   const user = useAppSelector((state)=> state.auth.value)
+  const chats = useAppSelector((state)=> state.chat.chats)
 
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
@@ -97,14 +96,22 @@ export default function Page() {
     bearerToken = localStorage.getItem("token");
     console.log('ojoihoiuh',selectedChat);
     
+    console.log("Selected chat: ", selectedChat);
 
     if (bearerToken) {
       const fetchChats = async () => {
+        const sendData={
+          s: selectedChat
+        }
+        console.log("Send Data:", sendData);
+        
         try {
-          const response = await axios.get(
-            `http://localhost:8004/getmessage/${selectedChat}`,
+          
+          const response = await axios.post(
+            `http://localhost:8004/getmessage`,{selectedChat},
             {
               headers: {
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${bearerToken}`,
               },
             }
@@ -119,6 +126,9 @@ export default function Page() {
       fetchChats();
     }
   }, [selectedChat]);
+
+  console.log("messages: ", messages);
+  
 
 
 
@@ -146,12 +156,30 @@ export default function Page() {
             sellerName: userData.users[1].username,
             sellerProfilePicture: userData.users[1].profilePicture,
           });
-          
-          dispatch(
-            setSelectedChat(
-              userData.latestMessage.chat
-            )
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchData();
+    }
+  }, []);
+
+  useEffect(() => {
+    bearerToken = localStorage.getItem("token");
+
+    if (bearerToken) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8004/fetchchat`,
+            {
+              headers: {
+                Authorization: `Bearer ${bearerToken}`,
+              },
+            }
           );
+          const userData = response.data;
+          
           dispatch(setChats(userData))
         } catch (error) {
           console.error(error);
@@ -160,6 +188,10 @@ export default function Page() {
       fetchData();
     }
   }, []);
+  
+
+  
+  
 
   const handleSendButton = async (e: any) => {
 
@@ -190,6 +222,7 @@ export default function Page() {
     }
   };
   
+console.log("Messages:",messages);
 
 
   return (

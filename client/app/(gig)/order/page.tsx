@@ -132,7 +132,7 @@ export default function Page() {
                   </>
                 )}
                 <Link
-                  href={`/messages/${x.buyerId}`}
+                  href={`/messages`}
                   className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1"
                 >
                   Message

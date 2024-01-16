@@ -67,6 +67,8 @@ const messageController = {
       path: "latestMessage.sender",
       select: "username profilePicture email",
     });
+    console.log("is chat is: ", isChat);
+    
 
     if (isChat.length > 0) {
       res.send(isChat[0]);
@@ -122,10 +124,13 @@ const messageController = {
     }
   },
   async allMessages(req: Request, res: Response) {
+    const {s} = req.body;
+    console.log("body req: ",req.body);
+    
     try {
-      const messages = await messageModel.find({ chat: req.params.chatId })
+      const messages = await messageModel.find({ chat: s })
         .populate("sender", "username profilePicture email")
-        .populate("chat");        
+        .populate("chat");      
       res.json(messages);
     } catch (error) {
       res.status(400).json({ error })
