@@ -15,6 +15,11 @@ import { Avatar, Tooltip } from '@chakra-ui/react';
 import ScrollableFeed from "react-scrollable-feed";
 import ChatAllUsers from "@/components/chatAllUsers";
 import { setChats, setSelectedChat } from "@/redux/features/chatSlice";
+import io from 'socket.io-client';
+
+
+const ENDPOINT = 'http://localhost:8004'
+var socket, selectedChatCompare
 
 interface Pokedex {
   username: string;
@@ -57,6 +62,7 @@ interface User {
 
 let bearerToken: string | null;
 export default function Page() {
+
   const [accessData, setAccessData] = useState<Pokedex>({
     username: "",
     profilePicture: "",
@@ -87,6 +93,12 @@ export default function Page() {
     let newMessages = newMessage + emojiData.emoji;
     setNewMessage(newMessages);
   };
+
+  
+  useEffect(()=>{
+    socket = io(ENDPOINT);
+    socket.emit("setup", user)
+  })
 
   const typingHandler = (e: any) => {
     setNewMessage(e.target.value);

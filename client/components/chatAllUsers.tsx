@@ -145,11 +145,11 @@ export default function ChatAllUsers() {
               />
               <div className="ml-2">
                 <div className="text-md font-bold">
-                  {getSender(loggedUser, x.users)}
+                  {x.latestMessage.sender.username}
                 </div>
                 {x.latestMessage && (
                   <div className="text-sm font-semibold">
-                    <b>{x.latestMessage.sender.name} : </b>
+                    <b>{x.latestMessage.sender.username} : </b>
                     {x.latestMessage.content.length > 50
                       ? x.latestMessage.content.substring(0, 51) + "..."
                       : x.latestMessage.content}
