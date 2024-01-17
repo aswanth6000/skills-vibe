@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Picker from "emoji-picker-react";
 import { EmojiStyle } from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
+import Lottie from "lottie-react";
+import amimationData from '../../../components/lotties/typingAnimation.json'
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { AppDispatch, useAppSelector } from "@/redux/store";
@@ -98,11 +100,28 @@ export default function Page() {
   useEffect(()=>{
     socket = io(ENDPOINT);
     socket.emit("setup", user);
-    socket.on("connection", ()=> setSocketConnected(true))
-  })
+    socket.on("connected", ()=> setSocketConnected(true))
+    socket.on('typing', ()=> setIsTyping(true));
+    socket.on('stop typing', ()=> setIsTyping(false));
+  }, [])
 
   const typingHandler = (e: any) => {
     setNewMessage(e.target.value);
+    if(!socketConnected) return 
+    if(!typing){
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+      let lastTypingTime = new Date().getTime();
+      var timerLength = 3000;
+      setTimeout(() => {
+        var timeNow = new Date().getTime()
+        var timeDiff = timeNow - lastTypingTime
+        if(timeDiff >= timerLength && typing){
+          socket.emit("stop typing", selectedChat._id);
+          setTyping(false)
+        }
+      }, timerLength);
+    }
   };
 
   useEffect(() => {
@@ -216,6 +235,7 @@ export default function Page() {
   
 
   const handleSendButton = async (e: any) => {
+    socket.emit("stop typing", selectedChat._id)
 
     if (newMessage) {
       try {
@@ -301,6 +321,7 @@ console.log("Messages:",messages);
           <div>
             {showEmojiPicker && <Picker className="mb-5" onEmojiClick={handleEmojiClick} />}
           </div>
+          {isTyping ? <div className="text-sm font-semibold"> Typing...</div> : (<></>)}
           </ScrollableFeed>
           <div
             className={`border-y w-1/2 h-16 bg-bodywhite fixed flex flex-row justify-center items-center bottom-0`}
@@ -319,7 +340,6 @@ console.log("Messages:",messages);
                 icon={faFaceSmile}
               />
             </button>
-
             <input
               type="text"
               className="w-9/12 h-7 outline-none "

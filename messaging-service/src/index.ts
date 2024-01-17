@@ -45,12 +45,10 @@ io.on("connection", (Socket)=>{
         Socket.join(room);
         console.log("User joined room " + room);
     })
+    Socket.on("typing", (room)=>Socket.in(room).emit("typing"))
+    Socket.on("stop typing", (room)=>Socket.in(room).emit("stop typing"))
     Socket.on("new message", (newMessageRecieved)=>{
-        
-        
         var chat = newMessageRecieved.chat;
-
-        
         if(!chat?.users) return console.log("chat.users not defined ");
         chat.users.forEach((user: any)=> {
             if(user._id == newMessageRecieved.sender._id) return 
