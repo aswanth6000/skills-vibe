@@ -47,16 +47,17 @@ io.on("connection", (Socket)=>{
     })
     Socket.on("typing", (room)=>Socket.in(room).emit("typing"))
     Socket.on("stop typing", (room)=>Socket.in(room).emit("stop typing"))
+
     Socket.on("new message", (newMessageRecieved)=>{
         var chat = newMessageRecieved.chat;
         if(!chat?.users) return console.log("chat.users not defined ");
         chat.users.forEach((user: any)=> {
             if(user._id == newMessageRecieved.sender._id) return 
-            Socket.in(user._id).emit("message recieved ", newMessageRecieved);
-            console.log("message sent su");
-            
+            Socket.in(user._id).emit("message recieved ", newMessageRecieved);            
         });
-        
     })
-    
+    Socket.off("setup", (userData)=>{
+        console.log("User Disconnected");
+        Socket.leave(userData._id)
+    })
 })

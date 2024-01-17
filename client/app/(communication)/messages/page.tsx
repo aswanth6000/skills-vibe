@@ -7,21 +7,27 @@ import Picker from "emoji-picker-react";
 import { EmojiStyle } from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
 import Lottie from "lottie-react";
-import amimationData from '../../../components/lotties/typingAnimation.json'
+import amimationData from "../../../components/lotties/typingAnimation.json";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
-import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from "@/config/chatLogics";
-import { Avatar, Tooltip } from '@chakra-ui/react';
+import {
+  isLastMessage,
+  isSameSender,
+  isSameSenderMargin,
+  isSameUser,
+} from "@/config/chatLogics";
+import { Avatar, Tooltip } from "@chakra-ui/react";
 import ScrollableFeed from "react-scrollable-feed";
 import ChatAllUsers from "@/components/chatAllUsers";
 import { setChats, setSelectedChat } from "@/redux/features/chatSlice";
-import io from 'socket.io-client';
+import { setNotification } from "@/redux/features/chatSlice";
+import io from "socket.io-client";
+import Navbar from "@/components/navbar";
 
-
-const ENDPOINT = 'http://localhost:8004'
-var socket: any, selectedChatCompare: any
+const ENDPOINT = "http://localhost:8004";
+var socket: any, selectedChatCompare: any;
 
 interface Pokedex {
   username: string;
@@ -64,7 +70,7 @@ interface User {
 
 let bearerToken: string | null;
 export default function Page() {
-
+  const [fetchAgain, setFetchAgain ] = useState<boolean>(false)
   const [accessData, setAccessData] = useState<Pokedex>({
     username: "",
     profilePicture: "",
@@ -72,22 +78,22 @@ export default function Page() {
     sellerProfilePicture: "",
   });
   const dispatch = useDispatch<AppDispatch>();
-  
-  const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
 
-  const params = useParams<{ tag: string; userId: string }>();  
+  const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
+  const notification = useAppSelector((state: any)=> state.chat.notification)
+
+  const params = useParams<{ tag: string; userId: string }>();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages]: any = useState("");
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage]: any = useState();
   const [sendM, setSendM] = useState("");
-  const [socketConnected, setSocketConnected] = useState(false)
+  const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
-  const [isTyping, setIsTyping] = useState(false)
-  const user = useAppSelector((state)=> state.auth.value);
+  const [isTyping, setIsTyping] = useState(false);
+  const user = useAppSelector((state) => state.auth.value);
   const userId = user._id;
-  const chats = useAppSelector((state)=> state.chat.chats)
-
+  const chats = useAppSelector((state) => state.chat.chats);
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     console.log(emojiData);
@@ -96,29 +102,28 @@ export default function Page() {
     setNewMessage(newMessages);
   };
 
-  
-  useEffect(()=>{
+  useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
-    socket.on("connected", ()=> setSocketConnected(true))
-    socket.on('typing', ()=> setIsTyping(true));
-    socket.on('stop typing', ()=> setIsTyping(false));
-  }, [])
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+  }, []);
 
   const typingHandler = (e: any) => {
     setNewMessage(e.target.value);
-    if(!socketConnected) return 
-    if(!typing){
+    if (!socketConnected) return;
+    if (!typing) {
       setTyping(true);
       socket.emit("typing", selectedChat._id);
       let lastTypingTime = new Date().getTime();
       var timerLength = 3000;
       setTimeout(() => {
-        var timeNow = new Date().getTime()
-        var timeDiff = timeNow - lastTypingTime
-        if(timeDiff >= timerLength && typing){
+        var timeNow = new Date().getTime();
+        var timeDiff = timeNow - lastTypingTime;
+        if (timeDiff >= timerLength && typing) {
           socket.emit("stop typing", selectedChat._id);
-          setTyping(false)
+          setTyping(false);
         }
       }, timerLength);
     }
@@ -126,8 +131,7 @@ export default function Page() {
 
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
-    console.log('ojoihoiuh',selectedChat);
-    
+    console.log("ojoihoiuh", selectedChat);
 
     if (bearerToken) {
       const fetchChats = async () => {
@@ -142,68 +146,40 @@ export default function Page() {
           );
           const chatData = response.data;
           console.log("chat data: ", chatData);
-          
+
           setMessages(chatData);
 
-          socket.emit('join chat', selectedChat._id)
-          
+          socket.emit("join chat", selectedChat._id);
         } catch (error) {
           console.error(error);
         }
       };
       fetchChats();
-      selectedChatCompare = selectedChat
+      selectedChatCompare = selectedChat;
     }
   }, [selectedChat]);
-
-  useEffect(()=>{
-    socket.on("message recieved ", (newMessageRecieved: any)=>{
-      console.log("new Message recieved is : ", newMessageRecieved);
-      
-      if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id){
-        //give notification 
-      }else{
-        setMessages([...messages, newMessageRecieved])
-      }
-    })
-  })
-
-  console.log("messages: ", messages);
+  console.log(notification,'---------------------');
   
 
+  useEffect(() => {
+    socket.on("message recieved ", (newMessageRecieved: any) => {
+      console.log("new Message recieved is : ", newMessageRecieved);
 
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        if(!notification.includes(newMessageRecieved)){
+          dispatch(setNotification([newMessageRecieved, ...notification]))
+          setFetchAgain(!fetchAgain)
+        }
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
 
-  // useEffect(() => {
-  //   bearerToken = localStorage.getItem("token");
-
-  //   if (bearerToken) {
-  //     const fetchData = async () => {
-  //       try {
-  //         const response = await axios.post(
-  //           `http://localhost:8004/accesschat`,
-  //           { userId },
-  //           {
-  //             headers: {
-  //               Authorization: `Bearer ${bearerToken}`,
-  //             },
-  //           }
-  //         );
-  //         const userData = response.data;
-          
-
-  //         setAccessData({
-  //           username: userData.users[0].username,
-  //           profilePicture: userData.users[0].profilePicture,
-  //           sellerName: userData.users[1].username,
-  //           sellerProfilePicture: userData.users[1].profilePicture,
-  //         });
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     };
-  //     fetchData();
-  //   }
-  // }, []);
+  console.log("messages: ", messages);
 
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
@@ -211,31 +187,24 @@ export default function Page() {
     if (bearerToken) {
       const fetchData = async () => {
         try {
-          const response = await axios.get(
-            `http://localhost:8004/fetchchat`,
-            {
-              headers: {
-                Authorization: `Bearer ${bearerToken}`,
-              },
-            }
-          );
+          const response = await axios.get(`http://localhost:8004/fetchchat`, {
+            headers: {
+              Authorization: `Bearer ${bearerToken}`,
+            },
+          });
           const userData = response.data;
-          
-          dispatch(setChats(userData))
+
+          dispatch(setChats(userData));
         } catch (error) {
           console.error(error);
         }
       };
       fetchData();
     }
-  }, []);
-  
-
-  
-  
+  });
 
   const handleSendButton = async (e: any) => {
-    socket.emit("stop typing", selectedChat._id)
+    socket.emit("stop typing", selectedChat._id);
 
     if (newMessage) {
       try {
@@ -255,121 +224,143 @@ export default function Page() {
             },
           }
         );
-        
+
         setMessages([...messages, data]);
         console.log(data);
 
-        socket.emit("new message",data)
+        socket.emit("new message", data);
       } catch (error) {
         console.error(error);
       }
     }
   };
-  
-console.log("Messages:",messages);
 
+  console.log("Messages:", messages);
 
   return (
     <div>
       <div className="flex flex-row">
-        <ChatAllUsers/>
-        {selectedChat ? <div
-          className={`bg-bodywhite w-1/2 h-screen relative overflow-y-scroll `}
-        >
+        <ChatAllUsers />
+        {selectedChat ? (
           <div
-            className={`w-1/2 h-16 border-y bg-bodywhite z-50 flex items-center p-2 fixed `}
+            className={`bg-bodywhite w-1/2 h-screen relative overflow-y-scroll `}
           >
-            {/* <img
+            <div
+              className={`w-1/2 h-16 border-y bg-bodywhite z-50 flex items-center p-2 fixed `}
+            >
+              {/* <img
               src={accessData.profilePicture}
               className="h-10 w-10 rounded-3xl"
             ></img> */}
-            <div className="flex flex-col ml-2">
-              <div className="text-md font-semibold">Git tiltle goes here</div>
-              {/* <div className="text-sm font-semibold">{accessData.username}</div> */}
+              <div className="flex flex-col ml-2">
+                <div className="text-md font-semibold">
+                  Git tiltle goes here
+                </div>
+                {/* <div className="text-sm font-semibold">{accessData.username}</div> */}
+              </div>
+            </div>
+            <ScrollableFeed className="mt-16">
+              {messages &&
+                messages.map((m: any, i: any) => (
+                  <div style={{ display: "flex" }} key={m._id}>
+                    {(isSameSender(messages, m, i, user._id) ||
+                      isLastMessage(messages, i, user._id)) && (
+                      <Tooltip
+                        label={m.sender.name}
+                        placement="bottom-start"
+                        hasArrow
+                      >
+                        <img
+                          className="w-6 h-6 mr-1 ml-1 mt-2 rounded-full"
+                          alt={m.sender.username}
+                          src={m.sender.profilePicture}
+                        />
+                      </Tooltip>
+                    )}
+                    <span
+                      style={{
+                        backgroundColor: `${
+                          m.sender._id === user._id ? "#BEE3F8" : "#B9F5D0"
+                        }`,
+                        marginLeft: isSameSenderMargin(
+                          messages,
+                          m,
+                          i,
+                          user._id
+                        ),
+                        marginTop: isSameUser(messages, m, i) ? 3 : 10,
+                        borderRadius: "20px",
+                        padding: "5px 15px",
+                        maxWidth: "75%",
+                      }}
+                    >
+                      {m.content}
+                    </span>
+                  </div>
+                ))}
+              <div>
+                {showEmojiPicker && (
+                  <Picker className="mb-5" onEmojiClick={handleEmojiClick} />
+                )}
+              </div>
+              {isTyping ? (
+                <div className="text-sm font-semibold"> Typing...</div>
+              ) : (
+                <></>
+              )}
+            </ScrollableFeed>
+            <div
+              className={`border-y w-1/2 h-16 bg-bodywhite fixed flex flex-row justify-center items-center bottom-0`}
+            >
+              <button
+                className="mr-2"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowEmojiPicker(!showEmojiPicker);
+                }}
+              >
+                <FontAwesomeIcon
+                  className={`h-6 w-6 ${
+                    !showEmojiPicker ? "text-blue-300" : "text-blue-500"
+                  }`}
+                  icon={faFaceSmile}
+                />
+              </button>
+              <input
+                type="text"
+                className="w-9/12 h-7 outline-none "
+                placeholder="Type something"
+                autoComplete="off"
+                value={newMessage}
+                onChange={typingHandler}
+                name="message"
+              />
+              <button
+                className="w-1/12 flex justify-center items-center h-7"
+                onClick={handleSendButton}
+              >
+                <FontAwesomeIcon
+                  className="h-6 w-6 text-blue-300 hover:text-blue-500"
+                  icon={faPaperPlane}
+                />
+              </button>
             </div>
           </div>
-          <ScrollableFeed className="mt-16">
-          {messages &&
-        messages.map((m: any, i: any) => (
-          <div style={{ display: "flex" }} key={m._id}>
-            {(isSameSender(messages, m, i, user._id) ||
-              isLastMessage(messages, i, user._id)) && (
-              <Tooltip label={m.sender.name} placement="bottom-start" hasArrow>
-                <img
-                  className="w-6 h-6 mr-1 ml-1 mt-2 rounded-full"
-                  alt={m.sender.username}
-                  src={m.sender.profilePicture}
-                />
-              </Tooltip>
-            )}
-            <span
-              style={{
-                backgroundColor: `${
-                  m.sender._id === user._id ? "#BEE3F8" : "#B9F5D0"
-                }`,
-                marginLeft: isSameSenderMargin(messages, m, i, user._id),
-                marginTop: isSameUser(messages, m, i) ? 3 : 10,
-                borderRadius: "20px",
-                padding: "5px 15px",
-                maxWidth: "75%",
-              }}
-            >
-              {m.content}
-            </span>
-          </div>
-        ))}
-          <div>
-            {showEmojiPicker && <Picker className="mb-5" onEmojiClick={handleEmojiClick} />}
-          </div>
-          {isTyping ? <div className="text-sm font-semibold"> Typing...</div> : (<></>)}
-          </ScrollableFeed>
+        ) : (
           <div
-            className={`border-y w-1/2 h-16 bg-bodywhite fixed flex flex-row justify-center items-center bottom-0`}
+            className={`bg-bodywhite w-1/2 h-screen flex justify-center items-center`}
+            style={{
+              opacity: 0.5,
+              backgroundImage:
+                'url("https://i.pinimg.com/564x/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg")',
+              backgroundSize: "cover",
+            }}
           >
-            <button
-              className="mr-2"
-              onClick={(e) => {
-                e.preventDefault();
-                setShowEmojiPicker(!showEmojiPicker);
-              }}
-            >
-              <FontAwesomeIcon
-                className={`h-6 w-6 ${
-                  !showEmojiPicker ? "text-blue-300" : "text-blue-500"
-                }`}
-                icon={faFaceSmile}
-              />
-            </button>
-            <input
-              type="text"
-              className="w-9/12 h-7 outline-none "
-              placeholder="Type something"
-              autoComplete="off"
-              value={newMessage}
-              onChange={typingHandler}
-              name="message"
-            />
-            <button
-              className="w-1/12 flex justify-center items-center h-7"
-              onClick={handleSendButton}
-            >
-              <FontAwesomeIcon
-                className="h-6 w-6 text-blue-300 hover:text-blue-500"
-                icon={faPaperPlane}
-              />
-            </button>
+            <div className="text-2xl font-semibold opacity-100">
+              Select a user to start Chating
+            </div>
           </div>
-        </div> : <div
-          className={`bg-bodywhite w-1/2 h-screen flex justify-center items-center`}
-          style={{
-            opacity: 0.5,
-            backgroundImage:
-              'url("https://i.pinimg.com/564x/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg")',
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="text-2xl font-semibold opacity-100">Select a user to start Chating</div>
-          </div>}
+        )}
         <div className="  flex flex-col items-center  w-1/4 h-screen">
           {/* <img
             src={accessData.sellerProfilePicture}
