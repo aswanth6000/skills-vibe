@@ -19,7 +19,7 @@ import io from 'socket.io-client';
 
 
 const ENDPOINT = 'http://localhost:8004'
-var socket, selectedChatCompare
+var socket: any, selectedChatCompare: any
 
 interface Pokedex {
   username: string;
@@ -81,6 +81,7 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage]: any = useState();
   const [sendM, setSendM] = useState("");
+  const [socketConnected, setSocketConnected] = useState(false)
   
   const user = useAppSelector((state)=> state.auth.value);
   const userId = user._id;
@@ -97,7 +98,8 @@ export default function Page() {
   
   useEffect(()=>{
     socket = io(ENDPOINT);
-    socket.emit("setup", user)
+    socket.emit("setup", user);
+    socket.on("connection", ()=> setSocketConnected(true))
   })
 
   const typingHandler = (e: any) => {
@@ -108,7 +110,6 @@ export default function Page() {
     bearerToken = localStorage.getItem("token");
     console.log('ojoihoiuh',selectedChat);
     
-    console.log("Selected chat: ", selectedChat);
 
     if (bearerToken) {
       const fetchChats = async () => {
@@ -125,14 +126,29 @@ export default function Page() {
           console.log("chat data: ", chatData);
           
           setMessages(chatData);
+
+          socket.emit('join chat', selectedChat._id)
           
         } catch (error) {
           console.error(error);
         }
       };
       fetchChats();
+      selectedChatCompare = selectedChat
     }
   }, [selectedChat]);
+
+  useEffect(()=>{
+    socket.on("message recived ", (newMessageRecieved: any)=>{
+      console.log("new Message recieved is : ", newMessageRecieved);
+      
+      if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id){
+        //give notification 
+      }else{
+        setMessages([...messages, newMessageRecieved])
+      }
+    })
+  })
 
   console.log("messages: ", messages);
   
@@ -223,6 +239,8 @@ export default function Page() {
         
         setMessages([...messages, data]);
         console.log(data);
+
+        socket.emit("new message",data)
       } catch (error) {
         console.error(error);
       }

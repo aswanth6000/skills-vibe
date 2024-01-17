@@ -11,12 +11,11 @@ const persistConfig = {
 };
 
 const persistedAuthReducer = persistReducer(persistConfig, authReducer);
-const persistedChatReducer = persistReducer(persistConfig, chatReducer);
 
 const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
-    chat: persistedChatReducer
+    chat: chatReducer
   },
 });
 

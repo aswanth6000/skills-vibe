@@ -18,8 +18,8 @@ export default function ChatAllUsers() {
   const [loggedUser, setLoggedUser]: any = useState("");
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
-    setLoggedUser(userAuth._id);
-  }, []);
+    setLoggedUser(userAuth);
+  });
   console.log("Logged user", loggedUser);
 
   const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
@@ -145,7 +145,7 @@ export default function ChatAllUsers() {
               />
               <div className="ml-2">
                 <div className="text-md font-bold">
-                  {x.latestMessage.sender.username}
+                  {getSender(loggedUser, x.users)}
                 </div>
                 {x.latestMessage && (
                   <div className="text-sm font-semibold">

@@ -187,10 +187,12 @@ export default function Navbar() {
             </li>}
 
             <li className="nav-item">
+              <Link href={`/messagesdisplay`}>
               <FontAwesomeIcon
                 className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                 icon={faEnvelope}
-              />
+                />
+                </Link>
             </li>
             <li className="nav-item">
               <FontAwesomeIcon

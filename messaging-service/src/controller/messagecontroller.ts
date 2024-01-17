@@ -75,7 +75,6 @@ const messageController = {
     } else {
       var chatData = {
         chatName: "sender",
-        isGroupChat: false,
         users: [myId, userId],
       };
 
@@ -84,9 +83,7 @@ const messageController = {
         const FullChat = await chatModel.findOne({ _id: createdChat._id }).populate(
           "users",
         );
-        console.log(FullChat);
-        res.status(200).json(FullChat);
-        
+        res.status(200).json(FullChat);        
       } catch (error) {
         res.status(400).json({ message: 'page not found' })
       }
@@ -124,7 +121,6 @@ const messageController = {
   },
   async allMessages(req: Request, res: Response) {
     console.log("Params: ",req.params);
-    
     try {
       const messages = await messageModel.find({ chat: req.params.chatId })
         .populate("sender", "username profilePicture email")
