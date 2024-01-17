@@ -46,16 +46,17 @@ io.on("connection", (Socket)=>{
         console.log("User joined room " + room);
     })
     Socket.on("new message", (newMessageRecieved)=>{
-        console.log(newMessageRecieved);
+        
         
         var chat = newMessageRecieved.chat;
-        console.log(chat);
+
         
         if(!chat?.users) return console.log("chat.users not defined ");
         chat.users.forEach((user: any)=> {
             if(user._id == newMessageRecieved.sender._id) return 
-            console.log("userId: ", user._id)
             Socket.in(user._id).emit("message recieved ", newMessageRecieved);
+            console.log("message sent su");
+            
         });
         
     })

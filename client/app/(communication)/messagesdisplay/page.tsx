@@ -24,10 +24,8 @@ export default function Page() {
       setLoggedUser(userAuth);
       bearerToken = localStorage.getItem("token");
     });
-    console.log("Logged user", loggedUser);
   
     const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
-    console.log("selected chat: ", selectedChat );
     
   
     const dispatch = useDispatch<AppDispatch>();
@@ -39,7 +37,6 @@ export default function Page() {
     const [search, setSearch] = useState("");
     const user = useAppSelector((state: any) => state.chat.user);
     const chats = useAppSelector((state: any) => state.chat.chats);
-    console.log("llll0o", chats);
     const handleSearch = async () => {
       if (!search) {
         toast.error("Please enter something in search", {

@@ -149,7 +149,7 @@ export default function ChatAllUsers() {
                 </div>
                 {x.latestMessage && (
                   <div className="text-sm font-semibold">
-                    <b>{x.latestMessage.sender.username} : </b>
+                    <b>{loggedUser.username !== x.latestMessage.sender.username ? x.latestMessage.sender.username : 'you' } : </b>
                     {x.latestMessage.content.length > 50
                       ? x.latestMessage.content.substring(0, 51) + "..."
                       : x.latestMessage.content}

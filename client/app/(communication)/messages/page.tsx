@@ -73,16 +73,15 @@ export default function Page() {
   
   const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
 
-  const params = useParams<{ tag: string; userId: string }>();
-
-  
+  const params = useParams<{ tag: string; userId: string }>();  
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages]: any = useState("");
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage]: any = useState();
   const [sendM, setSendM] = useState("");
   const [socketConnected, setSocketConnected] = useState(false)
-  
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false)
   const user = useAppSelector((state)=> state.auth.value);
   const userId = user._id;
   const chats = useAppSelector((state)=> state.chat.chats)
@@ -139,7 +138,7 @@ export default function Page() {
   }, [selectedChat]);
 
   useEffect(()=>{
-    socket.on("message recived ", (newMessageRecieved: any)=>{
+    socket.on("message recieved ", (newMessageRecieved: any)=>{
       console.log("new Message recieved is : ", newMessageRecieved);
       
       if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id){
