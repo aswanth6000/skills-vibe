@@ -273,7 +273,7 @@ console.log("Messages:",messages);
     <div>
       <div className="flex flex-row">
         <ChatAllUsers/>
-        <div
+        {selectedChat ? <div
           className={`bg-bodywhite w-1/2 h-screen relative overflow-y-scroll `}
         >
           <div
@@ -359,7 +359,17 @@ console.log("Messages:",messages);
               />
             </button>
           </div>
-        </div>
+        </div> : <div
+          className={`bg-bodywhite w-1/2 h-screen flex justify-center items-center`}
+          style={{
+            opacity: 0.5,
+            backgroundImage:
+              'url("https://i.pinimg.com/564x/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg")',
+            backgroundSize: "cover",
+          }}
+        >
+          <div className="text-2xl font-semibold opacity-100">Select a user to start Chating</div>
+          </div>}
         <div className="  flex flex-col items-center  w-1/4 h-screen">
           {/* <img
             src={accessData.sellerProfilePicture}
