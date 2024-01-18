@@ -412,6 +412,29 @@ const orderController = {
             res.status(501).json({message: "Internal server error"})
             
         }
+    },
+    async vorders(req: Request, res: Response){
+        try {
+            const token = req.headers.authorization?.split(' ')[1];
+            if (!token) {
+              res.status(401).json({ error: 'Unauthorized - Token not provided' });
+              return;
+            }
+            let decodedToken: JwtPayload;
+            try {
+              decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+            } catch (jwtError) {
+              console.error('JWT Verification Error:', jwtError);
+              res.status(401).json({ error: 'Unauthorized - Invalid token' });
+              return;
+            }
+            const userId = decodedToken.userId
+            const orders = await OrderModel.find({buyerId: userId});
+            return res.status(200).json({message: "success", orders})
+        } catch (error) {
+            console.error(error);
+            
+        }
     }
 }
 

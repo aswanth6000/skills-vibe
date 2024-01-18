@@ -1,3 +1,4 @@
+import { connection } from 'mongoose';
 import RabbitMQ from '../../../../common/src/messages/rabbitMQ'
 
 const orderConsumer = {
@@ -5,6 +6,10 @@ const orderConsumer = {
         try{
             console.log("starting rabbit mq channel ");
             const channel = await RabbitMQ.createChannel();
+            process.once('SIGINT', async()=>{
+                await channel.close()
+                await connection.close()
+            })
             const exchangeName = 'order-exchange';
             const queueName = 'order-service-queue';
             await channel.assertExchange(exchangeName, 'direct', {durable: false});

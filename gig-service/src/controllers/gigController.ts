@@ -15,7 +15,6 @@ const gigController = {
     async addGig(req: any, res: Response) {
         try {
             const folderName = 'skillVibe';
-
             const token = req.headers.authorization?.split(' ')[1]
             if (!token) {
                 return res.status(401).json({ error: 'Unauthorized - Token not provided' });
@@ -64,6 +63,7 @@ const gigController = {
                 });
 
                 await newGig.save();
+
                 
                 console.log("Gig data inserted to the database");
 
@@ -71,7 +71,7 @@ const gigController = {
                 newGig.refId = newGig._id
                 
                 gigPublisher.gigCreatedEvent(newGig);
-                console.log('Data sent to publisher is ', data);
+                
             } catch (error) {
                 console.log('Error in addGig:', error);
                 return res.status(500).json({ error: 'Internal Server Error' });
@@ -145,7 +145,6 @@ const gigController = {
     async rejectgig(req: Request, res: Response){
         const {gigId} = req.body; 
         console.log(req.body);
-        
         try {
             const updateGig = await GigModel.findByIdAndUpdate(gigId, {status: false}, {new: true});
             await gigPublisher.gigStatusRejectEvent(gigId)            

@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import router from './routes/authRoutes'
 import userRouter from './routes/userRoutes';
 import userController from './controller/userController';
-import cors from 'cors'
+import cors from 'cors';
 const app = express();
 app.use(cors())
 

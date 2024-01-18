@@ -1,9 +1,6 @@
 import RabbitMQ from '../../../../common/src/messages/rabbitMQ'
 
-interface UserLoggedInEvent {
-    userId: string;
-    timestamp: Date;
-  }
+
 
 
 const userPublisher = {

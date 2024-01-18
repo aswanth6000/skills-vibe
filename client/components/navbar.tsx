@@ -1,38 +1,41 @@
-"use client"
+"use client";
 import { logOut } from "@/redux/features/authSlice";
 import { useAppSelector } from "@/redux/store";
-import React,{useState, useEffect} from "react" ;
+import React, { useState, useEffect } from "react";
 import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faBell, faCircleQuestion, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEnvelope,
+  faBell,
+  faCircleQuestion,
+  faCaretDown,
+} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
-import { Menu } from '@headlessui/react'
+import { Menu } from "@headlessui/react";
 import { button } from "@material-tailwind/react";
 
-
 export default function Navbar() {
-  const router = useRouter()
-  const dispatch = useDispatch<AppDispatch>()
-  const user = useAppSelector((state)=> state.auth.value)
-  
-  
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useAppSelector((state) => state.auth.value);
+  const notification = useAppSelector((state) => state.chat.notification);
+
   const [navbarOpen, setNavbarOpen] = useState<Boolean>(false);
   useEffect(() => {
     setNavbarOpen(false);
   }, [user]);
-  
-  const handleLogout = () =>{
-     localStorage.removeItem('token');
-     dispatch(logOut())
-     router.push('/login')
-  }
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(logOut());
+    router.push("/login");
+  };
 
   return (
-    <div className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-navwhite ">
+    <div className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-navwhite border-y-2">
       <div className="container px-3 mx-auto flex flex-wrap items-center justify-between">
         <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
           <a
@@ -106,99 +109,128 @@ export default function Navbar() {
                 </a>
               </li>
             )}
-            {user && <li className="nav-item">
-              <Menu as="div" className="relative z-10">
-                <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
-                  Business<FontAwesomeIcon className="ml-1" icon={faCaretDown} />
-                </Menu.Button>
-                <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
-                          active ? "bg-blue-500 text-white" : ""
-                        } hover:bg-blue-500 hover:text-white`}
-                        href="/myorders"
-                      >
-                        Orders
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
-                          active ? "bg-blue-500 text-white" : ""
-                        } hover:bg-blue-500 hover:text-white`}
-                        href="/mygigs"
-                      >
-                        Gigs
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
-                          active ? "bg-blue-500 text-white" : ""
-                        } hover:bg-blue-500 hover:text-white`}
-                        href={`/userprofile/${user._id}`}
-                      >
-                        Profile
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
-                          active ? "bg-blue-500 text-white" : ""
-                        } hover:bg-blue-500 hover:text-white`}
-                        href="/earnings"
-                      >
-                        Earnings
-                      </a>
-                    )}
-                  </Menu.Item>
-                </Menu.Items>
-              </Menu>
-            </li>}
+            {user && (
+              <li className="nav-item">
+                <Menu as="div" className="relative z-10">
+                  <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
+                    Business
+                    <FontAwesomeIcon className="ml-1" icon={faCaretDown} />
+                  </Menu.Button>
+                  <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
+                            active ? "bg-blue-500 text-white" : ""
+                          } hover:bg-blue-500 hover:text-white`}
+                          href="/myorders"
+                        >
+                          Orders
+                        </a>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
+                            active ? "bg-blue-500 text-white" : ""
+                          } hover:bg-blue-500 hover:text-white`}
+                          href="/mygigs"
+                        >
+                          Gigs
+                        </a>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
+                            active ? "bg-blue-500 text-white" : ""
+                          } hover:bg-blue-500 hover:text-white`}
+                          href={`/userprofile/${user._id}`}
+                        >
+                          Profile
+                        </a>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
+                            active ? "bg-blue-500 text-white" : ""
+                          } hover:bg-blue-500 hover:text-white`}
+                          href="/earnings"
+                        >
+                          Earnings
+                        </a>
+                      )}
+                    </Menu.Item>
+                  </Menu.Items>
+                </Menu>
+              </li>
+            )}
 
-            {user && <li className="nav-item">
-              <Menu as="div" className="relative z-10">
-                <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
-                  analytics<FontAwesomeIcon className="ml-1" icon={faCaretDown} />
-                </Menu.Button>
-                <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
-                          active ? "bg-blue-500 text-white" : ""
-                        } hover:bg-blue-500 hover:text-white`}
-                        href="/account-settings"
-                      >
-                        Overview
-                      </a>
-                    )}
-                  </Menu.Item>
-                  
-                </Menu.Items>
-              </Menu>
-            </li>}
+            {user && (
+              <li className="nav-item">
+                <Menu as="div" className="relative z-10">
+                  <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
+                    analytics
+                    <FontAwesomeIcon className="ml-1" icon={faCaretDown} />
+                  </Menu.Button>
+                  <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
+                            active ? "bg-blue-500 text-white" : ""
+                          } hover:bg-blue-500 hover:text-white`}
+                          href="/account-settings"
+                        >
+                          Overview
+                        </a>
+                      )}
+                    </Menu.Item>
+                  </Menu.Items>
+                </Menu>
+              </li>
+            )}
 
             <li className="nav-item">
-              <FontAwesomeIcon
-                className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
-                icon={faEnvelope}
-              />
+              <Link href={`/messagesdisplay`}>
+                <FontAwesomeIcon
+                  className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
+                  icon={faEnvelope}
+                />
+              </Link>
             </li>
-            <li className="nav-item">
-              <FontAwesomeIcon
-                className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
-                icon={faBell}
-              />
-            </li>
+            {user && (
+              <li className="nav-item">
+                <Menu as="div" className="relative z-10">
+                  <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
+                    <FontAwesomeIcon className="ml-1" icon={faBell} />
+                  </Menu.Button>
+                  <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border w-96 flex justify-center border-gray-200 rounded shadow-md z-50">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <>
+                          {notification.length !== 0 ?(
+                            <a
+                              className={`block px-4 py-2 w-auto text-xs leading-5 text-textgrey ${
+                                active ? "bg-blue-500 text-white" : ""
+                              } hover:bg-blue-500 hover:text-white`}
+                              href="/account-settings"
+                            >
+                              Overview
+                            </a>
+                          ): "No new Messeges" }
+                          
+                        </>
+                      )}
+                    </Menu.Item>
+                  </Menu.Items>
+                </Menu>
+              </li>
+            )}
             <li className="nav-item">
               <FontAwesomeIcon
                 className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"

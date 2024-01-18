@@ -41,7 +41,7 @@ const Grid: React.FC<GridProps> = ({ props }) => {
                 <div>
                   <img
                     src={x.image1}
-                    className='w-full h-36 object-fill m-0 p-0'
+                    className='w-full h-36 object-fill m-0 p-0 rounded-2xl'
                     alt='Slide 1'
                   />
                 </div>
@@ -50,7 +50,7 @@ const Grid: React.FC<GridProps> = ({ props }) => {
                 <div>
                   <img
                     src={x.image2}
-                    className='w-full h-36 object-fill m-0 p-0'
+                    className='w-full h-36 object-fill m-0 p-0 rounded-2xl'
                     alt='Slide 2'
                   />
                 </div>
@@ -59,7 +59,7 @@ const Grid: React.FC<GridProps> = ({ props }) => {
                 <div>
                   <img
                     src={x.image3}
-                    className='w-full h-36 object-fill m-0 p-0'
+                    className='w-full h-36 object-fill m-0 p-0 rounded-sm'
                     alt='Slide 3'
                   />
                 </div>
@@ -67,14 +67,14 @@ const Grid: React.FC<GridProps> = ({ props }) => {
             </Swiper>
           </div>
           <div>
-            <p className='pl-3'>{x.title}</p>
+            <p className='pl-3 font-bold'>{x.title}</p>
           </div>
           <div>
             {/* You can replace this placeholder with your actual star rating component */}
             <p className='pl-3'>Star rating here</p>
           </div>
           <div>
-            <p className='pl-3'>From: {x.price}</p>
+            <p className='pl-3 font-semibold'>From: {x.price}</p>
           </div>
           {/* <div className='pl-3'>
             <a href={`/editgig/${x.refId}`} className='text-blue-900'>

@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 import orderPublisher from "../events/publisher/orderPublisher";
 dotenv.config();
 import { ExtendedRequest } from "../types/usertypes";
+import userMessagePublisher from "../events/publisher/userMessagePublisher";
 
 
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
@@ -127,6 +128,7 @@ const userController = {
 
       const user = await UserModel.findByIdAndUpdate(userId, updatedData, { new: true });
       userPublisher.userUpdatedEvent(updatedData)
+      userMessagePublisher.userUpdateMessageEvent(updatedData)
 
       res.status(200).json({ message: 'User profile updated successfully', user });
     } catch (error) {

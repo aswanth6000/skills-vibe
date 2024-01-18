@@ -82,6 +82,7 @@ export default function Login() {
       
       const token = response.data.token
       const user = response.data.user
+      
       console.log(response.status);
       if(response.status === 200){
         localStorage.setItem('token', token);

@@ -3,6 +3,7 @@ import Navbar from "@/components/navbar";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
 
 interface OrderData {
   buyerId: string;
@@ -25,33 +26,69 @@ interface OrderData {
   __v: number;
   _id: string;
 }
+let bearerToken: string | null;
+
 
 export default function Page() {
   const [data, setData] = useState<OrderData[]>([]);
-  const handleApprove = async (orderId: string) =>{
-    const sendStatus = {
-      status: 'ongoing',
-      orderId: orderId
-    }
-    const response = await axios.post('http://localhost:8003/orderAccept', sendStatus, {
-      headers:{
-        'Authorization': 'application/json'
+
+  useEffect(() => {
+    bearerToken = localStorage.getItem("token");
+  }, [])
+
+    const handleOrder = async (userId: any) => {
+      console.log("handle order user Id",userId);
+      
+      try {
+        const response = await axios.post(
+          `http://localhost:8004/accesschat`,
+          { userId },
+          {
+            headers: {
+              Authorization: `Bearer ${bearerToken}`,
+            },
+          }
+        );
+        const userData = response.data;
+        
+      } catch (error) {
+        console.error(error);
       }
-    })
-    console.log(response.data);
-  } 
-  const handleReject = async (orderId: string) =>{
+    };
+  const handleApprove = async (orderId: string) => {
     const sendStatus = {
-      status: 'rejected by seller',
-      orderId: orderId
-    }
-    const response = await axios.post('http://localhost:8003/orderReject', sendStatus, {
-      headers:{
-        'Authorization': 'application/json'
+      status: "ongoing",
+      orderId: orderId,
+    };
+  
+
+    const response = await axios.post(
+      "http://localhost:8003/orderAccept",
+      sendStatus,
+      {
+        headers: {
+          Authorization: "application/json",
+        },
       }
-    })
+    );
     console.log(response.data);
-  }
+  };
+  const handleReject = async (orderId: string) => {
+    const sendStatus = {
+      status: "rejected by seller",
+      orderId: orderId,
+    };
+    const response = await axios.post(
+      "http://localhost:8003/orderReject",
+      sendStatus,
+      {
+        headers: {
+          Authorization: "application/json",
+        },
+      }
+    );
+    console.log(response.data);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,33 +137,38 @@ export default function Page() {
                   <p className="text-gray-500">
                     Payment Status: {x.paymentStatus}
                   </p>
-                  <p className="text-gray-500">
-                    Order Status: {x.orderStatus}
-                  </p>
+                  <p className="text-gray-500">Order Status: {x.orderStatus}</p>
                   <p className="text-green-700 font-bold">${x.gigPrice}</p>
                 </div>
               </div>
               <div className="flex flex-col">
-    {(x.orderStatus === 'confirmed' || x.orderStatus === 'failed') && (
-        <>
-            <button
-                className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1"
-                onClick={() => handleApprove(x._id)}
-            >
-                Approve
-            </button>
-            <button
-                className="h-10 w-60 bg-red-400 hover:bg-red-600 rounded-2xl m-1"
-                onClick={() => handleReject(x._id)}
-            >
-                Reject
-            </button>
-        </>
-    )}
-    <button className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1">
-        Message
-    </button>
-</div>
+                {(x.orderStatus === "confirmed" ||
+                  x.orderStatus === "failed") && (
+                  <>
+                    <button
+                      className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1"
+                      onClick={() => handleApprove(x._id)}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      className="h-10 w-60 bg-red-400 hover:bg-red-600 rounded-2xl m-1"
+                      onClick={() => handleReject(x._id)}
+                    >
+                      Reject
+                    </button>
+                  </>
+                )}
+                <Link
+                  href={`/messages`}
+                >
+                  <button className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1"
+                  onClick={()=>handleOrder(x.buyerId)}>
+
+                  </button>
+                  Message
+                </Link>
+              </div>
             </div>
           </div>
         ))}

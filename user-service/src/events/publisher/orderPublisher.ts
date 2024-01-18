@@ -10,7 +10,6 @@ const orderPublisher = {
             channel.publish(exchangeName, routingKey, Buffer.from(JSON.stringify(orderDetails)));
             await channel.close();
             console.log('channel closed order');
-            
         } catch (error) {
             console.log('error publishing order details event ');
             
