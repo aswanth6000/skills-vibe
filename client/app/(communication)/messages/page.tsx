@@ -29,6 +29,7 @@ import { setChats, setSelectedChat } from "@/redux/features/chatSlice";
 import { setNotification } from "@/redux/features/chatSlice";
 import io from "socket.io-client";
 import Navbar from "@/components/navbar";
+import { useRouter } from "next/navigation";
 
 const ENDPOINT = "http://localhost:8004";
 var socket: any, selectedChatCompare: any;
@@ -80,6 +81,8 @@ export default function Page() {
     bearerToken = localStorage.getItem("token");
     setLoggedUser(userAuth);
   }, []);
+  const router = useRouter()
+  
   const [modal1Open, setModal1Open] = useState(false);
   const [modal2Open, setModal2Open] = useState(false);
   const [fetchAgain, setFetchAgain ] = useState<boolean>(false)
@@ -104,6 +107,7 @@ export default function Page() {
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [meetingCode, setMeetingCode] = useState('')
+  const [customMeeting, setCustommeeting] = useState('');
   const user = useAppSelector((state) => state.auth.value);
   const userId = user._id;
   const chats = useAppSelector((state) => state.chat.chats);
@@ -123,7 +127,11 @@ export default function Page() {
     }
   }
   const handleJoinRoom = () =>{
-
+    
+    router.push(`/meetings/${meetingCode}`)
+  }
+  const customRoomCode = (e:any) =>{
+    setCustommeeting(e.target.value)
   }
 
   console.log(meetingCode);
@@ -167,12 +175,10 @@ export default function Page() {
       }, timerLength);
     }
   };
-  console.log("sesesesseeseseseseesesesesesese", selectedChat);
   
 
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
-    console.log("ojoihoiuh", selectedChat);
 
     if (bearerToken) {
       const fetchChats = async () => {
@@ -276,7 +282,6 @@ export default function Page() {
     }
   };
 
-  console.log("Messages:", messages);
 
   return (
     <div>
@@ -412,10 +417,10 @@ export default function Page() {
         open={modal1Open}
         onOk={() => setModal1Open(false)}
         onCancel={() => setModal1Open(false)}
-        okButtonProps={{ className: "bg-blue-600 text-white hover:bg-blue-300"}}
+        okButtonProps={{ className: "bg-blue-600 text-white hover:bg-blue-300", onClick: handleJoinRoom}}
         okText="Join Room"
       >
-        <input type="text" className="outline-none border-none w-9/12" placeholder="Enter the meeting code" value={meetingCode} />
+        <input type="text" onChange={customRoomCode} className="outline-none border-none w-9/12" placeholder="Enter the meeting code" value={meetingCode} />
       </Modal>
       <br />
       <br />

@@ -23,6 +23,7 @@
     "@material-tailwind/react": "^2.1.5",
     "@reduxjs/toolkit": "^2.0.1",
     "@types/redux-persist": "^4.3.1",
+    "@zegocloud/zego-uikit-prebuilt": "^1.10.0",
     "antd": "^5.12.4",
     "axios": "^1.6.2",
     "emoji-picker-react": "^4.6.8",
