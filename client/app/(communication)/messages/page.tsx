@@ -12,7 +12,11 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
+import { Button, Modal } from 'antd';
+
 import {
+  getSender,
+  getSenderImg,
   isLastMessage,
   isSameSender,
   isSameSenderMargin,
@@ -70,6 +74,14 @@ interface User {
 
 let bearerToken: string | null;
 export default function Page() {
+  const [loggedUser, setLoggedUser]: any = useState("");
+  const userAuth = useAppSelector((state: any) => state.auth.value);
+  useEffect(() => {
+    bearerToken = localStorage.getItem("token");
+    setLoggedUser(userAuth);
+  }, []);
+  const [modal1Open, setModal1Open] = useState(false);
+  const [modal2Open, setModal2Open] = useState(false);
   const [fetchAgain, setFetchAgain ] = useState<boolean>(false)
   const [accessData, setAccessData] = useState<Pokedex>({
     username: "",
@@ -91,6 +103,7 @@ export default function Page() {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [meetingCode, setMeetingCode] = useState('')
   const user = useAppSelector((state) => state.auth.value);
   const userId = user._id;
   const chats = useAppSelector((state) => state.chat.chats);
@@ -101,6 +114,32 @@ export default function Page() {
     let newMessages = newMessage + emojiData.emoji;
     setNewMessage(newMessages);
   };
+  const handleGenerateCode =async () =>{
+    try {
+      const {data} = await axios.get(`http://localhost:8004/generateMeeting`);
+      setMeetingCode(data)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const handleJoinRoom = () =>{
+
+  }
+
+  console.log(meetingCode);
+  
+
+  const handeleCopy = async (meetingCode: any) =>{
+    console.log("meeeeeee:", meetingCode);
+    
+    try {
+      await navigator.clipboard.writeText(meetingCode);
+      alert('Text copied to clipboard:');
+    } catch (error) {
+      alert('Error copying to clipboard:');
+    }
+  }
+
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -128,6 +167,8 @@ export default function Page() {
       }, timerLength);
     }
   };
+  console.log("sesesesseeseseseseesesesesesese", selectedChat);
+  
 
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
@@ -201,7 +242,7 @@ export default function Page() {
       };
       fetchData();
     }
-  });
+  }, []);
 
   const handleSendButton = async (e: any) => {
     socket.emit("stop typing", selectedChat._id);
@@ -248,15 +289,19 @@ export default function Page() {
             <div
               className={`w-1/2 h-16 border-y bg-bodywhite z-50 flex items-center p-2 fixed `}
             >
-              {/* <img
-              src={accessData.profilePicture}
+              <img
+              src={getSenderImg(loggedUser, selectedChat.users)}
               className="h-10 w-10 rounded-3xl"
-            ></img> */}
+            ></img>
               <div className="flex flex-col ml-2">
                 <div className="text-md font-semibold">
-                  Git tiltle goes here
+                 {getSender(loggedUser, selectedChat.users)}
                 </div>
-                {/* <div className="text-sm font-semibold">{accessData.username}</div> */}
+                {isTyping ? (
+                <div className="text-sm font-semibold"> Typing...</div>
+              ) : (
+                <></>
+              )}
               </div>
             </div>
             <ScrollableFeed className="mt-16">
@@ -303,11 +348,7 @@ export default function Page() {
                   <Picker className="mb-5" onEmojiClick={handleEmojiClick} />
                 )}
               </div>
-              {isTyping ? (
-                <div className="text-sm font-semibold"> Typing...</div>
-              ) : (
-                <></>
-              )}
+
             </ScrollableFeed>
             <div
               className={`border-y w-1/2 h-16 bg-bodywhite fixed flex flex-row justify-center items-center bottom-0`}
@@ -361,21 +402,29 @@ export default function Page() {
             </div>
           </div>
         )}
-        <div className="  flex flex-col items-center  w-1/4 h-screen">
-          {/* <img
-            src={accessData.sellerProfilePicture}
-            className="h-48 w-48  rounded-full mt-16"
-          ></img> */}
-          {/* <div className="text-md font-semibold">{accessData.sellerName}</div> */}
-          <div className="">
-            <button className="bg-blue-400 p-1 mt-4 font-semibold text-white rounded-md">
-              View Profile
-            </button>
-          </div>
-          <div className="flex flex-col mt-3 items-center">
-            <h1>Gig title</h1>
-            <p>Gig description</p>
-          </div>
+        <div className="  flex flex-col items-center justify-center  w-1/4 h-screen">
+        {meetingCode && <Button className="bg-blue-600 text-white hover:bg-blue-300"  onClick={() => setModal1Open(true)}>
+        Join Meeting
+      </Button>}
+      <Modal
+        title="Join Meeting"
+        style={{ top: 20 }}
+        open={modal1Open}
+        onOk={() => setModal1Open(false)}
+        onCancel={() => setModal1Open(false)}
+        okButtonProps={{ className: "bg-blue-600 text-white hover:bg-blue-300"}}
+        okText="Join Room"
+      >
+        <input type="text" className="outline-none border-none w-9/12" placeholder="Enter the meeting code" value={meetingCode} />
+      </Modal>
+      <br />
+      <br />
+      {!meetingCode && <button className="w-7/12 h-8 bg-blue-600 rounded-sm text-white "
+      onClick={handleGenerateCode}
+      >
+        Start An Instant Meeting 
+      </button>}
+      {meetingCode && <p onClick={handeleCopy}  className="w-7/12 p-5 text-md font-bold h-5" > {meetingCode} </p>}
         </div>
       </div>
     </div>

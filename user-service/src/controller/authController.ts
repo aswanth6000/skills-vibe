@@ -135,7 +135,7 @@ const authController = {
           status: user.status
         }
         const token = jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
-        res.cookie('jwt', token, { httpOnly: true, maxAge: 300000 });
+        res.cookie('jwt', token, { httpOnly: true});
         res.status(200).json({ token });
       } else {
         res.status(203).json({ message: 'Email not found' });

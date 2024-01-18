@@ -67,11 +67,11 @@ const messageController = {
       path: "latestMessage.sender",
       select: "username profilePicture email",
     });
-    
+
 
     if (isChat.length > 0) {
       res.send(isChat[0]);
-      
+
     } else {
       var chatData = {
         chatName: "sender",
@@ -83,7 +83,7 @@ const messageController = {
         const FullChat = await chatModel.findOne({ _id: createdChat._id }).populate(
           "users",
         );
-        res.status(200).json(FullChat);        
+        res.status(200).json(FullChat);
       } catch (error) {
         res.status(400).json({ message: 'page not found' })
       }
@@ -120,18 +120,18 @@ const messageController = {
     }
   },
   async allMessages(req: Request, res: Response) {
-    console.log("Params: ",req.params);
+    console.log("Params: ", req.params);
     try {
       const messages = await messageModel.find({ chat: req.params.chatId })
         .populate("sender", "username profilePicture email")
-        .populate("chat");      
+        .populate("chat");
       res.json(messages);
     } catch (error) {
       res.status(400).json({ error })
     }
   },
   async sendMessage(req: Request, res: Response) {
-    
+
     const { content, chatId } = req.body;
 
     const token = req.headers.authorization?.split(' ')[1];
@@ -148,7 +148,7 @@ const messageController = {
       return res.status(401).json({ error: 'Unauthorized - Invalid token' });
     }
     console.log(content, chatId);
-    
+
 
     if (!content || !chatId) {
       console.log("Invalid data passed into request");
@@ -206,6 +206,25 @@ const messageController = {
     const users = await UserModel.find(keyword).find({ _id: { $ne: decodedToken.userId } });
     res.send(users);
   },
+  async meetingCodeGenerator(req: Request, res: Response) {
+    try {
+      const characters = 'abcdefghijklmnopqrstuvwxyz';
+    const randomChar = () => characters[Math.floor(Math.random() * characters.length)];
+
+    const stringParts = [
+      randomChar() + randomChar() + randomChar(),
+      randomChar() + randomChar() + randomChar(),
+      randomChar() + randomChar() + randomChar()
+    ];
+
+    const meetingCode = stringParts.join('-');
+    res.status(200).json(meetingCode)
+    } catch (error) {
+      console.log(error);
+      res.status(500).json("internal server error")
+      
+    }
+  }
 
 }
 
