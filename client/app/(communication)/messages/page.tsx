@@ -128,7 +128,7 @@ export default function Page() {
   }
   const handleJoinRoom = () =>{
     
-    router.push(`/meetings/${meetingCode}`)
+    router.push(`/meetings/${customMeeting}`)
   }
   const customRoomCode = (e:any) =>{
     setCustommeeting(e.target.value)
@@ -309,7 +309,7 @@ export default function Page() {
               )}
               </div>
             </div>
-            <ScrollableFeed className="mt-16">
+            <div className="mt-16 mb-16">
               {messages &&
                 messages.map((m: any, i: any) => (
                   <div style={{ display: "flex" }} key={m._id}>
@@ -354,7 +354,7 @@ export default function Page() {
                 )}
               </div>
 
-            </ScrollableFeed>
+            </div>
             <div
               className={`border-y w-1/2 h-16 bg-bodywhite fixed flex flex-row justify-center items-center bottom-0`}
             >
@@ -408,9 +408,9 @@ export default function Page() {
           </div>
         )}
         <div className="  flex flex-col items-center justify-center  w-1/4 h-screen">
-        {meetingCode && <Button className="bg-blue-600 text-white hover:bg-blue-300"  onClick={() => setModal1Open(true)}>
+        <Button className="bg-blue-600 text-white hover:bg-blue-300"  onClick={() => setModal1Open(true)}>
         Join Meeting
-      </Button>}
+      </Button>
       <Modal
         title="Join Meeting"
         style={{ top: 20 }}
@@ -420,7 +420,7 @@ export default function Page() {
         okButtonProps={{ className: "bg-blue-600 text-white hover:bg-blue-300", onClick: handleJoinRoom}}
         okText="Join Room"
       >
-        <input type="text" onChange={customRoomCode} className="outline-none border-none w-9/12" placeholder="Enter the meeting code" value={meetingCode} />
+        <input type="text" onChange={customRoomCode} className="outline-none border-none w-9/12" placeholder="Enter the meeting code" value={customMeeting} />
       </Modal>
       <br />
       <br />
