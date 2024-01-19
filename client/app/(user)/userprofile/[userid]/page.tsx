@@ -113,7 +113,7 @@ const UserProfileEdit: React.FC = () => {
     console.log("Updated user data:", updatedUserData);
     try {
       setLoad(true)
-      const response = await axios.put('/userProfileUpdate', updatedUserData, {
+      const response = await axios.put('http://localhost:8001/userProfileUpdate', updatedUserData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${bearerToken}`,

@@ -103,6 +103,8 @@ const userController = {
     try {
       const folderName = 'skillVibe';
       const updatedData = req.body;
+      console.log(req.body);
+      
 
       const token = req.headers.authorization?.split(' ')[1];
 
@@ -125,8 +127,12 @@ const userController = {
         const result = await cloudinary.uploader.upload(req.file.path, { public_id: `${folderName}/${req.file.originalname}` });
         updatedData.profilePicture = result.secure_url;
       }
+      console.log("updated data: ",updatedData);
+      
 
       const user = await UserModel.findByIdAndUpdate(userId, updatedData, { new: true });
+      console.log("user", user);
+      
       userPublisher.userUpdatedEvent(updatedData)
       userMessagePublisher.userUpdateMessageEvent(updatedData)
 
