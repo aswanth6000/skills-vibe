@@ -26,7 +26,7 @@ const Grid: React.FC<GridProps> = ({ props }) => {
   return (
     <div className='flex flex-row flex-wrap mb-5'>
       {props.map((x) => (
-        <div key={x.refId} className='w-72 h-auto flex flex-col justify-start border rounded mt-3 mb-3 ml-3'>
+        <div key={x.refId} className='w-56 h-auto flex flex-col justify-start border rounded-2xl mt-3 mb-3 ml-3'>
           <div>
             {/* Initialize Swiper component for image carousel */}
             <Swiper
@@ -39,7 +39,9 @@ const Grid: React.FC<GridProps> = ({ props }) => {
             >
               <SwiperSlide>
                 <div>
-                  <img
+                  <Image
+                  height={500}
+                  width={500}
                     src={x.image1}
                     className='w-full h-36 object-fill m-0 p-0 rounded-2xl'
                     alt='Slide 1'
@@ -48,7 +50,9 @@ const Grid: React.FC<GridProps> = ({ props }) => {
               </SwiperSlide>
               <SwiperSlide>
                 <div>
-                  <img
+                  <Image
+                  height={500}
+                  width={500}
                     src={x.image2}
                     className='w-full h-36 object-fill m-0 p-0 rounded-2xl'
                     alt='Slide 2'
@@ -57,7 +61,9 @@ const Grid: React.FC<GridProps> = ({ props }) => {
               </SwiperSlide>
               <SwiperSlide>
                 <div>
-                  <img
+                  <Image
+                  height={500}
+                  width={500}
                     src={x.image3}
                     className='w-full h-36 object-fill m-0 p-0 rounded-sm'
                     alt='Slide 3'

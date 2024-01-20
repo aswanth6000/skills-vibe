@@ -1,6 +1,5 @@
 "use client";
 import Navbar from "@/components/navbar";
-import { CarouselDefault } from "@/components/carousel";
 import Grid from "@/components/grid";
 import Popular from "@/components/popular";
 import Footer from "@/components/footer";
@@ -9,6 +8,8 @@ import { useRouter } from "next/navigation";
 import axios from "../../../config/axios";
 import { useEffect, useState } from "react";
 import { Gigs } from "@/types/gigTypes";
+import SubNav from "@/components/subNav";
+
 
 export default function Home() {
   const [data, setData] = useState<Gigs[]>([]);
@@ -48,6 +49,8 @@ export default function Home() {
   return (
     <div className="bg-bodywhite">
       <Navbar />
+      <SubNav/>
+      
       <div className="flex justify-center mt-4 mb-2 ">
         <div
           className="w-11/12  h-60 rounded-2xl"
@@ -77,7 +80,7 @@ export default function Home() {
         </div>
       </div>
       <Grid props={data} />
-      <Popular />
+      {/* <Popular /> */}
       <Footer />
     </div>
   );
