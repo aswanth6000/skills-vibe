@@ -18,7 +18,7 @@ function SubNav() {
         {categories.map((category) => (
           <li
             key={category.value}
-            className='px-2 whitespace-nowrap '
+            className='px-2 whitespace-nowrap'
           >
             <Link href={`/${category.value}`}>
               {category.label.toUpperCase()}

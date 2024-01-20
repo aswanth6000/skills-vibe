@@ -165,8 +165,8 @@ const UserProfileEdit: React.FC = () => {
         capitalizeLinks
       />
       
-      {load ? <Skeleton/> : <div className="bg-bodywhite min-h-screen flex">
-        <div className="w-1/3 bg-navwhite h-auto ml-5 rounded-2xl border-black flex flex-col mt-2 items-center p-4 mb-12">
+      {load ? <Skeleton/> : <div className="bg-bodywhite min-h-screen flex   ">
+        <div className="w-1/3 bg-navwhite h-auto ml-5 rounded-2xl border-black  flex flex-col mt-2 items-center p-4 mb-12">
           <div className="w-56 h-56 rounded-full cursor-pointer overflow-hidden">
             <input
               id="file_input"
