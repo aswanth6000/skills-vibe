@@ -7,6 +7,7 @@ import dotenv from 'dotenv'
 import jwt, { JwtPayload, Secret, GetPublicKeyOrSecret } from 'jsonwebtoken'
 dotenv.config()
 import crypto from 'crypto'
+import {v4 as uuidv4} from 'uuid'
 const jwtSecret: Secret | GetPublicKeyOrSecret = process.env.JWT_KEY || 'defaultkey'
 
 interface OrderData {
