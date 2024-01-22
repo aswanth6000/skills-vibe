@@ -38,20 +38,36 @@ export default function Page() {
     setOpen(true);
   };
 
-  const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
+  const handleOk = async (event: any) => {
+    const file = event.target.files?.[0];
+    const userData = {
+      file
+    }
+    try {
+      const response = await axios.post('http://localhost:8003/deliver', userData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${bearerToken}`,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      
+    }
   };
 
   const handleCancel = () => {
     console.log("Clicked cancel button");
     setOpen(false);
   };
-
+  const handleDeliver = () =>{
+    setModalText("The modal will be closed after two seconds");
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  }
   const [data, setData] = useState<OrderData[]>([]);
 
   useEffect(() => {
@@ -181,17 +197,18 @@ export default function Page() {
                 )}
                 {x.orderStatus === "ongoing" && (
                   <div>
-                    <Button type="primary" onClick={showModal}>
+                    <Button className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1 flex justify-center items-center" onClick={showModal}>
                      Deliver
                     </Button>
                     <Modal
-                      title="Title"
+                      title="Select the file to deliver"
                       open={open}
-                      onOk={handleOk}
+                      onOk={()=>handleOk(event)}
                       confirmLoading={confirmLoading}
                       onCancel={handleCancel}
+                      okButtonProps={{ className: "bg-blue-600 text-white hover:bg-blue-300"}}
                     >
-                      <p>{modalText}</p>
+                      <input type="file" />
                     </Modal>
                   </div>
                 )}

@@ -8,6 +8,7 @@ import jwt, { JwtPayload, Secret, GetPublicKeyOrSecret } from 'jsonwebtoken'
 dotenv.config()
 import crypto from 'crypto'
 import {v4 as uuidv4} from 'uuid'
+import transporter from '../config/nodeMailer';
 const jwtSecret: Secret | GetPublicKeyOrSecret = process.env.JWT_KEY || 'defaultkey'
 
 interface OrderData {
@@ -435,6 +436,28 @@ const orderController = {
         } catch (error) {
             console.error(error);
             
+        }
+    },
+    async deliver(req: Request, res: Response){
+        const file = req.file;
+        const mailOptions = {
+            from: 'your_email@gmail.com',
+            to: 'recipient_email@example.com',
+            subject: 'Email with Attachment',
+            text: 'This is the email body.',
+            attachments: [
+                {
+                    filename: 'attachment.txt',
+                    content: 'Attachment content here...',
+                },
+                {
+                    path: 'path/to/another/file.pdf',
+                },
+            ],
+        };
+        
+        if(file){
+
         }
     }
 }
