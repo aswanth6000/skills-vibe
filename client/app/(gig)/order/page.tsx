@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { Button, Modal } from "antd";
 
 interface OrderData {
   buyerId: string;
@@ -28,39 +29,58 @@ interface OrderData {
 }
 let bearerToken: string | null;
 
-
 export default function Page() {
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("Content of the modal");
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleOk = () => {
+    setModalText("The modal will be closed after two seconds");
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpen(false);
+  };
+
   const [data, setData] = useState<OrderData[]>([]);
 
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
-  }, [])
+  }, []);
 
-    const handleOrder = async (userId: any) => {
-      console.log("handle order user Id",userId);
-      
-      try {
-        const response = await axios.post(
-          `http://localhost:8004/accesschat`,
-          { userId },
-          {
-            headers: {
-              Authorization: `Bearer ${bearerToken}`,
-            },
-          }
-        );
-        const userData = response.data;
-        
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const handleOrder = async (userId: any) => {
+    console.log("handle order user Id", userId);
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8004/accesschat`,
+        { userId },
+        {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        }
+      );
+      const userData = response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handleApprove = async (orderId: string) => {
     const sendStatus = {
       status: "ongoing",
       orderId: orderId,
     };
-  
 
     const response = await axios.post(
       "http://localhost:8003/orderAccept",
@@ -159,13 +179,27 @@ export default function Page() {
                     </button>
                   </>
                 )}
+                {x.orderStatus === "ongoing" && (
+                  <div>
+                    <Button type="primary" onClick={showModal}>
+                     Deliver
+                    </Button>
+                    <Modal
+                      title="Title"
+                      open={open}
+                      onOk={handleOk}
+                      confirmLoading={confirmLoading}
+                      onCancel={handleCancel}
+                    >
+                      <p>{modalText}</p>
+                    </Modal>
+                  </div>
+                )}
                 <Link
+                  className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1 flex justify-center items-center"
                   href={`/messages`}
                 >
-                  <button className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1"
-                  onClick={()=>handleOrder(x.buyerId)}>
-
-                  </button>
+                  <button onClick={() => handleOrder(x.buyerId)}></button>
                   Message
                 </Link>
               </div>

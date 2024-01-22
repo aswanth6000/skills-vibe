@@ -28,6 +28,7 @@
     "nodemailer": "^6.9.8",
     "nodemon": "^3.0.2",
     "skill-vibe-express-jwt-auth": "^1.0.3",
+    "skills-vibe-rabbitmq": "^1.0.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
