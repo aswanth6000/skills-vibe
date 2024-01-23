@@ -441,15 +441,10 @@ const orderController = {
     async deliver(req: Request, res: Response){
         const file = req.file;
         const {orderId} = req.body;
-        const order = await OrderModel.findById(orderId);
-
-        
-        
-        console.log(file);
-        
+        const order = await OrderModel.findById(orderId);        
         const mailOptions = {
             from: order?.sellerEmail,
-            to: 'aswanth6000@gmail.com' ,
+            to: order?.buyeremail ,
             subject: `Delivery of your order ${order?.gigTitle}` ,
             text: 'Thank for your order at skills vibe',
             attachments: [
@@ -459,6 +454,8 @@ const orderController = {
                 },
             ],
         };
+        const odr = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'completed'}, {new: true});
+
         
         try {
             const info = await transporter.sendMail(mailOptions);
