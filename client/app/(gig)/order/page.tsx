@@ -40,16 +40,16 @@ export default function Page() {
 
   const handleOk = async (event: any) => {
     const file = event.target.files?.[0];
-    const userData = {
-      file
-    }
+    const formData = new FormData()
+    formData.append('file', file)
     try {
-      const response = await axios.post('http://localhost:8003/deliver', userData, {
+      const response = await axios.post('http://localhost:8003/deliver', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${bearerToken}`,
         },
       });
+      console.log(response);
+      
     } catch (error) {
       console.log(error);
       

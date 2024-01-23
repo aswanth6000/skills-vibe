@@ -17,7 +17,7 @@ orderRouter.post('/ordercancel', orderController.orderCancel)
 orderRouter.post('/orderaccept', orderController.orderAccept)
 orderRouter.post('/orderreject', orderController.orderReject)
 orderRouter.get('/vorders', orderController.vorders)
-orderRouter.post('/deliver',upload.single('file'),  orderController.deliver)
+orderRouter.post('/deliver',upload.single('file'), orderController.deliver)
 
 // paymentRouter.post('/payment/:id',paymentController.payment)
 // paymentRouter.post('/paymentverification', paymentController.paymentVerification)

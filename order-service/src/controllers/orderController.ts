@@ -440,6 +440,12 @@ const orderController = {
     },
     async deliver(req: Request, res: Response){
         const file = req.file;
+        console.log("howowwo");
+        console.log(req.body);
+        
+        
+        console.log(file);
+        
         const mailOptions = {
             from: 'your_email@gmail.com',
             to: 'recipient_email@example.com',
