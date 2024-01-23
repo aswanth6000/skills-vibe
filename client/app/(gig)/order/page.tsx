@@ -32,27 +32,38 @@ let bearerToken: string | null;
 export default function Page() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [file, setFile] = useState<File | undefined>(undefined);
   const [modalText, setModalText] = useState("Content of the modal");
 
   const showModal = () => {
     setOpen(true);
   };
 
-  const handleOk = async (event: any) => {
-    const file = event.target.files?.[0];
-    const formData = new FormData()
-    formData.append('file', file)
+  const handleOk = async (orderData: any) => {
+    
+  const formData = {
+    file,
+    orderId: orderData
+  }    
     try {
-      const response = await axios.post('http://localhost:8003/deliver', formData, {
-        headers: {
-          'Authorization': `Bearer ${bearerToken}`,
-        },
-      });
+      setConfirmLoading(true);
+      const response = await axios.post(
+        "http://localhost:8003/deliver",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        }
+      );
       console.log(response);
-      
+      setConfirmLoading(false);
+      if(!confirmLoading){
+        setOpen(false);
+      }
     } catch (error) {
       console.log(error);
-      
     }
   };
 
@@ -60,14 +71,7 @@ export default function Page() {
     console.log("Clicked cancel button");
     setOpen(false);
   };
-  const handleDeliver = () =>{
-    setModalText("The modal will be closed after two seconds");
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-  }
+
   const [data, setData] = useState<OrderData[]>([]);
 
   useEffect(() => {
@@ -197,18 +201,27 @@ export default function Page() {
                 )}
                 {x.orderStatus === "ongoing" && (
                   <div>
-                    <Button className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1 flex justify-center items-center" onClick={showModal}>
-                     Deliver
+                    <Button
+                      className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1 flex justify-center items-center"
+                      onClick={showModal}
+                    >
+                      Deliver
                     </Button>
                     <Modal
                       title="Select the file to deliver"
                       open={open}
-                      onOk={()=>handleOk(event)}
+                      onOk={()=>handleOk(x._id)}
                       confirmLoading={confirmLoading}
                       onCancel={handleCancel}
-                      okButtonProps={{ className: "bg-blue-600 text-white hover:bg-blue-300"}}
+                      okButtonProps={{
+                        className: "bg-blue-600 text-white hover:bg-blue-300",
+                      }}
                     >
-                      <input type="file" />
+                      <input
+                        type="file"
+                        name="file"
+                        onChange={(e) => setFile(e.target.files?.[0])}
+                      />
                     </Modal>
                   </div>
                 )}

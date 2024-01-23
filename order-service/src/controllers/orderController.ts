@@ -440,31 +440,34 @@ const orderController = {
     },
     async deliver(req: Request, res: Response){
         const file = req.file;
-        console.log("howowwo");
-        console.log(req.body);
+        const {orderId} = req.body;
+        const order = await OrderModel.findById(orderId);
+
         
         
         console.log(file);
         
         const mailOptions = {
-            from: 'your_email@gmail.com',
-            to: 'recipient_email@example.com',
-            subject: 'Email with Attachment',
-            text: 'This is the email body.',
+            from: order?.sellerEmail,
+            to: 'aswanth6000@gmail.com' ,
+            subject: `Delivery of your order ${order?.gigTitle}` ,
+            text: 'Thank for your order at skills vibe',
             attachments: [
                 {
-                    filename: 'attachment.txt',
-                    content: 'Attachment content here...',
-                },
-                {
-                    path: 'path/to/another/file.pdf',
+                    filename: file?.originalname ,
+                    content: file?.buffer ,
                 },
             ],
         };
         
-        if(file){
-
-        }
+        try {
+            const info = await transporter.sendMail(mailOptions);
+            console.log('Email sent:', info.response);
+            return res.status(200).json({ message: 'Email sent successfully' });
+          } catch (error) {
+            console.error('Error sending email:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+          }
     }
 }
 

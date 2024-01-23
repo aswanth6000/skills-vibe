@@ -1,8 +1,18 @@
 import express from 'express';
 import orderController from '../controllers/orderController';
 import multer from 'multer';
-const storage = multer.memoryStorage()
-const upload = multer({storage: storage})
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname);
+    }
+  });
+  
+  // Create the multer instance
+  const upload = multer({ storage: storage });
 
 const orderRouter = express.Router();
 
