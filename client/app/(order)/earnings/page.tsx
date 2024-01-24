@@ -25,8 +25,33 @@ interface OrderData {
   _id: string;
 }
 
+let bearerToken: string | null; 
+
+
 const Page = () => {
   const [data, setData] = useState<OrderData[]>([]);
+  useEffect(() => {
+    bearerToken = localStorage.getItem("token");
+  }, []);
+  useEffect(()=>{
+    const fetchEarnings = async() =>{
+      try {
+        const { data } = await axios.get(
+          `http://localhost:8003/earnings`,
+          {
+            headers: {
+              Authorization: `Bearer ${bearerToken}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+        
+      }
+  }
+  fetchEarnings()
+  } ,[])
+
   useEffect(() => {
     const fetchData = async () => {
       try {

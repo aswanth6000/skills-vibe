@@ -29,6 +29,7 @@ orderRouter.post('/orderreject', orderController.orderReject)
 orderRouter.get('/vorders', orderController.vorders)
 orderRouter.post('/deliver',upload.single('file'), orderController.deliver)
 orderRouter.post('/orderReview', orderController.orderReview)
+orderRouter.get('/earnings', orderController.earnings)
 
 // paymentRouter.post('/payment/:id',paymentController.payment)
 // paymentRouter.post('/paymentverification', paymentController.paymentVerification)

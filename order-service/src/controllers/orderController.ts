@@ -475,7 +475,46 @@ const orderController = {
             console.error(error)
             res.status(501).json({message: 'Internal server error'})
         }
-    }
+    },
+    async earnings(req: Request, res: Response) {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+          return res.status(401).json({ error: 'Unauthorized - Token not provided' });
+        }
+      
+        let decodedToken: JwtPayload;
+      
+        try {
+          decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+        } catch (jwtError) {
+          console.log('JWT Verification Error:', jwtError);
+          return res.status(401).json({ error: 'Unauthorized - Invalid token' });
+        }
+      
+        try {
+          const result = await OrderModel.aggregate([
+            {
+              $match: {
+                sellerId: decodedToken.userId,
+                orderStatus: 'confirmed'
+              }
+            },
+            {
+              $group: {
+                _id: '$sellerId',
+                totalPrice: { $sum: '$gigPrice' }
+              }
+            }
+          ]);
+      
+          console.log(result);
+      
+          res.status(200).json(result);
+        } catch (error) {
+          console.error('Error in aggregation:', error);
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+      }
 }
 
 export default orderController;
