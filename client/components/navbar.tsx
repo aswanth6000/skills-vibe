@@ -38,16 +38,17 @@ export default function Navbar() {
   const searchGig = async(e: any)=>{
     if(e.key === "Enter"){
       e.preventDefault()
-      console.log("here", search);
-      const { data } = await axios.get(
-        `http://localhost:8001/searchGig?search=${search}`,
-        {
-          headers: {
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        }
-      );
-      console.log(data);
+      router.push(`http://localhost:3000/searchGig/${search}`)
+      // console.log("here", search);
+      // const { data } = await axios.get(
+      //   `http://localhost:8001/searchGig?search=${search}`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${bearerToken}`,
+      //     },
+      //   }
+      // );
+      // console.log(data);
       
     }
 

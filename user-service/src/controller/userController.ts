@@ -306,17 +306,20 @@ const userController = {
       console.log('JWT Verification Error:', jwtError);
       return res.status(401).json({ error: 'Unauthorized - Invalid token' });
     }    
-    const keyword = req.query.search
+    console.log(req.params.searchId);
+        
+    const keyword = req.params.searchId
     ?{
     $or: [
-      { username: {$regex: req.query.search, $options: "i"}},
-      { username: {$regex: req.query.search, $options: "i"}}
+      { username: {$regex: req.params.searchId, $options: "i"}},
+      { username: {$regex: req.params.searchId, $options: "i"}}
     ],
   }
-  : {};
+  : {}; 
   const users = await GigUserModel.find(keyword).find({_id: {$ne: decodedToken.userId}})
   console.log(users);
   
+  res.status(200).json(users)
   }
 }
 
