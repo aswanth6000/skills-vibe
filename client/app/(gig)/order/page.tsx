@@ -199,7 +199,7 @@ export default function Page() {
                     </button>
                   </>
                 )}
-                {x.orderStatus === "ongoing" && (
+                {(x.orderStatus === "ongoing" || x.orderStatus === "review") && (
                   <div>
                     <Button
                       className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1 flex justify-center items-center"

@@ -388,7 +388,7 @@ const orderController = {
         const {orderId} = req.body;
         console.log(orderId);
         try {
-            const order = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'cancelled'}, {new:true})
+            const order = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'cancelled', paymentStatus: 'refund initiated'}, {new:true})
             res.status(200).json({message: 'order cancelled', order})
         } catch (error) {
             console.error(error);
@@ -465,6 +465,16 @@ const orderController = {
             console.error('Error sending email:', error);
             return res.status(500).json({ error: 'Internal server error' });
           }
+    },
+    async orderReview(req: Request, res: Response){
+        try {
+            const {orderId} = req.body;
+            const order = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'review'}, {new: true})
+            return res.status(200).json({message: 'Order status not accepted'})
+        } catch (error) {
+            console.error(error)
+            res.status(501).json({message: 'Internal server error'})
+        }
     }
 }
 
