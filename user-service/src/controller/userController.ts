@@ -291,6 +291,32 @@ const userController = {
       console.error(error);
     }
      
+  },
+  async searchgig(req: Request, res: Response ){
+    const token = req.headers.authorization?.split(' ')[1]
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized - Token not provided' });
+    }
+
+    let decodedToken: JwtPayload;
+
+    try {
+      decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+    } catch (jwtError) {
+      console.log('JWT Verification Error:', jwtError);
+      return res.status(401).json({ error: 'Unauthorized - Invalid token' });
+    }    
+    const keyword = req.query.search
+    ?{
+    $or: [
+      { username: {$regex: req.query.search, $options: "i"}},
+      { username: {$regex: req.query.search, $options: "i"}}
+    ],
+  }
+  : {};
+  const users = await GigUserModel.find(keyword).find({_id: {$ne: decodedToken.userId}})
+  console.log(users);
+  
   }
 }
 

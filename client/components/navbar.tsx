@@ -16,17 +16,42 @@ import {
 import Image from "next/image";
 import { Menu } from "@headlessui/react";
 import { button } from "@material-tailwind/react";
+import axios from "axios";
+
+
+
+let bearerToken: string | null; 
 
 export default function Navbar() {
+  const [search, setSearch] = useState('')
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const user = useAppSelector((state) => state.auth.value);
   const notification = useAppSelector((state) => state.chat.notification);
-
+  useEffect(() => {
+    bearerToken = localStorage.getItem("token");
+  }, []);
   const [navbarOpen, setNavbarOpen] = useState<Boolean>(false);
   useEffect(() => {
     setNavbarOpen(false);
   }, [user]);
+  const searchGig = async(e: any)=>{
+    if(e.key === "Enter"){
+      e.preventDefault()
+      console.log("here", search);
+      const { data } = await axios.get(
+        `http://localhost:8001/searchGig?search=${search}`,
+        {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        }
+      );
+      console.log(data);
+      
+    }
+
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -93,12 +118,16 @@ export default function Navbar() {
                 </svg>
               </div>
             </div>
+            <form action="" onKeyDown={searchGig}>
             <input
               type="text"
               id="search-navbar"
               className="block outline-none w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
               placeholder="Search..."
+              value={search}
+              onChange={(e)=> setSearch(e.target.value)}
             />
+            </form>
             {user && (
               <li className="nav-item">
                 <a

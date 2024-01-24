@@ -17,5 +17,6 @@ userRouter.get('/ordergig/:id', userController.orderGig)
 userRouter.get('/viewgigdetail/:gigId', userController.viewgigdetail)
 userRouter.post('/block', userController.userBlock)
 userRouter.post('/unblock', userController.userUnblock)
+userRouter.get('/searchGig', userController.searchgig)
 
 export default userRouter;
