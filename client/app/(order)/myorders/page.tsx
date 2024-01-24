@@ -32,7 +32,8 @@ let bearerToken: string | null;
 export default function Page() {
   const [data, setData] = useState<OrderData[]>([]);
   const [cancel, setCancel] = useState(false);
-  const [review, setReview] = useState(false)
+  const [review, setReview] = useState(false);
+  const [displayReview, setDisplayReview] = useState(false)
 
   const formatDate = (ts: string) => {
     const date = new Date(ts);
@@ -43,9 +44,20 @@ export default function Page() {
     }).format(date);
     return formatedDate;
   };
-
+  const hourDiff = (time: string) => {
+    const orderCompletionTime: Date = new Date(time);
+    const currentTime: Date = new Date();
+    
+    const timeDifference: number = currentTime.getTime() - orderCompletionTime.getTime();
+    
+    const hoursDifference: number = timeDifference / (1000 * 60 * 60);
+    if (hoursDifference > 24) {
+    return true
+  }
+  return false
+}
   const handleReview = async (orderId: any) => {
-    setReview(true)
+    setReview(true);
     try {
       const response = await axios.post(
         `http://localhost:8003/orderReview`,
@@ -175,10 +187,11 @@ export default function Page() {
                 Your order has been delivered to the Email: {x.buyeremail}
               </div>
             )}
-            {x.orderStatus === "completed" && (
-              <Tooltip title="If you are not satified with your delivery you can request a review within 24 hours of delivery"
-              placement="right"
-              arrow = {false}
+            {(x.orderStatus === "completed" && hourDiff(x.date)) && (
+              <Tooltip
+                title="If you are not satified with your delivery you can request a review within 24 hours of delivery"
+                placement="right"
+                arrow={false}
               >
                 <button
                   className="w-64 text-white bg-sky-600 hover:bg-sky-700 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-sky-600 dark:hover:bg-sky-700 dark:focus:ring-sky-800"
