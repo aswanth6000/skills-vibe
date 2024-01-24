@@ -29,6 +29,7 @@ let bearerToken: string | null;
 
 
 const Page = () => {
+  const [earn, setEarn ] = useState([])
   const [data, setData] = useState<OrderData[]>([]);
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
@@ -44,10 +45,11 @@ const Page = () => {
             },
           }
         );
+        setEarn(data[0])
       } catch (error) {
-        console.log(error);
-        
+        console.log(error); 
       }
+      
   }
   fetchEarnings()
   } ,[])
@@ -84,7 +86,7 @@ const Page = () => {
               <p className="text-xl font-bold mb-2">
                 Balance available for use
               </p>
-              <p>$3.95</p>
+              <p>${earn.totalPrice}</p>
             </div>
             <div className="bg-green-100 p-4 rounded-md">
               <p className="text-xl font-bold mb-2">Withdraw balance</p>
@@ -93,21 +95,7 @@ const Page = () => {
           </div>
         </section>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Future Payments</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-green-100 p-4 rounded-md">
-              <p className="text-xl font-bold mb-2">Payments being cleared</p>
-              <p>$0.00</p>
-            </div>
-            <div className="bg-green-100 p-4 rounded-md">
-              <p className="text-xl font-bold mb-2">
-                Payments for active orders
-              </p>
-              <p>Coming soon</p>
-            </div>
-          </div>
-        </section>
+
 
         <section>
           <h2 className="text-2xl font-semibold mb-4">Earnings & Expenses</h2>

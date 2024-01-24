@@ -496,7 +496,7 @@ const orderController = {
             {
               $match: {
                 sellerId: decodedToken.userId,
-                orderStatus: 'confirmed'
+                orderStatus: 'completed'
               }
             },
             {
@@ -505,10 +505,7 @@ const orderController = {
                 totalPrice: { $sum: '$gigPrice' }
               }
             }
-          ]);
-      
-          console.log(result);
-      
+          ]);      
           res.status(200).json(result);
         } catch (error) {
           console.error('Error in aggregation:', error);
