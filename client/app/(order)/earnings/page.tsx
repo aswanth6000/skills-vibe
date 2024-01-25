@@ -74,7 +74,6 @@ const Page = () => {
     };
     fetchData();
   }, []);
-  console.log(data);
   return (
     <>
       <Navbar />
@@ -86,7 +85,7 @@ const Page = () => {
               <p className="text-xl font-bold mb-2">
                 Balance available for use
               </p>
-              <p>${earn.totalPrice}</p>
+             {earn ? <p>${earn.totalPrice}</p> : <p>₹ 0</p> }
             </div>
             <div className="bg-green-100 p-4 rounded-md">
               <p className="text-xl font-bold mb-2">Withdraw balance</p>
@@ -102,12 +101,12 @@ const Page = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-green-100 p-4 rounded-md">
               <p className="text-xl font-bold mb-2">Earnings to date</p>
-              <p>$4.00</p>
+              <p>₹ 4.00</p>
               <p>Your earnings before taxes since joining.</p>
             </div>
             <div className="bg-green-100 p-4 rounded-md">
               <p className="text-xl font-bold mb-2">Expenses to date</p>
-              <p>$0.00</p>
+              <p>₹ 0.00</p>
               <p>Earnings spent on purchases since joining.</p>
             </div>
           </div>

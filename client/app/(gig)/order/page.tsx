@@ -40,11 +40,10 @@ export default function Page() {
   };
 
   const handleOk = async (orderData: any) => {
-    
-  const formData = {
-    file,
-    orderId: orderData
-  }    
+    const formData = {
+      file,
+      orderId: orderData,
+    };
     try {
       setConfirmLoading(true);
       const response = await axios.post(
@@ -59,7 +58,7 @@ export default function Page() {
       );
       console.log(response);
       setConfirmLoading(false);
-      if(!confirmLoading){
+      if (!confirmLoading) {
         setOpen(false);
       }
     } catch (error) {
@@ -158,7 +157,7 @@ export default function Page() {
         {data.map((x) => (
           <div
             key={x._id}
-            className="m-4 w-fit  bg-bodywhite outline-dashed h-44 rounded-2xl"
+            className="m-4 w-fit shadow-md  bg-bodywhite h-44 rounded-2xl"
           >
             <div className="flex justify-between m-3">
               <div className="flex flex-col  align-middle justify-center items-center">
@@ -169,7 +168,7 @@ export default function Page() {
                   height={500}
                   alt="Picture of the buyer"
                 />
-                <h2>{x.buyername}</h2>
+                <h2 className="font-semibold">{x.buyername}</h2>
               </div>
               <div className="flex flex-col  align-middle justify-center">
                 <div>
@@ -186,23 +185,24 @@ export default function Page() {
                   x.orderStatus === "failed") && (
                   <>
                     <button
-                      className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1"
+                      className="h-10 w-60 bg-green-400 shadow-md font-semibold  hover:bg-green-600 rounded-2xl m-1"
                       onClick={() => handleApprove(x._id)}
                     >
                       Approve
                     </button>
                     <button
-                      className="h-10 w-60 bg-red-400 hover:bg-red-600 rounded-2xl m-1"
+                      className="h-10 w-60 bg-red-400 shadow-lg font-semibold  hover:bg-red-600 rounded-2xl m-1"
                       onClick={() => handleReject(x._id)}
                     >
                       Reject
                     </button>
                   </>
                 )}
-                {(x.orderStatus === "ongoing" || x.orderStatus === "review") && (
+                {(x.orderStatus === "ongoing" ||
+                  x.orderStatus === "review") && (
                   <div>
                     <Button
-                      className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1 flex justify-center items-center"
+                      className="h-10 w-60 bg-green-400 font-semibold shadow-md hover:bg-green-600 rounded-2xl m-1 flex justify-center items-center"
                       onClick={showModal}
                     >
                       Deliver
@@ -210,11 +210,11 @@ export default function Page() {
                     <Modal
                       title="Select the file to deliver"
                       open={open}
-                      onOk={()=>handleOk(x._id)}
+                      onOk={() => handleOk(x._id)}
                       confirmLoading={confirmLoading}
                       onCancel={handleCancel}
                       okButtonProps={{
-                        className: "bg-blue-600 text-white hover:bg-blue-300",
+                        className: "bg-blue-600 text-white hover:bg-blue-300 font-semibold",
                       }}
                     >
                       <input
@@ -226,7 +226,7 @@ export default function Page() {
                   </div>
                 )}
                 <Link
-                  className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1 flex justify-center items-center"
+                  className="h-10 w-60 bg-blue-400  font-semibold hover:bg-blue-600 shadow-md rounded-2xl m-1 flex justify-center items-center"
                   href={`/messages`}
                 >
                   <button onClick={() => handleOrder(x.buyerId)}></button>
