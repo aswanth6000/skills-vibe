@@ -21,4 +21,5 @@ userRouter.get('/searchGig/:searchId', userController.searchgig)
 userRouter.post('/userSpecficDetails', userController.userSpecficDetails)
 userRouter.post('/viewGigDetail', userController.viewGigDetail)
 
+
 export default userRouter;

@@ -47,6 +47,7 @@ interface GigData {
   email: string;
   profilePicture: string;
   status: boolean;
+  paymentStatus: string
 }
 
 function Page() {
@@ -70,6 +71,7 @@ function Page() {
     image3: "",
     video: "",
     orderStatus: "",
+    paymentStatus: "",
   });
   const [data, setData] = useState<OrderGig>({
     title: "",
@@ -85,8 +87,13 @@ function Page() {
   });
   const orderId = params.orderId;
 
-  const handleWithdraw = () =>{
-    
+  const handleWithdraw = async() =>{
+
+    const { data } = await axios.post(
+        `http://localhost:8003/withdraw`,
+        { paymentStatus: 'withdrawable', orderId }
+      );
+      console.log("with", data);
   }
 
   useEffect(() => {
@@ -231,13 +238,12 @@ function Page() {
               <p className="font-normal text-sm">{gigData.gigdescription}</p>
               <p className="font-semibold mt-2">₹ {gigData.price}</p>
             </div>
-            <button
+            {gigData.paymentStatus === "completed" && <button
               className="bg-black text-white font-semibold rounded-md p-4 w-9/12 b-9"
-              disabled={gigData.orderStatus !== "completed"}
               onClick={handleWithdraw}
             >
               Release payment
-            </button>
+            </button>}
           </div>
         </div>
       </div>

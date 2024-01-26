@@ -522,6 +522,16 @@ const orderController = {
             res.status(500).json({message: "internal server error", error})
         }
         
+      },
+      async withdraw(req: Request, res: Response){
+        const {orderId, paymentStatus} = req.body
+        try {
+            const order = OrderModel.findByIdAndUpdate(orderId, {paymentStatus}, {new: true})
+            res.status(200).json(order)
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: "internal server error"})
+        }
       }
 }
 
