@@ -119,12 +119,12 @@ export default function Page() {
             eveniet incidunt placeat!
           </div>
           <div className="w-11/12 h-36  border-2 rounded-md m-4 ">
-            <div className="flex flex-row">
+            <div className="flex flex-row items-center">
               <Image
                 src={data.profilePicture}
                 height={100}
                 width={100}
-                className="rounded-full mt-5 ml-5 "
+                className="rounded-full mt-5 ml-5 w-28 h-28 "
                 alt="Picture of the author"
               />
               <h1 className="text-lg font-semibold ml-4">{data.username}</h1>

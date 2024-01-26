@@ -322,6 +322,16 @@ const userController = {
       console.error(error)
     }
   },
+  async userSpecficDetails(req: Request, res: Response){
+    const {userId} = req.body
+    try {
+      const users = await UserModel.findById(userId)
+      res.status(200).json(users)
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({error: "Internal server error"})
+    }
+  }
 
 }
 
