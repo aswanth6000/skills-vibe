@@ -33,7 +33,7 @@ export default function Navbar() {
 
 
   return (
-    <div className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-navwhite ">
+    <div className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-navwhite shadow-md">
       <div className="container px-3 mx-auto flex flex-wrap items-center justify-between">
         <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
           <a

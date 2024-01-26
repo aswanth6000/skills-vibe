@@ -511,6 +511,17 @@ const orderController = {
           console.error('Error in aggregation:', error);
           res.status(500).json({ error: 'Internal Server Error' });
         }
+      },
+      async viewOrderDetail(req: Request, res: Response){
+        const {orderId} = req.body
+        try {
+            const order = await OrderModel.findById(orderId);
+            res.status(200).json(order)
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: "internal server error", error})
+        }
+        
       }
 }
 

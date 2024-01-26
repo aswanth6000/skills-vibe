@@ -200,33 +200,8 @@ export default function Navbar() {
               </li>
             )}
 
-            {user && (
-              <li className="nav-item">
-                <Menu as="div" className="relative z-10">
-                  <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
-                    analytics
-                    <FontAwesomeIcon className="ml-1" icon={faCaretDown} />
-                  </Menu.Button>
-                  <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
-                            active ? "bg-blue-500 text-white" : ""
-                          } hover:bg-blue-500 hover:text-white`}
-                          href="/account-settings"
-                        >
-                          Overview
-                        </a>
-                      )}
-                    </Menu.Item>
-                  </Menu.Items>
-                </Menu>
-              </li>
-            )}
-
             <li className="nav-item">
-              <Link href={`/messagesdisplay`}>
+              <Link href={`/messages`}>
                 <FontAwesomeIcon
                   className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                   icon={faEnvelope}

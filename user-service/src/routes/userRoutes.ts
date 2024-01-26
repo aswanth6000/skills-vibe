@@ -19,5 +19,6 @@ userRouter.post('/block', userController.userBlock)
 userRouter.post('/unblock', userController.userUnblock)
 userRouter.get('/searchGig/:searchId', userController.searchgig)
 userRouter.post('/userSpecficDetails', userController.userSpecficDetails)
+userRouter.post('/viewGigDetail', userController.viewGigDetail)
 
 export default userRouter;

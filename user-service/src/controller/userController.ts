@@ -331,6 +331,17 @@ const userController = {
       console.error(error);
       res.status(500).json({error: "Internal server error"})
     }
+  },
+  async viewGigDetail(req: Request, res: Response){
+    const {gigId} = req.body    
+    try {
+      const gigData = await GigUserModel.find({refId: gigId})
+      res.status(200).json(gigData)
+    } catch (error) {
+      res.status(500).json({message: "Internal server error"})
+      console.error(error);
+      
+    }
   }
 
 }

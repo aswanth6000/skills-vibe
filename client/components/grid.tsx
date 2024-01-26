@@ -1,18 +1,19 @@
-'use client'
-import { CarouselDefault } from '@/components/carousel'
-import axios from 'axios'
-import { FC } from 'react';
-import 'swiper/css';
-import Image from 'next/image';
-import 'swiper/css';
-import Navbar from '@/components/navbar';
-import Empty from '@/components/empty';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
-import React from 'react';
-import Cards from '@/components/cards';
-import { Gigs } from '@/types/gigTypes';
-import Link from 'next/link';
+"use client";
+import { CarouselDefault } from "@/components/carousel";
+import axios from "axios";
+import { FC } from "react";
+import "swiper/css";
+import Image from "next/image";
+import "swiper/css";
+import Navbar from "@/components/navbar";
+import Empty from "@/components/empty";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import React from "react";
+import Cards from "@/components/cards";
+import { Gigs } from "@/types/gigTypes";
+import Link from "next/link";
+import { Skeleton } from "antd";
 
 interface GridProps {
   props: Gigs[];
@@ -20,7 +21,78 @@ interface GridProps {
 
 const Grid: React.FC<GridProps> = ({ props }) => {
   if (!props) {
-    return null;
+    return (
+      <div className="flex flex-col">
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -94,7 +166,6 @@ const Grid: React.FC<GridProps> = ({ props }) => {
             </button>
             </Link>
           </div>
-          
 
         </div>
       ))}

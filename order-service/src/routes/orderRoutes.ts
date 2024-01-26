@@ -30,6 +30,7 @@ orderRouter.get('/vorders', orderController.vorders)
 orderRouter.post('/deliver',upload.single('file'), orderController.deliver)
 orderRouter.post('/orderReview', orderController.orderReview)
 orderRouter.get('/earnings', orderController.earnings)
+orderRouter.post('/viewOrderDetail', orderController.viewOrderDetail)
 
 // paymentRouter.post('/payment/:id',paymentController.payment)
 // paymentRouter.post('/paymentverification', paymentController.paymentVerification)

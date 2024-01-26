@@ -9,15 +9,18 @@ import axios from "../../../config/axios";
 import { useEffect, useState } from "react";
 import { Gigs } from "@/types/gigTypes";
 import SubNav from "@/components/subNav";
+import { Skeleton } from "antd";
 
 
 export default function Home() {
   const [data, setData] = useState<Gigs[]>([]);
+  const [loading, setLoading] = useState(false)
   const user = useAppSelector((state) => state.auth.value);
   useEffect(() => {
     const token = localStorage.getItem("token");
     const fetchData = async () => {
       try {
+        setLoading(true)
         const response = await axios.get("/getallgig", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -25,6 +28,7 @@ export default function Home() {
           },
         });
         if (response.status === 200) {
+          setLoading(false)
           console.log(response.data.allgigs);
           setData(response.data.allgigs);
         }
@@ -79,8 +83,77 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Grid props={data} />
-      {/* <Popular /> */}
+      <Grid props={data} /> 
+      {loading && <div className="flex flex-col">
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+      </div>}
       <Footer />
     </div>
   );
