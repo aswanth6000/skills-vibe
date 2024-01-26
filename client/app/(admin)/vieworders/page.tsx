@@ -47,9 +47,9 @@ export default function Vieworder() {
       
   return (
     <div>
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="relative overflow-x-auto shadow-md ">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <thead className="text-xs border-2 border-black text-gray-700 uppercase bg-white-50 dark:bg-white-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3">
               Gig Name
@@ -75,11 +75,11 @@ export default function Vieworder() {
           {orderData?.map((order) => (
             <tr
               key={order._id.toString()}
-              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+              className="bg-white border-2 border-black dark:bg-white-800 dark:border-white-700 hover:bg-white-50 dark:hover:bg-white-600"
             >
               <th
                 scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-black"
               >
                 {order.gigTitle}
               </th>

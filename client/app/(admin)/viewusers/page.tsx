@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { User } from "@/types/adminTypes";
+import Image from "next/image";
 
 
 function Page() {
@@ -57,9 +58,9 @@ function Page() {
   return (
     <div>
       {/* <Navbar /> */}
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg m-10">
+      <div className="relative overflow-x-auto shadow-md  m-10">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase border-2 border-black bg-white-50 dark:bg-white-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="p-4"></th>
               <th scope="col" className="px-6 py-3">
@@ -80,20 +81,22 @@ function Page() {
             {userData.map((user) => (
               <tr
                 key={user._id}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                className="bg-white border-2 border-black dark:bg-white-800 dark:border-white-700 hover:bg-white-50 dark:hover:bg-white-600"
               >
                 <td className="w-4 p-4"></td>
                 <th
                   scope="row"
                   className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  <img
+                  <Image
                     className="w-10 h-10 rounded-full"
                     src={user.profilePicture}
+                    height={500}
+                    width={500}
                     alt={`${user.username}'s profile`}
                   />
                   <div className="ps-3">
-                    <div className="text-base font-semibold">{user.username}</div>
+                    <div className="text-base font-semibold text-black">{user.username}</div>
                     <div className="font-normal text-gray-500">{user.email}</div>
                   </div>
                 </th>

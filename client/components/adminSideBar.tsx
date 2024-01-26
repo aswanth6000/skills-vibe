@@ -61,13 +61,14 @@ function AdminSideBar() {
         trigger={null}
         collapsible
         collapsed={collapsed}
-        className="sidebar"
+        style={{ background: colorBgContainer }}
+        
       >
-        <div className="h-16 ">
+        <div className="h-16 flex justify-center text-lg font-bold ">
           <h1>Admin</h1>
         </div>
         <Menu
-          theme="dark"
+          theme="light"
           mode="inline"
           onClick={handleMenuClick}
           defaultSelectedKeys={['1']}
@@ -205,7 +206,7 @@ function AdminSideBar() {
         </div>
       </div>
     </div>
-          <Content className="mt-6 mr-4 ml-6 p-10 min-h-min bg-teal-300">
+          <Content className="mt-6 mr-4 ml-6 p-10 min-h-min">
            {selectedMenuKey === '1' && <Viewusers/>}
            {selectedMenuKey === '2' && <ViewGigs/>}
            {selectedMenuKey === '3' && <Vieworder/>}
