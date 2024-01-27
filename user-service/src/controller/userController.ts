@@ -159,8 +159,11 @@ const userController = {
   },
   async getAllGigs(req: Request, res: Response) {
     try {
-      const allgigs = await GigUserModel.find()
-      res.status(200).json({ message: 'gig data fetched successfully', allgigs })
+      const PAGE_SIZE = 10
+      const page: number = parseInt(req.query.page as string || '0', 10);            
+      const total = await GigUserModel.countDocuments({})
+      const allgigs = await GigUserModel.find({}).limit(PAGE_SIZE).skip(PAGE_SIZE * page)
+      res.status(200).json({ message: 'gig data fetched successfully', allgigs, totalPages: Math.ceil(total / PAGE_SIZE) })
     } catch (error) {
       res.status(500).json({ error: "internal server error" })
     }
