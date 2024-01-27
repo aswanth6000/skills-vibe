@@ -18,6 +18,7 @@ const styles = {
 };
 
 interface OrderGig {
+  paymentStatus: string;
   title: string;
   image1: string;
   image2: string;
@@ -52,6 +53,7 @@ interface GigData {
 
 function Page() {
   const params = useParams();
+  const [orderData, setOrderData]: any = useState()
   const [sellerData, setSellerData]: any = useState();
   const [buyerData, setBuyerData]: any = useState();
   const [gigData, setGigData] = useState<GigData>({
@@ -84,6 +86,7 @@ function Page() {
     price: 0,
     profilePicture: "",
     orderStatus: "",
+    paymentStatus: ''
   });
   const orderId = params.orderId;
 
@@ -104,39 +107,30 @@ function Page() {
           { orderId }
         );
 
-        // Log to check if data is retrieved correctly
         console.log("Order Detail:", data);
 
         const response = await axios.post(
           `http://localhost:8001/viewGigDetail`,
           { gigId: data.gigId }
         );
-        // Log to check if gig data is retrieved correctly
         console.log("Gig Detail:", response.data[0]);
 
         setGigData(response.data[0]);
         setData(data);
 
-        const uId = {
-          sellerId: data.sellerId,
-          buyerId: data.buyerId,
-        };
-        console.log("userId's", uId);
+        // const res = await axios.post(
+        //   "http://localhost:8001/userSpecificDetails",
+        //   { userId: data.sellerId }
+        // );
+        // console.log("Seller Data:", res.data);
+        // setSellerData(res.data);
 
-        const res = await axios.post(
-          "http://localhost:8001/userSpecificDetails",
-          { userId: data.sellerId }
-        );
-        // Log to check if seller data is retrieved correctly
-        console.log("Seller Data:", res.data);
-        setSellerData(res.data);
-
-        const buyerResponse = await axios.post(
-          "http://localhost:8001/userSpecificDetails",
-          { userId: data.buyerId }
-        );
-        console.log("Buyer Data:", buyerResponse.data);
-        setBuyerData(buyerResponse.data);
+        // const buyerResponse = await axios.post(
+        //   "http://localhost:8001/userSpecificDetails",
+        //   { userId: data.buyerId }
+        // );
+        // console.log("Buyer Data:", buyerResponse.data);
+        // setBuyerData(buyerResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -238,12 +232,12 @@ function Page() {
               <p className="font-normal text-sm">{gigData.gigdescription}</p>
               <p className="font-semibold mt-2">₹ {gigData.price}</p>
             </div>
-            {gigData.paymentStatus === "completed" && <button
+            {(data.orderStatus === "completed" && data.paymentStatus === 'paid') ? <button
               className="bg-black text-white font-semibold rounded-md p-4 w-9/12 b-9"
               onClick={handleWithdraw}
             >
               Release payment
-            </button>}
+            </button> : <p>paid</p>}
           </div>
         </div>
       </div>

@@ -525,8 +525,10 @@ const orderController = {
       },
       async withdraw(req: Request, res: Response){
         const {orderId, paymentStatus} = req.body
+        console.log(req.body);
+        
         try {
-            const order = OrderModel.findByIdAndUpdate(orderId, {paymentStatus}, {new: true})
+            const order = await OrderModel.findByIdAndUpdate(orderId, {paymentStatus}, {new: true})
             res.status(200).json(order)
         } catch (error) {
             console.error(error);
