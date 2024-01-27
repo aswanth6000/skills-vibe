@@ -351,7 +351,7 @@ const orderController = {
             }
             const decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
             const userId = decodedToken.userId;
-            const order = await OrderModel.find({ buyerId: userId });
+            const order = await OrderModel.find({ buyerId: userId }).sort({date: -1});
             return res.status(200).json(order);
         } catch (error) {
             console.error(error);

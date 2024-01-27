@@ -10,7 +10,6 @@ import Empty from "@/components/empty";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import React from "react";
-import Cards from "@/components/cards";
 import { Gigs } from "@/types/gigTypes";
 import Link from "next/link";
 import { Skeleton } from "antd";
@@ -149,7 +148,7 @@ const Grid: React.FC<GridProps> = ({ props }) => {
           </div>
           <div>
             {/* You can replace this placeholder with your actual star rating component */}
-            <p className='pl-3'>Star rating here</p>
+            {/* <p className='pl-3'>{x.gigdescription}</p> */}
           </div>
           <div>
             <p className='pl-3 font-semibold'>From: {x.price}</p>

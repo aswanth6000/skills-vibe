@@ -149,7 +149,7 @@ const OrderConfirmation: React.FC = () => {
         <main className="text-center">
           <h1 className="text-3xl font-semibold mb-8">Order Confirmation</h1>
 
-          <div className="w-96 mx-auto bg-white p-8 rounded-lg shadow-md mb-8">
+          <div className="w-96 mx-auto flex flex-col bg-white p-8 rounded-lg shadow-md mb-8">
             <p className="text-gray-700 mb-4">Complete payment to continue!</p>
 
             {/* Display order details here, e.g., gig information, price, etc. */}
@@ -160,7 +160,7 @@ const OrderConfirmation: React.FC = () => {
             </div>
 
             <button
-              className="block bg-green-500 text-white py-2 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-green"
+              className="block bg-green-500 text-white p-2 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-green"
               onClick={payNow}
             >
               Proceed to Payment

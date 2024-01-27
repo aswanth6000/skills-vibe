@@ -122,10 +122,7 @@ export default function Page() {
           </div>
           <div className="m-4">
             {" "}
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium
-            quo dicta impedit quam officiis excepturi dolor laudantium dolore
-            quaerat, molestias adipisci quia culpa doloribus animi quis velit
-            eveniet incidunt placeat!
+            {data.gigdescription}
           </div>
           <div className="w-11/12 h-36  border-2 rounded-md m-4 ">
             <div className="flex flex-row items-center">
