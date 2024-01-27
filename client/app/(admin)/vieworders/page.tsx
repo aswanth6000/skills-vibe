@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
+import { Pagination } from 'antd';
 
 interface OrderDetails {
     buyerId: string;
@@ -27,27 +28,31 @@ interface OrderDetails {
   
 export default function Vieworder() {
     const [orderData, setOrderData] = useState<OrderDetails[]>([])
+    const [pageNumber, setPagenumber] = useState(0)
+    const [totalPages, setTotalPages] = useState(0)
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get('http://localhost:8003/viewOrders');
+            const response = await axios.get(`http://localhost:8003/viewOrders?page=${pageNumber}`);
             console.log(response.data);
             
             if (response.status === 200) {
               setOrderData(response.data.orders);
+              setTotalPages(response.data.totalPages)
             }
           } catch (error) {
             console.error('Error fetching user data:', error);
           }
         };
         fetchData();
-      }, []);
-      console.log(orderData);
-      
+      }, [pageNumber]);
+      const handleChange = (page: number) =>{
+        setPagenumber(page)
+      }      
       
   return (
-    <div>
-    <div className="relative overflow-x-auto shadow-md ">
+    <div className='flex flex-col items-center'>
+    <div className="relative overflow-x-auto shadow-md mb-4 ">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs border-2 border-black text-gray-700 uppercase bg-white-50 dark:bg-white-700 dark:text-gray-400">
           <tr>
@@ -100,6 +105,7 @@ export default function Vieworder() {
         </tbody> 
       </table>
     </div>
+      <Pagination defaultCurrent={1} total={totalPages * 10} onChange={handleChange} />
   </div>
   )
 }

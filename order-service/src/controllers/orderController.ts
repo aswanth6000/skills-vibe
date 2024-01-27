@@ -377,8 +377,11 @@ const orderController = {
     },
     async viewOrders(req: Request, res: Response){
         try {
-            const orders = await OrderModel.find()
-            res.status(200).json({message: 'success', orders})
+            const PAGE_SIZE = 10
+            const page: number = parseInt(req.query.page as string || '0', 10);            
+            const total = await OrderModel.countDocuments({})
+            const orders = await OrderModel.find({}).limit(PAGE_SIZE).skip(PAGE_SIZE * page)
+            res.status(200).json({message: 'success', orders, totalPages: Math.ceil(total / PAGE_SIZE)})
         } catch (error) {
             console.error(error);
             res.status(501).json({message: 'internal server error'})
