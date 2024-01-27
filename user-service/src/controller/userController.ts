@@ -146,8 +146,11 @@ const userController = {
 
   async getAllUsers(req: Request, res: Response) {
     try {
-      const allusers = await UserModel.find({});
-      res.status(200).json({ message: 'user data fetched successfully', allusers })
+      const PAGE_SIZE = 10
+      const page: number = parseInt(req.query.page as string || '0', 10);   
+      const total = await UserModel.countDocuments({})
+      const allusers = await UserModel.find({}).limit(PAGE_SIZE).skip(PAGE_SIZE * page)
+      res.status(200).json({ message: 'user data fetched successfully', allusers, totalPages: Math.ceil(total / PAGE_SIZE) })
     } catch (error) {
       console.log('Error handling user profile update:', error);
       res.status(500).json({ error: 'Internal server error' });

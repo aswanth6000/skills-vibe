@@ -4,23 +4,27 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { User } from "@/types/adminTypes";
 import Image from "next/image";
+import { Pagination } from "antd";
 
 
 function Page() {
   const [userData, setUserData] = useState<User[]>([]);
+  const [pageNumber, setPagenumber] = useState(0)
+  const [totalPages, setTotalPages] = useState(0)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/viewAllUsers');
+        const response = await axios.get(`http://localhost:8000/viewAllUsers?page=${pageNumber}`);
         if (response.status === 200) {
           setUserData(response.data.allusers);
+          setTotalPages(response.data.totalPages)
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
     fetchData();
-  }, [userData]);
+  }, [pageNumber]);
 
   const userBlock = async(userId: string) =>{
     const sendBlock = {
@@ -51,12 +55,14 @@ function Page() {
       console.log(response);
     } catch (error) {
       console.error(error);
-      
     }
   }
+  const handleChange = (page: number) =>{
+    setPagenumber(page)
+  }  
 
   return (
-    <div>
+    <div className='flex flex-col items-center'>
       {/* <Navbar /> */}
       <div className="relative overflow-x-auto shadow-md  m-10">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -128,6 +134,7 @@ function Page() {
           </tbody>
         </table>
       </div>
+      <Pagination defaultCurrent={1} total={totalPages * 10} onChange={handleChange} />
     </div>
   );
 }

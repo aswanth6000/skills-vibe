@@ -34,8 +34,6 @@ export default function Vieworder() {
         const fetchData = async () => {
           try {
             const response = await axios.get(`http://localhost:8003/viewOrders?page=${pageNumber}`);
-            console.log(response.data);
-            
             if (response.status === 200) {
               setOrderData(response.data.orders);
               setTotalPages(response.data.totalPages)
