@@ -15,8 +15,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { Menu } from "@headlessui/react";
-import { button } from "@material-tailwind/react";
-import axios from "axios";
 
 
 
@@ -99,7 +97,7 @@ export default function Navbar() {
           }
           id="example-navbar-danger"
         >
-          <ul className="flex flex-col lg:flex-row list-none lg:ml-auto p-2">
+          <div className="flex flex-col lg:flex-row list-none lg:ml-auto p-2">
             <div className="relative mt-3">
               <div className="absolute inset-y-0 mb-3 start-0 flex items-center ps-3 pointer-events-none">
                 <svg
@@ -130,17 +128,17 @@ export default function Navbar() {
             />
             </form>
             {user && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <a
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                   href="#pablo"
                 >
                   Dashboard
                 </a>
-              </li>
+              </div>
             )}
             {user && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <Menu as="div" className="relative z-10">
                   <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
                     Business
@@ -197,19 +195,19 @@ export default function Navbar() {
                     </Menu.Item>
                   </Menu.Items>
                 </Menu>
-              </li>
+              </div>
             )}
 
-            <li className="nav-item">
+            <div className="nav-item">
               <Link href={`/messages`}>
                 <FontAwesomeIcon
                   className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                   icon={faEnvelope}
                 />
               </Link>
-            </li>
+            </div>
             {user && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <Menu as="div" className="relative z-10">
                   <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
                     <FontAwesomeIcon className="ml-1" icon={faBell} />
@@ -234,28 +232,28 @@ export default function Navbar() {
                     </Menu.Item>
                   </Menu.Items>
                 </Menu>
-              </li>
+              </div>
             )}
-            <li className="nav-item">
+            <div className="nav-item">
               <FontAwesomeIcon
                 className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                 icon={faCircleQuestion}
               />
-            </li>
+            </div>
 
             {user.username && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <button
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                   onClick={handleLogout}
                 >
                   Logout
                 </button>
-              </li>
+              </div>
             )}
 
             {user && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <div className=" h-8 w-8 rounded-3xl">
                   <Link href={`/userprofile/${user._id}`}>
                     <Image
@@ -267,9 +265,9 @@ export default function Navbar() {
                     />
                   </Link>
                 </div>
-              </li>
+              </div>
             )}
-          </ul>
+          </div>
         </div>
       </div>
     </div>

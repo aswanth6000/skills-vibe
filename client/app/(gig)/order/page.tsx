@@ -5,6 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Modal } from "antd";
+import NextBreadcrumb from "@/components/NextBreadcrumb";
 
 interface OrderData {
   buyerId: string;
@@ -153,6 +154,14 @@ export default function Page() {
   return (
     <div>
       <Navbar />
+      <NextBreadcrumb
+        homeElement={'Home'}
+        separator={<span> /  </span>}
+        activeClasses='text-amber-500'
+        containerClasses='flex py-2 bg-bodywhite' 
+        listClasses='hover:underline mx-2 font-bold'
+        capitalizeLinks
+      />
       <div className="flex justify-center content-center items-center flex-col">
         {data.map((x) => (
           <div

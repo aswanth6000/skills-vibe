@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { Tooltip } from "antd";
+import NextBreadcrumb from "@/components/NextBreadcrumb";
 
 interface OrderData {
   buyerId: string;
@@ -146,6 +147,14 @@ export default function Page() {
   return (
     <>
       <Navbar />
+      <NextBreadcrumb
+        homeElement={'Home'}
+        separator={<span> /  </span>}
+        activeClasses='text-amber-500'
+        containerClasses='flex py-2 bg-bodywhite' 
+        listClasses='hover:underline mx-2 font-bold'
+        capitalizeLinks
+      />
       <div className="bg-white p-8 min-h-screen">
         <h1 className="text-3xl font-bold mb-8">Order History</h1>
         {data.map((x) => (

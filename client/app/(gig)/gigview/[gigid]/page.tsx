@@ -10,6 +10,7 @@ import "swiper/css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import NextBreadcrumb from "@/components/NextBreadcrumb";
 
 const styles = {
   outerdiv: "flex h-full w-full items-center justify-center",
@@ -59,11 +60,19 @@ export default function Page() {
       }
     };
     fetchData();
-  }, []);
+  }, [data]);
 
   return (
     <>
       <Navbar />
+      <NextBreadcrumb
+        homeElement={'Home'}
+        separator={<span> /  </span>}
+        activeClasses='text-amber-500'
+        containerClasses='flex py-2 bg-bodywhite' 
+        listClasses='hover:underline mx-2 font-bold'
+        capitalizeLinks
+      />
       <div className="relative">
         <div className="w-8/12 h-auto mb-10">
           <div className="text-2xl font-semibold m-4">{data.title}</div>

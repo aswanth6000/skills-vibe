@@ -499,7 +499,7 @@ const orderController = {
             {
               $match: {
                 sellerId: decodedToken.userId,
-                orderStatus: 'completed'
+                orderStatus: 'withdrawable'
               }
             },
             {

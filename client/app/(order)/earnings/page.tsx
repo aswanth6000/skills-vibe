@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "@/components/navbar";
+import NextBreadcrumb from "@/components/NextBreadcrumb";
 
 interface OrderData {
   buyerId: string;
@@ -29,7 +30,7 @@ let bearerToken: string | null;
 
 
 const Page = () => {
-  const [earn, setEarn ] = useState([])
+  const [earn, setEarn ]: any = useState([])
   const [data, setData] = useState<OrderData[]>([]);
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
@@ -77,6 +78,14 @@ const Page = () => {
   return (
     <>
       <Navbar />
+      <NextBreadcrumb
+        homeElement={'Home'}
+        separator={<span> /  </span>}
+        activeClasses='text-amber-500'
+        containerClasses='flex py-2 bg-bodywhite' 
+        listClasses='hover:underline mx-2 font-bold'
+        capitalizeLinks
+      />
       <div className="p-8 bg-white text-bodydark2">
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">Available Funds</h2>

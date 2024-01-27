@@ -36,12 +36,12 @@ export default function Navbar() {
     <div className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-navwhite shadow-md">
       <div className="container px-3 mx-auto flex flex-wrap items-center justify-between">
         <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
-          <a
+          <Link
             className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-textgrey"
             href="#pablo"
           >
             Skills Vibe
-          </a>
+          </Link>
           <button
             className="text-textgrey cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
             type="button"
@@ -71,20 +71,10 @@ export default function Navbar() {
           }
           id="example-navbar-danger"
         >
-          <ul className="flex flex-col lg:flex-row list-none lg:ml-auto p-2">
+          <div className="flex flex-col lg:flex-row list-none lg:ml-auto p-2">
 
 
-            {user && (
-              <li className="nav-item">
-                <a
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
-                  href="#pablo"
-                >
-                  Dashboard
-                </a>
-              </li>
-            )}
-            {user && <li className="nav-item">
+            {user && <div className="nav-item">
               <Menu as="div" className="relative z-10">
                 <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
                   Business<FontAwesomeIcon className="ml-1" icon={faCaretDown} />
@@ -92,57 +82,57 @@ export default function Navbar() {
                 <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
                   <Menu.Item>
                     {({ active }) => (
-                      <a
+                      <Link
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
                         href="/account-settings"
                       >
                         Orders
-                      </a>
+                      </Link>
                     )}
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <a
+                      <Link
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
                         href="/viewGigs"
                       >
                         View Gigs
-                      </a>
+                      </Link>
                     )}
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <a
+                      <Link
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
                         href="/documentation"
                       >
                         Profile
-                      </a>
+                      </Link>
                     )}
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <a
+                      <Link
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
                         href="/documentation"
                       >
                         Earnings
-                      </a>
+                      </Link>
                     )}
                   </Menu.Item>
                 </Menu.Items>
               </Menu>
-            </li>}
+            </div>}
 
-            {user && <li className="nav-item">
+            {user && <div className="nav-item">
               <Menu as="div" className="relative z-10">
                 <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
                   Users<FontAwesomeIcon className="ml-1" icon={faCaretDown} />
@@ -150,56 +140,56 @@ export default function Navbar() {
                 <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
                   <Menu.Item>
                     {({ active }) => (
-                      <a
+                      <Link
                         className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
                           active ? "bg-blue-500 text-white" : ""
                         } hover:bg-blue-500 hover:text-white`}
                         href="viewusers"
                       >
                         View Users
-                      </a>
+                      </Link>
                     )}
                   </Menu.Item>
                   
                 </Menu.Items>
               </Menu>
-            </li>}
+            </div>}
 
-            <li className="nav-item">
+            <div className="nav-item">
               <FontAwesomeIcon
                 className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                 icon={faEnvelope}
               />
-            </li>
-            <li className="nav-item">
+            </div>
+            <div className="nav-item">
               <FontAwesomeIcon
                 className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                 icon={faBell}
               />
-            </li>
-            <li className="nav-item">
+            </div>
+            <div className="nav-item">
               <FontAwesomeIcon
                 className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                 icon={faCircleQuestion}
               />
-            </li>
+            </div>
 
             {user && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <button
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                   onClick={handleLogout}
                 >
                   Logout
                 </button>
-              </li>
+              </div>
             )}
 
             {user && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <div className=" h-8 w-8 rounded-3xl">
                   <Link href={`/adminprofile`}>
-                    <img
+                    <Image
                       src='https://cdn3.iconfinder.com/data/icons/user-group-black/100/user-process-512.png'
                       className="h-8 w-8 rounded-3xl"
                       width={500}
@@ -208,9 +198,9 @@ export default function Navbar() {
                     />
                   </Link>
                 </div>
-              </li>
+              </div>
             )}
-          </ul>
+          </div>
         </div>
       </div>
     </div>

@@ -48,11 +48,11 @@ const Page: React.FC<GridProps> = () => {
     <>
       {/* <Navbar /> */}
       
-      {data.length > 0 && <h1 className="text-2xl font-bold">Search results for "{searchId}"</h1>}
+      {data.length > 0 && <h1 className="text-2xl font-bold">Search results for &#34;{searchId}&#34;</h1>}
       {data.length > 0 ? 
       <Grid props={data}/> : 
       <div className="w-full flex justify-center h-screen items-center">
-        <h1 className="text-2xl font-bold">No items found for the search "{searchId}"</h1>
+        <h1 className="text-2xl font-bold">No items found for the search &#34;{searchId}&#34;</h1>
       </div>
       }
     </>
