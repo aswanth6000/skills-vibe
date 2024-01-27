@@ -176,19 +176,21 @@ export default function Login() {
                 {error && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{error}</p>}
                 {load ? <Loading /> : <button
                   type="submit"
-                  className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                  className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                 >
                   Sign in
                 </button>}
-                <p className="ml-44">Or</p>
-                <div className="ml-20">
+                <div className="flex justify-center">
+                <p className="">Or</p>
+                </div>
+                <div className=" flex justify-center">
                 <GoogleButton 
                 label='Continue with Google'
                   onClick={handleGoogleLogin}
                 />
                 </div>
 
-                <p className="text-sm font-light text-white-500 dark:text-white-400">
+                <p className="text-sm font-light text-white-500 flex justify-center dark:text-white-400">
                   Dont have an account yet?{' '}
                   <a href="/signup" className="font-medium text-green-600 hover:underline dark:text-green-500">
                     Sign up

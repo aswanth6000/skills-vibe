@@ -15,18 +15,42 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { Menu } from "@headlessui/react";
-import { button } from "@material-tailwind/react";
+
+
+
+let bearerToken: string | null; 
 
 export default function Navbar() {
+  const [search, setSearch] = useState('')
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const user = useAppSelector((state) => state.auth.value);
   const notification = useAppSelector((state) => state.chat.notification);
-
+  useEffect(() => {
+    bearerToken = localStorage.getItem("token");
+  }, []);
   const [navbarOpen, setNavbarOpen] = useState<Boolean>(false);
   useEffect(() => {
     setNavbarOpen(false);
   }, [user]);
+  const searchGig = async(e: any)=>{
+    if(e.key === "Enter"){
+      e.preventDefault()
+      router.push(`http://localhost:3000/searchGig/${search}`)
+      // console.log("here", search);
+      // const { data } = await axios.get(
+      //   `http://localhost:8001/searchGig?search=${search}`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${bearerToken}`,
+      //     },
+      //   }
+      // );
+      // console.log(data);
+      
+    }
+
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -35,7 +59,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-navwhite border-y-2">
+    <div className="relative flex flex-wrap items-center justify-between px-2 py-3 z-50 bg-navwhite border-y-2">
       <div className="container px-3 mx-auto flex flex-wrap items-center justify-between">
         <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
           <a
@@ -73,7 +97,7 @@ export default function Navbar() {
           }
           id="example-navbar-danger"
         >
-          <ul className="flex flex-col lg:flex-row list-none lg:ml-auto p-2">
+          <div className="flex flex-col lg:flex-row list-none lg:ml-auto p-2">
             <div className="relative mt-3">
               <div className="absolute inset-y-0 mb-3 start-0 flex items-center ps-3 pointer-events-none">
                 <svg
@@ -93,24 +117,28 @@ export default function Navbar() {
                 </svg>
               </div>
             </div>
+            <form action="" onKeyDown={searchGig}>
             <input
               type="text"
               id="search-navbar"
               className="block outline-none w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
               placeholder="Search..."
+              value={search}
+              onChange={(e)=> setSearch(e.target.value)}
             />
+            </form>
             {user && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <a
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                   href="#pablo"
                 >
                   Dashboard
                 </a>
-              </li>
+              </div>
             )}
             {user && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <Menu as="div" className="relative z-10">
                   <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
                     Business
@@ -167,44 +195,19 @@ export default function Navbar() {
                     </Menu.Item>
                   </Menu.Items>
                 </Menu>
-              </li>
+              </div>
             )}
 
-            {user && (
-              <li className="nav-item">
-                <Menu as="div" className="relative z-10">
-                  <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
-                    analytics
-                    <FontAwesomeIcon className="ml-1" icon={faCaretDown} />
-                  </Menu.Button>
-                  <Menu.Items className="absolute right-0 mt-2 space-y-2 bg-white border border-gray-200 rounded shadow-md z-50">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          className={`block px-4 py-2 text-xs leading-5 text-textgrey ${
-                            active ? "bg-blue-500 text-white" : ""
-                          } hover:bg-blue-500 hover:text-white`}
-                          href="/account-settings"
-                        >
-                          Overview
-                        </a>
-                      )}
-                    </Menu.Item>
-                  </Menu.Items>
-                </Menu>
-              </li>
-            )}
-
-            <li className="nav-item">
-              <Link href={`/messagesdisplay`}>
+            <div className="nav-item">
+              <Link href={`/messages`}>
                 <FontAwesomeIcon
                   className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                   icon={faEnvelope}
                 />
               </Link>
-            </li>
+            </div>
             {user && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <Menu as="div" className="relative z-10">
                   <Menu.Button className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75">
                     <FontAwesomeIcon className="ml-1" icon={faBell} />
@@ -229,28 +232,28 @@ export default function Navbar() {
                     </Menu.Item>
                   </Menu.Items>
                 </Menu>
-              </li>
+              </div>
             )}
-            <li className="nav-item">
+            <div className="nav-item">
               <FontAwesomeIcon
                 className="px-3 py-2 flex items-center text-sm uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                 icon={faCircleQuestion}
               />
-            </li>
+            </div>
 
             {user.username && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <button
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-textgrey hover:opacity-75"
                   onClick={handleLogout}
                 >
                   Logout
                 </button>
-              </li>
+              </div>
             )}
 
             {user && (
-              <li className="nav-item">
+              <div className="nav-item">
                 <div className=" h-8 w-8 rounded-3xl">
                   <Link href={`/userprofile/${user._id}`}>
                     <Image
@@ -262,9 +265,9 @@ export default function Navbar() {
                     />
                   </Link>
                 </div>
-              </li>
+              </div>
             )}
-          </ul>
+          </div>
         </div>
       </div>
     </div>

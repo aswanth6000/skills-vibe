@@ -5,6 +5,8 @@ import Loading from "@/components/loading";
 import axios from "axios";
 import { useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Page() {
   const router = useRouter()
@@ -15,6 +17,18 @@ export default function Page() {
   const [load, setLoad] = useState("");
   const [err, setErr] = useState("");
   const [otp, setOtp] = useState("");
+  const otpSendToast = () => {
+    toast.success('OTP send successfully!!', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+    }
   const user = useAppSelector((state) => state.auth.value);
   const email = user.email;
   const handleChangePassword = async(e: React.FormEvent, email: string) => {
@@ -60,8 +74,7 @@ export default function Page() {
           },
         }
       );
-  
-      console.log(response.data);
+      otpSendToast()
     } catch (error) {
       console.error("Error sending OTP:", error);
     }
@@ -103,7 +116,7 @@ export default function Page() {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white-800 dark:border-white-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-white-900 md:text-2xl dark:text-black">
+            <h1 className="text-xl flex justify-center font-bold leading-tight tracking-tight text-white-900 md:text-2xl dark:text-black">
               Change Password
             </h1>
             {step === 1 && (
@@ -113,7 +126,7 @@ export default function Page() {
             )}
             {step === 0 && (
               <div>
-                <h1 className="text-xl font-bold leading-tight tracking-tight text-white-900 md:text-2xl dark:text-black">
+                <h1 className="text-md mb-4 font-semibold leading-tight tracking-tight text-white-900 md:text-2xl dark:text-black">
                   An OTP will be sent to your email {email}
                 </h1>
                 <button
@@ -132,7 +145,7 @@ export default function Page() {
                     htmlFor="otp"
                     className="block mb-2 text-sm font-medium text-white-900 dark:text-black"
                   >
-                    Password
+                    Enter the OTP Recieved
                   </label>
                   <input
                     type="password"
@@ -212,11 +225,23 @@ export default function Page() {
                   <button
                     type="submit"
                     onClick={(e)=>handleChangePassword(e, email)}
-                    className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                    className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                   >
                     Submit
                   </button>
                 )}
+            <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
               </form>
             )}
           </div>

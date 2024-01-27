@@ -99,8 +99,8 @@ export default function Signup() {
   return (
       <section className="bg-white-50 dark:bg-white-900 mt-11 mb-11">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white-800 dark:border-white-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <div className="w-full bg-white rounded-lg shadow-lg mt-12 dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white-800 dark:border-white-700">
+            <div className="p-6 space-y-4 md:space-y-6 sm:p-8 ">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-white-900 md:text-2xl dark:text-black">
                 Sign up to Skill Vibe
               </h1>
@@ -206,19 +206,19 @@ export default function Signup() {
                   {err && <p className='block mb-2 mt-2 text-sm font-medium text-red-600 dark:text-red-600 text-center'>{err}</p> }
                 <button
                   type="submit"
-                  className="w-full text-black bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                  className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                 >
                   Sign up
                 </button>
-                <p className="ml-44">Or</p>
-                <div className="ml-20">
+                <p className="flex justify-center">Or</p>
+                <div className="flex justify-center">
                 <GoogleButton 
                 label='Continue with Google'
                   onClick={handleLogin}
                 />
                 </div>
 
-                <p className="text-sm font-light text-white-500 dark:text-white-400">
+                <p className="text-sm font-light flex justify-center text-white-500 dark:text-white-400">
                   Already have an account?{' '}
                   <a href="/login" className="font-medium text-green-600 hover:underline dark:text-green-500">
                     Login

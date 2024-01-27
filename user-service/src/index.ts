@@ -25,6 +25,8 @@ app.use(userRouter)
 
 const mongoUrl: string | undefined = process.env.MONGO_URL
 
+
+
 if (!mongoUrl) {
     console.error('MongoDB connection URL is not defined.');
     process.exit(1);

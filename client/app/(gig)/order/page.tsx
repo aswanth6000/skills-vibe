@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { Button, Modal } from "antd";
+import NextBreadcrumb from "@/components/NextBreadcrumb";
 
 interface OrderData {
   buyerId: string;
@@ -28,39 +30,77 @@ interface OrderData {
 }
 let bearerToken: string | null;
 
-
 export default function Page() {
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [file, setFile] = useState<File | undefined>(undefined);
+  const [modalText, setModalText] = useState("Content of the modal");
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleOk = async (orderData: any) => {
+    const formData = {
+      file,
+      orderId: orderData,
+    };
+    try {
+      setConfirmLoading(true);
+      const response = await axios.post(
+        "http://localhost:8003/deliver",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        }
+      );
+      console.log(response);
+      setConfirmLoading(false);
+      if (!confirmLoading) {
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpen(false);
+  };
+
   const [data, setData] = useState<OrderData[]>([]);
 
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
-  }, [])
+  }, []);
 
-    const handleOrder = async (userId: any) => {
-      console.log("handle order user Id",userId);
-      
-      try {
-        const response = await axios.post(
-          `http://localhost:8004/accesschat`,
-          { userId },
-          {
-            headers: {
-              Authorization: `Bearer ${bearerToken}`,
-            },
-          }
-        );
-        const userData = response.data;
-        
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const handleOrder = async (userId: any) => {
+    console.log("handle order user Id", userId);
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8004/accesschat`,
+        { userId },
+        {
+          headers: {
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        }
+      );
+      const userData = response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handleApprove = async (orderId: string) => {
     const sendStatus = {
       status: "ongoing",
       orderId: orderId,
     };
-  
 
     const response = await axios.post(
       "http://localhost:8003/orderAccept",
@@ -114,11 +154,19 @@ export default function Page() {
   return (
     <div>
       <Navbar />
+      <NextBreadcrumb
+        homeElement={'Home'}
+        separator={<span> /  </span>}
+        activeClasses='text-amber-500'
+        containerClasses='flex py-2 bg-bodywhite' 
+        listClasses='hover:underline mx-2 font-bold'
+        capitalizeLinks
+      />
       <div className="flex justify-center content-center items-center flex-col">
         {data.map((x) => (
           <div
             key={x._id}
-            className="m-4 w-fit  bg-bodywhite outline-dashed h-44 rounded-2xl"
+            className="m-4 w-fit shadow-md  bg-bodywhite h-44 rounded-2xl"
           >
             <div className="flex justify-between m-3">
               <div className="flex flex-col  align-middle justify-center items-center">
@@ -129,7 +177,7 @@ export default function Page() {
                   height={500}
                   alt="Picture of the buyer"
                 />
-                <h2>{x.buyername}</h2>
+                <h2 className="font-semibold">{x.buyername}</h2>
               </div>
               <div className="flex flex-col  align-middle justify-center">
                 <div>
@@ -146,26 +194,51 @@ export default function Page() {
                   x.orderStatus === "failed") && (
                   <>
                     <button
-                      className="h-10 w-60 bg-green-400 hover:bg-green-600 rounded-2xl m-1"
+                      className="h-10 w-60 bg-green-400 shadow-md font-semibold  hover:bg-green-600 rounded-2xl m-1"
                       onClick={() => handleApprove(x._id)}
                     >
                       Approve
                     </button>
                     <button
-                      className="h-10 w-60 bg-red-400 hover:bg-red-600 rounded-2xl m-1"
+                      className="h-10 w-60 bg-red-400 shadow-lg font-semibold  hover:bg-red-600 rounded-2xl m-1"
                       onClick={() => handleReject(x._id)}
                     >
                       Reject
                     </button>
                   </>
                 )}
+                {(x.orderStatus === "ongoing" ||
+                  x.orderStatus === "review") && (
+                  <div>
+                    <Button
+                      className="h-10 w-60 bg-green-400 font-semibold shadow-md hover:bg-green-600 rounded-2xl m-1 flex justify-center items-center"
+                      onClick={showModal}
+                    >
+                      Deliver
+                    </Button>
+                    <Modal
+                      title="Select the file to deliver"
+                      open={open}
+                      onOk={() => handleOk(x._id)}
+                      confirmLoading={confirmLoading}
+                      onCancel={handleCancel}
+                      okButtonProps={{
+                        className: "bg-blue-600 text-white hover:bg-blue-300 font-semibold",
+                      }}
+                    >
+                      <input
+                        type="file"
+                        name="file"
+                        onChange={(e) => setFile(e.target.files?.[0])}
+                      />
+                    </Modal>
+                  </div>
+                )}
                 <Link
+                  className="h-10 w-60 bg-blue-400  font-semibold hover:bg-blue-600 shadow-md rounded-2xl m-1 flex justify-center items-center"
                   href={`/messages`}
                 >
-                  <button className="h-10 w-60 bg-blue-400 hover:bg-blue-600 rounded-2xl m-1"
-                  onClick={()=>handleOrder(x.buyerId)}>
-
-                  </button>
+                  <button onClick={() => handleOrder(x.buyerId)}></button>
                   Message
                 </Link>
               </div>

@@ -7,6 +7,8 @@ import dotenv from 'dotenv'
 import jwt, { JwtPayload, Secret, GetPublicKeyOrSecret } from 'jsonwebtoken'
 dotenv.config()
 import crypto from 'crypto'
+import {v4 as uuidv4} from 'uuid'
+import transporter from '../config/nodeMailer';
 const jwtSecret: Secret | GetPublicKeyOrSecret = process.env.JWT_KEY || 'defaultkey'
 
 interface OrderData {
@@ -349,7 +351,7 @@ const orderController = {
             }
             const decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
             const userId = decodedToken.userId;
-            const order = await OrderModel.find({ buyerId: userId });
+            const order = await OrderModel.find({ buyerId: userId }).sort({date: -1});
             return res.status(200).json(order);
         } catch (error) {
             console.error(error);
@@ -375,8 +377,11 @@ const orderController = {
     },
     async viewOrders(req: Request, res: Response){
         try {
-            const orders = await OrderModel.find()
-            res.status(200).json({message: 'success', orders})
+            const PAGE_SIZE = 10
+            const page: number = parseInt(req.query.page as string || '0', 10);            
+            const total = await OrderModel.countDocuments({})
+            const orders = await OrderModel.find({}).limit(PAGE_SIZE).skip(PAGE_SIZE * page)
+            res.status(200).json({message: 'success', orders, totalPages: Math.ceil(total / PAGE_SIZE)})
         } catch (error) {
             console.error(error);
             res.status(501).json({message: 'internal server error'})
@@ -386,7 +391,7 @@ const orderController = {
         const {orderId} = req.body;
         console.log(orderId);
         try {
-            const order = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'cancelled'}, {new:true})
+            const order = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'cancelled', paymentStatus: 'refund initiated'}, {new:true})
             res.status(200).json({message: 'order cancelled', order})
         } catch (error) {
             console.error(error);
@@ -435,7 +440,104 @@ const orderController = {
             console.error(error);
             
         }
-    }
+    },
+    async deliver(req: Request, res: Response){
+        const file = req.file;
+        const {orderId} = req.body;
+        const order = await OrderModel.findById(orderId);        
+        const mailOptions = {
+            from: order?.sellerEmail,
+            to: order?.buyeremail ,
+            subject: `Delivery of your order ${order?.gigTitle}` ,
+            text: 'Thank for your order at skills vibe',
+            attachments: [
+                {
+                    filename: file?.originalname ,
+                    content: file?.buffer ,
+                },
+            ],
+        };
+        const odr = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'completed'}, {new: true});
+
+        
+        try {
+            const info = await transporter.sendMail(mailOptions);
+            console.log('Email sent:', info.response);
+            return res.status(200).json({ message: 'Email sent successfully' });
+          } catch (error) {
+            console.error('Error sending email:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+          }
+    },
+    async orderReview(req: Request, res: Response){
+        try {
+            const {orderId} = req.body;
+            const order = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'review'}, {new: true})
+            return res.status(200).json({message: 'Order status not accepted'})
+        } catch (error) {
+            console.error(error)
+            res.status(501).json({message: 'Internal server error'})
+        }
+    },
+    async earnings(req: Request, res: Response) {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+          return res.status(401).json({ error: 'Unauthorized - Token not provided' });
+        }
+      
+        let decodedToken: JwtPayload;
+      
+        try {
+          decodedToken = jwt.verify(token, jwtSecret) as JwtPayload;
+        } catch (jwtError) {
+          console.log('JWT Verification Error:', jwtError);
+          return res.status(401).json({ error: 'Unauthorized - Invalid token' });
+        }
+      
+        try {
+          const result = await OrderModel.aggregate([
+            {
+              $match: {
+                sellerId: decodedToken.userId,
+                orderStatus: 'withdrawable'
+              }
+            },
+            {
+              $group: {
+                _id: '$sellerId',
+                totalPrice: { $sum: '$gigPrice' }
+              }
+            }
+          ]);      
+          res.status(200).json(result);
+        } catch (error) {
+          console.error('Error in aggregation:', error);
+          res.status(500).json({ error: 'Internal Server Error' });
+        }
+      },
+      async viewOrderDetail(req: Request, res: Response){
+        const {orderId} = req.body
+        try {
+            const order = await OrderModel.findById(orderId);
+            res.status(200).json(order)
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: "internal server error", error})
+        }
+        
+      },
+      async withdraw(req: Request, res: Response){
+        const {orderId, paymentStatus} = req.body
+        console.log(req.body);
+        
+        try {
+            const order = await OrderModel.findByIdAndUpdate(orderId, {paymentStatus}, {new: true})
+            res.status(200).json(order)
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: "internal server error"})
+        }
+      }
 }
 
 export default orderController;

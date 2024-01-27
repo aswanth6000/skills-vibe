@@ -1,18 +1,18 @@
-'use client'
-import { CarouselDefault } from '@/components/carousel'
-import axios from 'axios'
-import { FC } from 'react';
-import 'swiper/css';
-import Image from 'next/image';
-import 'swiper/css';
-import Navbar from '@/components/navbar';
-import Empty from '@/components/empty';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
-import React from 'react';
-import Cards from '@/components/cards';
-import { Gigs } from '@/types/gigTypes';
-import Link from 'next/link';
+"use client";
+import { CarouselDefault } from "@/components/carousel";
+import axios from "axios";
+import { FC } from "react";
+import "swiper/css";
+import Image from "next/image";
+import "swiper/css";
+import Navbar from "@/components/navbar";
+import Empty from "@/components/empty";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import React from "react";
+import { Gigs } from "@/types/gigTypes";
+import Link from "next/link";
+import { Skeleton } from "antd";
 
 interface GridProps {
   props: Gigs[];
@@ -20,13 +20,84 @@ interface GridProps {
 
 const Grid: React.FC<GridProps> = ({ props }) => {
   if (!props) {
-    return null;
+    return (
+      <div className="flex flex-col">
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+          <div className="w-56 h-auto flex flex-col justify-start rounded-2xl mt-3 mb-3 ml-3">
+            <Skeleton active />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className='flex flex-row flex-wrap mb-5'>
       {props.map((x) => (
-        <div key={x.refId} className='w-72 h-auto flex flex-col justify-start border rounded mt-3 mb-3 ml-3'>
+        <div key={x.refId} className='w-56 h-auto flex flex-col justify-start border rounded-2xl mt-3 mb-3 ml-3'>
           <div>
             {/* Initialize Swiper component for image carousel */}
             <Swiper
@@ -39,7 +110,9 @@ const Grid: React.FC<GridProps> = ({ props }) => {
             >
               <SwiperSlide>
                 <div>
-                  <img
+                  <Image
+                  height={500}
+                  width={500}
                     src={x.image1}
                     className='w-full h-36 object-fill m-0 p-0 rounded-2xl'
                     alt='Slide 1'
@@ -48,7 +121,9 @@ const Grid: React.FC<GridProps> = ({ props }) => {
               </SwiperSlide>
               <SwiperSlide>
                 <div>
-                  <img
+                  <Image
+                  height={500}
+                  width={500}
                     src={x.image2}
                     className='w-full h-36 object-fill m-0 p-0 rounded-2xl'
                     alt='Slide 2'
@@ -57,7 +132,9 @@ const Grid: React.FC<GridProps> = ({ props }) => {
               </SwiperSlide>
               <SwiperSlide>
                 <div>
-                  <img
+                  <Image
+                  height={500}
+                  width={500}
                     src={x.image3}
                     className='w-full h-36 object-fill m-0 p-0 rounded-sm'
                     alt='Slide 3'
@@ -71,7 +148,7 @@ const Grid: React.FC<GridProps> = ({ props }) => {
           </div>
           <div>
             {/* You can replace this placeholder with your actual star rating component */}
-            <p className='pl-3'>Star rating here</p>
+            {/* <p className='pl-3'>{x.gigdescription}</p> */}
           </div>
           <div>
             <p className='pl-3 font-semibold'>From: {x.price}</p>
@@ -88,7 +165,6 @@ const Grid: React.FC<GridProps> = ({ props }) => {
             </button>
             </Link>
           </div>
-          
 
         </div>
       ))}

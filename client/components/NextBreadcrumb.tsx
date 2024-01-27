@@ -22,7 +22,7 @@ const NextBreadcrumb = ({homeElement, separator, containerClasses, listClasses, 
     return (
         <div>
             <ul className={containerClasses}>
-                <li className={listClasses}><Link href={'/'}>{homeElement}</Link></li>
+                <li className={listClasses}><Link href={'/userhome'}>{homeElement}</Link></li>
                 {pathNames.length > 0 && separator}
             {
                 pathNames.map( (link, index) => {

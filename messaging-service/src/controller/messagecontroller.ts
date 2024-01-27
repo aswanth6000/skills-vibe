@@ -29,6 +29,7 @@ const messageController = {
   },
   async userUpdateSave() {
     const userData: any = await userMessageConsumers.userUpdatedMessageConsumer()
+    console.log("userData", userData);
     await UserModel.findByIdAndUpdate(userData._id, { userData }, { new: true })
   },
   async accessChat(req: Request, res: Response) {

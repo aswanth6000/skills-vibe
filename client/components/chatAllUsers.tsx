@@ -19,7 +19,7 @@ export default function ChatAllUsers() {
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
     setLoggedUser(userAuth);
-  });
+  }, [loggedUser, userAuth]);
   console.log("Logged user", loggedUser);
 
   const selectedChat = useAppSelector((state: any) => state.chat.selectedChat);
@@ -149,7 +149,12 @@ export default function ChatAllUsers() {
                 </div>
                 {x.latestMessage && (
                   <div className="text-sm font-semibold">
-                    <b>{loggedUser.username !== x.latestMessage.sender.username ? x.latestMessage.sender.username : 'you' } : </b>
+                    <b>
+                      {loggedUser.username !== x.latestMessage.sender.username
+                        ? x.latestMessage.sender.username
+                        : "you"}{" "}
+                      :{" "}
+                    </b>
                     {x.latestMessage.content.length > 50
                       ? x.latestMessage.content.substring(0, 51) + "..."
                       : x.latestMessage.content}
