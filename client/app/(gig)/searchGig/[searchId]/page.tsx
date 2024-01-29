@@ -9,6 +9,9 @@ import Image from "next/image";
 import { Gigs } from "@/types/gigTypes";
 import Link from "next/link";
 import Grid from "@/components/grid";
+import type { MenuProps } from 'antd';
+import { Button, Dropdown, Space } from 'antd';
+
 
 
 let bearerToken: string | null;
@@ -20,7 +23,9 @@ const Page: React.FC<GridProps> = () => {
   const [data, setData] = useState<Gigs[]>([])
   const params = useParams();
   const searchId = params.searchId;
-  console.log(searchId);
+  const [sort, setSort] = useState('Default')
+  const [filterPrice, setFilterPrice] = useState(0)
+
 
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
@@ -29,7 +34,7 @@ const Page: React.FC<GridProps> = () => {
   useEffect(()=>{
    async function fetchData (){
       const { data } = await axios.get(
-        `http://localhost:8001/searchGig/${searchId}`,
+        `http://localhost:8001/searchGig/${searchId}?sort=${sort}&price=${filterPrice}`,
         {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
@@ -39,22 +44,61 @@ const Page: React.FC<GridProps> = () => {
         setData(data)
     }
     fetchData()
-  }, [])
+  }, [sort, filterPrice])
 
-  console.log(data);
+  const onClick: MenuProps['onClick'] = ({ key }) => {
+    setSort(key)
+  };
+  console.log("Sort: ", sort);
+
+  const items: MenuProps['items'] = [
+    {
+      key: 'Default',
+      label: (
+        <p >
+          Default
+        </p>
+      ),
+    },
+    {
+      key: 'Low to high',
+      label: (
+        <p>
+          Low to high
+        </p>
+      ),
+    },
+    {
+      key: 'High to low',
+      label: (
+        <p>
+          High to low
+        </p>
+      ),
+    },
+  ];
   
- 
+   
   return (
     <>
       {/* <Navbar /> */}
-      
-      {data.length > 0 && <h1 className="text-2xl font-bold">Search results for &#34;{searchId}&#34;</h1>}
+      <div className="flex flex-row">
+      <div className="h-96 w-56 bg-white shadow-md ml-6 mt-6 flex flex-col">       
+      {data.length > 0 && 
+      <h1 className="text-md font-bold ml-4">Search results for &#34;{searchId}&#34;</h1>}
+      <h1 className="font-semibold m-2">Sort by: </h1>
+       <Dropdown menu={{ items, onClick }} className="m-2" placement="bottom">
+        <Button onClick={(e)=> e.preventDefault()}>{sort}</Button>
+      </Dropdown>
+      <h1 className="font-semibold m-2">Filter by price</h1>
+      </div>
       {data.length > 0 ? 
       <Grid props={data}/> : 
       <div className="w-full flex justify-center h-screen items-center">
         <h1 className="text-2xl font-bold">No items found for the search &#34;{searchId}&#34;</h1>
       </div>
       }
+    </div>
     </>
   );
 }

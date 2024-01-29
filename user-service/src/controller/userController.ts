@@ -314,6 +314,7 @@ const userController = {
       return res.status(401).json({ error: 'Unauthorized - Invalid token' });
     }
     try {
+      const sort = req.query.sort;      
       const keyword = req.params.searchId
         ? {
           $or: [
@@ -322,8 +323,18 @@ const userController = {
           ],
         }
         : {};
-      const users = await GigUserModel.find(keyword).find({ _id: { $ne: decodedToken.userId } })
-      res.status(200).json(users)
+
+        if(sort === 'High to low'){
+          const users = await GigUserModel.find(keyword).find({ _id: { $ne: decodedToken.userId } }).sort({price: -1})
+          res.status(200).json(users)
+        }else if(sort === 'Low to high'){
+          const users = await GigUserModel.find(keyword).find({ _id: { $ne: decodedToken.userId } }).sort({price: 1})
+          res.status(200).json(users)
+        }else{
+          const users = await GigUserModel.find(keyword).find({ _id: { $ne: decodedToken.userId } })
+          res.status(200).json(users)
+        }
+
     } catch (error) {
       res.status(501).json({ error: "Internal server error" })
       console.error(error)

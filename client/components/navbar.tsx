@@ -37,17 +37,6 @@ export default function Navbar() {
     if(e.key === "Enter"){
       e.preventDefault()
       router.push(`http://localhost:3000/searchGig/${search}`)
-      // console.log("here", search);
-      // const { data } = await axios.get(
-      //   `http://localhost:8001/searchGig?search=${search}`,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${bearerToken}`,
-      //     },
-      //   }
-      // );
-      // console.log(data);
-      
     }
 
   }
