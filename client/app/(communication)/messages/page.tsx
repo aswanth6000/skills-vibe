@@ -282,6 +282,24 @@ export default function Page() {
     }
   };
 
+  const formatDate = (d: Date): string => {
+    const date = new Date(d);
+    const year = date.getFullYear().toString().slice(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours: any = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const period = (date.getHours() >= 12) ? 'PM' : 'AM';
+    const formattedDate = `${day}/${month}/${year} ${hours % 12}:${minutes} ${period}`;
+    return formattedDate;
+  };
+  
+  // Example usage:
+  const exampleDate = new Date("2024-01-19T10:07:47.469Z");
+  const formattedExampleDate = formatDate(exampleDate);
+  console.log(formattedExampleDate);
+  
+
 
   return (
     <div>
@@ -344,7 +362,7 @@ export default function Page() {
                         maxWidth: "75%",
                       }}
                     >
-                      {m.content}
+                      {m.content} <div style={{fontSize: '10px', color: "grey", marginTop: "7px" }}>{formatDate(m.updatedAt)}</div>
                     </span>
                   </div>
                 ))}

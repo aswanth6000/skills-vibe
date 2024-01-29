@@ -43,7 +43,7 @@ const Page: React.FC<GridProps> = () => {
 
   console.log(data);
   
-
+ 
   return (
     <>
       {/* <Navbar /> */}

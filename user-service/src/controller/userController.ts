@@ -11,6 +11,7 @@ import orderPublisher from "../events/publisher/orderPublisher";
 dotenv.config();
 import { ExtendedRequest } from "../types/usertypes";
 import userMessagePublisher from "../events/publisher/userMessagePublisher";
+import { title } from "process";
 
 
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
@@ -317,7 +318,7 @@ const userController = {
         ? {
           $or: [
             { username: { $regex: req.params.searchId, $options: "i" } },
-            { username: { $regex: req.params.searchId, $options: "i" } }
+            { title: { $regex: req.params.searchId, $options: "i" } }
           ],
         }
         : {};
