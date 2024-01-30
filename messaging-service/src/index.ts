@@ -18,10 +18,10 @@ app.use(router);
 
 mongoose.connect("mongodb://localhost/messageservice")
 .then(() => {
-    console.log("Product-service database connected");
+    console.log("Message-service database connected");
 })
 .catch((err) => {
-    console.log("database connection failed :", err);
+    console.log("database connection failed :", err); 
 })
 
 const server = app.listen('8004', () => {
