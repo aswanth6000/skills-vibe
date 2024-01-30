@@ -11,6 +11,7 @@ import Link from "next/link";
 import Grid from "@/components/grid";
 import type { MenuProps } from 'antd';
 import { Button, Dropdown, Space } from 'antd';
+import { Col, InputNumber, Row, Slider } from 'antd';
 
 
 
@@ -24,7 +25,7 @@ const Page: React.FC<GridProps> = () => {
   const params = useParams();
   const searchId = params.searchId;
   const [sort, setSort] = useState('Default')
-  const [filterPrice, setFilterPrice] = useState(0)
+  const [filterPrice, setFilterPrice] = useState(500)
 
 
   useEffect(() => {
@@ -49,8 +50,11 @@ const Page: React.FC<GridProps> = () => {
   const onClick: MenuProps['onClick'] = ({ key }) => {
     setSort(key)
   };
-  console.log("Sort: ", sort);
-
+  const onChange = (newValue: number) => {
+    setFilterPrice(newValue);
+  };
+  console.log(filterPrice);
+  
   const items: MenuProps['items'] = [
     {
       key: 'Default',
@@ -90,7 +94,15 @@ const Page: React.FC<GridProps> = () => {
        <Dropdown menu={{ items, onClick }} className="m-2" placement="bottom">
         <Button onClick={(e)=> e.preventDefault()}>{sort}</Button>
       </Dropdown>
-      <h1 className="font-semibold m-2">Filter by price</h1>
+      <h1 className="font-semibold m-2">Filter by price ₹ {filterPrice}</h1>
+      <Col span={12}>
+        <Slider
+          min={500}
+          max={10000}
+          onChange={onChange}
+          value={typeof filterPrice === 'number' ? filterPrice : 0}
+        />
+      </Col>
       </div>
       {data.length > 0 ? 
       <Grid props={data}/> : 
