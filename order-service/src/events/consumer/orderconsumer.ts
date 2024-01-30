@@ -1,5 +1,5 @@
 import { connection } from 'mongoose';
-import RabbitMQ from '../../../../common/src/messages/rabbitMQ'
+import RabbitMQ from '../messages/rabbitMQ'
 
 const orderConsumer = {
     async orderDetailsConsumer(){
@@ -17,7 +17,7 @@ const orderConsumer = {
             const routingKey = 'order-created';
             await channel.bindQueue(queue ,exchangeName, routingKey);
             return new Promise((resolve ,reject)=>{
-                channel.consume(queue, (message)=>{
+                channel.consume(queue, (message: any)=>{
                     if(message){
                         try {
                             const createdGig: any = JSON.parse(message.content.toString());

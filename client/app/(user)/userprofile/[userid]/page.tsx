@@ -105,7 +105,7 @@ const UserProfileEdit: React.FC = () => {
     try {
       setLoad(true);
       const response = await axios.put(
-        "http://localhost:8001/userProfileUpdate",
+        "/userProfileUpdate",
         updatedUserData,
         {
           headers: {
