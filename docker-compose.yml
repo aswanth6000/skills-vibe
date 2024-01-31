@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  user-service:
+    image: aswanth600/user:latest
+    container_name: user-container
+    ports:
+      - "8001:8001"
+    networks:
+      - my-network  
+
+  order-service:
+    image: aswanth600/order:latest
+    container_name: order-container
+    ports:
+      - "8003:8003"
+    networks:
+      - my-network  
+
+  gig-service:
+    image: aswanth600/gig:latest
+    container_name: gig-container
+    ports:
+      - "8002:8002"
+    networks:
+      - my-network  
+
+  message-service:
+    image: aswanth600/message:latest
+    container_name: message-container
+    ports:
+      - "8004:8004"
+    networks:
+      - my-network  
+
+  api-service:
+    image: aswanth600/api:latest
+    container_name: api-container
+    ports:
+      - "8000:8000"
+    networks:
+      - my-network  
+
+networks:
+  my-network:
