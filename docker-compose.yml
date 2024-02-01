@@ -1,6 +1,14 @@
 version: '3.8'
 
 services:
+  api-service:
+    image: aswanth600/api:latest
+    container_name: api-container
+    ports:
+      - "8080:8080"
+    networks:
+      - my-network  
+
   user-service:
     image: aswanth600/user:latest
     container_name: user-container
@@ -33,13 +41,7 @@ services:
     networks:
       - my-network  
 
-  api-service:
-    image: aswanth600/api:latest
-    container_name: api-container
-    ports:
-      - "8000:8000"
-    networks:
-      - my-network  
 
 networks:
   my-network:
+    driver: bridge
