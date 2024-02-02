@@ -2,7 +2,7 @@
 import Navbar from "@/components/navbar";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import axios from "axios";
+import axios from "../../../../config/axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import Image from "next/image";
@@ -35,7 +35,7 @@ const Page: React.FC<GridProps> = () => {
   useEffect(()=>{
    async function fetchData (){
       const { data } = await axios.get(
-        `http://localhost:8001/searchGig/${searchId}?sort=${sort}&price=${filterPrice}`,
+        `/user/searchGig/${searchId}?sort=${sort}&price=${filterPrice}`,
         {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
@@ -45,7 +45,7 @@ const Page: React.FC<GridProps> = () => {
         setData(data)
     }
     fetchData()
-  }, [sort, filterPrice])
+  }, [sort, filterPrice, searchId])
 
   const onClick: MenuProps['onClick'] = ({ key }) => {
     setSort(key)

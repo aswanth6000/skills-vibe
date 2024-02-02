@@ -15,7 +15,7 @@ function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/viewallgigs?page=${pageNumber}`);
+        const response = await axios.get(`/user/viewallgigs?page=${pageNumber}`);
         if (response.status === 200) {
           setGigData(response.data.allgigs);
           setTotalPages(response.data.totalPages)
@@ -36,7 +36,7 @@ function Page() {
     };
     try {
       const response = await axios.post(
-        "http://localhost:8001/gigstatus",
+        "/user/gigstatus",
         status,
         {
           headers: {

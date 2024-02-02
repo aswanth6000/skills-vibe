@@ -21,7 +21,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const response = await axios.get("/getallgig", {
+        const response = await axios.get("/user/getallgig", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export default function Home() {
           }}
         >
           <h1 className="font-semibold mt-8 text-white text-3xl ml-7">
-            Welcome back, Aswanth 👋
+            Welcome back, {user.username} 👋
           </h1>
           <div className="flex justify-evenly mt-5 pl-4">
             <div className="w-4/12 h-28 rounded-xl flex items-center flex-col " style={stl}>

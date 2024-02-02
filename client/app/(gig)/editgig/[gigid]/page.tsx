@@ -33,7 +33,7 @@ const MultiStepForm: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/editgig/${gigid}`,
+          `/user/editgig/${gigid}`,
           {
             headers: {
               Authorization: `Bearer ${bearerToken}`,

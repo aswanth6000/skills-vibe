@@ -67,7 +67,7 @@ const UserProfileEdit: React.FC = () => {
     if (bearerToken) {
       const fetchData = async () => {
         try {
-          const response = await axios.get("/userhome", {
+          const response = await axios.get("/user/userhome", {
             headers: {
               Authorization: `Bearer ${bearerToken}`,
             },
@@ -105,7 +105,7 @@ const UserProfileEdit: React.FC = () => {
     try {
       setLoad(true);
       const response = await axios.put(
-        "/userProfileUpdate",
+        "/user/userProfileUpdate",
         updatedUserData,
         {
           headers: {

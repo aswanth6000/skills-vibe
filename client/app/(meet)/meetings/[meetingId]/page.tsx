@@ -21,9 +21,6 @@ function Page() {
       showScreenSharingButton: true
     })
   } 
-  
-
-  
   return (
     <div>
       <div ref={myMeeting}></div>

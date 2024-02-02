@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../../config/axios";
 import Navbar from "@/components/navbar";
 import NextBreadcrumb from "@/components/NextBreadcrumb";
 
@@ -39,7 +39,7 @@ const Page = () => {
     const fetchEarnings = async() =>{
       try {
         const { data } = await axios.get(
-          `http://localhost:8003/earnings`,
+          `/order/earnings`,
           {
             headers: {
               Authorization: `Bearer ${bearerToken}`,
@@ -60,7 +60,7 @@ const Page = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get<OrderData[]>(
-          "http://localhost:8003/orders",
+          "/order/orders",
           {
             headers: {
               Authorization: `Bearer ${token}`,

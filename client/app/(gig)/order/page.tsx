@@ -1,7 +1,7 @@
 "use client";
 import Navbar from "@/components/navbar";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../../config/axios";
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Modal } from "antd";
@@ -48,7 +48,7 @@ export default function Page() {
     try {
       setConfirmLoading(true);
       const response = await axios.post(
-        "http://localhost:8003/deliver",
+        "/order/deliver",
         formData,
         {
           headers: {
@@ -83,7 +83,7 @@ export default function Page() {
 
     try {
       const response = await axios.post(
-        `http://localhost:8004/accesschat`,
+        `/message/accesschat`,
         { userId },
         {
           headers: {
@@ -103,7 +103,7 @@ export default function Page() {
     };
 
     const response = await axios.post(
-      "http://localhost:8003/orderAccept",
+      "/order/orderAccept",
       sendStatus,
       {
         headers: {
@@ -119,7 +119,7 @@ export default function Page() {
       orderId: orderId,
     };
     const response = await axios.post(
-      "http://localhost:8003/orderReject",
+      "/order/orderReject",
       sendStatus,
       {
         headers: {
@@ -135,7 +135,7 @@ export default function Page() {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get<OrderData[]>(
-          "http://localhost:8003/orders",
+          "/order/orders",
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -1,12 +1,7 @@
 "use client";
-import { CarouselDefault } from "@/components/carousel";
-import axios from "axios";
-import { FC } from "react";
 import "swiper/css";
 import Image from "next/image";
 import "swiper/css";
-import Navbar from "@/components/navbar";
-import Empty from "@/components/empty";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import React from "react";

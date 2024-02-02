@@ -8,7 +8,7 @@ import { EmojiStyle } from "emoji-picker-react";
 import { EmojiClickData } from "emoji-picker-react";
 import Lottie from "lottie-react";
 import amimationData from "../../../components/lotties/typingAnimation.json";
-import axios from "axios";
+import axios from "../../../config/axios";
 import { useParams } from "next/navigation";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
@@ -31,7 +31,7 @@ import io from "socket.io-client";
 import Navbar from "@/components/navbar";
 import { useRouter } from "next/navigation";
 
-const ENDPOINT = "http://localhost:8004";
+const ENDPOINT = "http://message-service:8004";
 var socket: any, selectedChatCompare: any;
 
 interface Pokedex {
@@ -80,7 +80,7 @@ export default function Page() {
   useEffect(() => {
     bearerToken = localStorage.getItem("token");
     setLoggedUser(userAuth);
-  }, []);
+  }, [userAuth]);
   const router = useRouter()
   
   const [modal1Open, setModal1Open] = useState(false);
@@ -120,7 +120,7 @@ export default function Page() {
   };
   const handleGenerateCode =async () =>{
     try {
-      const {data} = await axios.get(`http://localhost:8004/generateMeeting`);
+      const {data} = await axios.get(`/message/generateMeeting`);
       setMeetingCode(data)
     } catch (error) {
       console.error(error);
@@ -128,18 +128,15 @@ export default function Page() {
   }
   const handleJoinRoom = () =>{
     
-    router.push(`/meetings/${customMeeting}`)
+    router.push(`/message/meetings/${customMeeting}`)
   }
   const customRoomCode = (e:any) =>{
     setCustommeeting(e.target.value)
   }
 
-  console.log(meetingCode);
   
 
-  const handeleCopy = async (meetingCode: any) =>{
-    console.log("meeeeeee:", meetingCode);
-    
+  const handeleCopy = async (meetingCode: any) =>{    
     try {
       await navigator.clipboard.writeText(meetingCode);
       alert('Text copied to clipboard:');
@@ -184,7 +181,7 @@ export default function Page() {
       const fetchChats = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:8004/getmessage/${selectedChat._id}`,
+            `/message/getmessage/${selectedChat._id}`,
             {
               headers: {
                 Authorization: `Bearer ${bearerToken}`,
@@ -234,7 +231,7 @@ export default function Page() {
     if (bearerToken) {
       const fetchData = async () => {
         try {
-          const response = await axios.get(`http://localhost:8004/fetchchat`, {
+          const response = await axios.get(`/message/fetchchat`, {
             headers: {
               Authorization: `Bearer ${bearerToken}`,
             },
@@ -262,7 +259,7 @@ export default function Page() {
         console.log(sendData);
         setNewMessage("");
         const { data } = await axios.post(
-          "http://localhost:8004/sendmessage",
+          "/message/sendmessage",
           sendData,
           {
             headers: {

@@ -1,7 +1,7 @@
 "use client";
 import Navbar from "@/components/navbar";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../../config/axios"
 import Link from "next/link";
 import { Tooltip } from "antd";
 import NextBreadcrumb from "@/components/NextBreadcrumb";
@@ -61,7 +61,7 @@ export default function Page() {
     setReview(true);
     try {
       const response = await axios.post(
-        `http://localhost:8003/orderReview`,
+        `/order/orderReview`,
         { orderId },
         {
           headers: {
@@ -92,7 +92,7 @@ export default function Page() {
   const handleOrder = async (userId: any) => {
     try {
       const response = await axios.post(
-        `http://localhost:8004/accesschat`,
+        `/message/accesschat`,
         { userId },
         {
           headers: {
@@ -111,7 +111,7 @@ export default function Page() {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get<OrderData[]>(
-          "http://localhost:8003/myorders",
+          "/order/myorders",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -134,7 +134,7 @@ export default function Page() {
       orderId: orderId,
     };
     const response = await axios.post(
-      "http://localhost:8003/ordercancel",
+      "/order/ordercancel",
       sendId,
       {
         headers: {

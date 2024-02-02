@@ -1,7 +1,7 @@
 "use client";
 import Head from "next/head";
 import Link from "next/link";
-import axios from "axios";
+import axios from "../../../../config/axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Script from "next/script";
@@ -39,11 +39,10 @@ const OrderConfirmation: React.FC = () => {
   const gigid = params.orderId;
 
   useEffect(() => {
-    console.log(bearerToken);
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/viewgig/${gigid}`,
+          `/user/viewgig/${gigid}`,
           {
             headers: {
               Authorization: `Bearer ${bearerToken}`,
@@ -57,14 +56,12 @@ const OrderConfirmation: React.FC = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [gigid]);
 
   useEffect(()=>{
     async function buyNow(){
-      console.log("klik");
-      console.log(bearerToken);
       try {
-        const response = await axios.get(`http://localhost:8000/ordergig/${gigid}`, {
+        const response = await axios.get(`/user/ordergig/${gigid}`, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
             "Content-Type": "application/json",
@@ -83,14 +80,14 @@ const OrderConfirmation: React.FC = () => {
     try {
       const {
         data: { key },
-      } = await axios.get("http://localhost:8003/getkey");
+      } = await axios.get("/order/getkey");
       console.log('let:',key);
       const sendData = {
         ...data,
       };      
 
       const response = await axios.post(
-        `http://localhost:8003/payment/${gigid}`, sendData, {
+        `/order/payment/${gigid}`, sendData, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -107,7 +104,7 @@ const OrderConfirmation: React.FC = () => {
           description: "Razorpay Tutorial",
           image: "https://img.freepik.com/premium-vector/sv-letter-logo-design-black-background-initial-monogram-letter-sv-logo-design-vector-template_634196-1210.jpg",
           order_id: response.data.order.id,
-          callback_url: "http://localhost:8003/paymentverification",
+          callback_url: "/order/paymentverification",
           prefill: {
             name: "Sagar Gupta",
             email: "anandguptasir@gmail.com",

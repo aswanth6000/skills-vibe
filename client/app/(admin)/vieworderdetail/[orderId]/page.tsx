@@ -93,7 +93,7 @@ function Page() {
   const handleWithdraw = async() =>{
 
     const { data } = await axios.post(
-        `http://localhost:8003/withdraw`,
+        `/order/withdraw`,
         { paymentStatus: 'withdrawable', orderId }
       );
       console.log("with", data);
@@ -103,14 +103,14 @@ function Page() {
     const fetchData = async () => {
       try {
         const { data } = await axios.post(
-          `http://localhost:8003/viewOrderDetail`,
+          `/order/viewOrderDetail`,
           { orderId }
         );
 
         console.log("Order Detail:", data);
 
         const response = await axios.post(
-          `http://localhost:8001/viewGigDetail`,
+          `/user/viewGigDetail`,
           { gigId: data.gigId }
         );
         console.log("Gig Detail:", response.data[0]);
