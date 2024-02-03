@@ -16,8 +16,6 @@ mongoose.connect(mongoUrl).then(()=>{
     
 })
 
-
-
 app.listen(8001, ()=>{
     console.log(`server running on 8001`);
 })
