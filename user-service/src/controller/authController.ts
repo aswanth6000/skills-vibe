@@ -37,7 +37,7 @@ const authController = {
           res.status(201).json({ user: newUser, token });
         } else {
           console.log('User already exists');
-          res.status(200).json({ user, message: 'User already exists.' });
+          res.status(400).json({ user, message: 'User already exists.' });
         }
       } else {
         const { email, username, password, phone } = req.body;
@@ -60,7 +60,7 @@ const authController = {
           res.status(201).json({ user: 'created' });
         } else {
           console.log('User already exists');
-          res.status(200).json({ message: 'User already exists.' });
+          res.status(400).json({ message: 'User already exists.' });
         }
       }
     } catch (err) {
@@ -91,14 +91,14 @@ const authController = {
           const role = 'user'
           const user = await UserModel.findOne({ email }).exec();
           if (!user) {
-            return res.status(203).json({ message: 'User not found' });
+            return res.status(400).json({ message: 'User not found' });
           }
           if (!user.status) {
             return res.status(207).json({ message: 'User is blocked by admin' });
           }
           const validPassword = await bcrypt.compare(password, user.password);
           if (!validPassword) {
-            return res.status(203).json({ message: 'Invalid Password' });
+            return res.status(400).json({ message: 'Invalid Password' });
           }
           const payload = {
             userId: user._id,
@@ -138,7 +138,7 @@ const authController = {
         res.cookie('jwt', token, { httpOnly: true});
         res.status(200).json({ token });
       } else {
-        res.status(203).json({ message: 'Email not found' });
+        res.status(400).json({ message: 'Email not found' });
       }
     }
   },
