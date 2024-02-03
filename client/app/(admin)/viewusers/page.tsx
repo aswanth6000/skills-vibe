@@ -14,7 +14,7 @@ function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/viewAllUsers?page=${pageNumber}`);
+        const response = await axios.get(`/user/viewAllUsers?page=${pageNumber}`);
         if (response.status === 200) {
           setUserData(response.data.allusers);
           setTotalPages(response.data.totalPages)
@@ -31,7 +31,7 @@ function Page() {
       userId: userId
     }
     try {
-      const response = await axios.post(`http://localhost:8000/block`, sendBlock,{
+      const response = await axios.post(`/user/block`, sendBlock,{
         headers:{
           "Content-Type": 'application/json' 
         }
@@ -47,7 +47,7 @@ function Page() {
       userId: userId
     }
     try {
-      const response = await axios.post(`http://localhost:8000/unblock`, sendUnblock,{
+      const response = await axios.post(`/user/unblock`, sendUnblock,{
         headers:{
           "Content-Type": 'application/json' 
         }

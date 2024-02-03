@@ -1,4 +1,4 @@
-import RabbitMQ from "../../../common/src/messages/rabbitMQ";
+import RabbitMQ from "./messages/rabbitMQ";
 
 const userMessageConsumers ={
     async userCreatedMessageConsumer(){

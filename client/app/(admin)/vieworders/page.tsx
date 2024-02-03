@@ -33,7 +33,7 @@ export default function Vieworder() {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get(`http://localhost:8003/viewOrders?page=${pageNumber}`);
+            const response = await axios.get(`/order/viewOrders?page=${pageNumber}`);
             if (response.status === 200) {
               setOrderData(response.data.orders);
               setTotalPages(response.data.totalPages)

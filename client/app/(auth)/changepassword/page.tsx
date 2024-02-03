@@ -40,7 +40,7 @@ export default function Page() {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8000/submitpassword",
+        "/user/submitpassword",
         sendData,
         {
           headers: {
@@ -66,7 +66,7 @@ export default function Page() {
     };
     try {
       const response = await axios.post(
-        "http://localhost:8000/sendotp",
+        "/user/sendotp",
         sendEmail,
         {
           headers: {
@@ -89,7 +89,7 @@ export default function Page() {
         email: email
       }
       const response = await axios.post(
-        "http://localhost:8000/submitotp",
+        "/user/submitotp",
         sendOtp,
         {
           headers: {

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from '../../../../config/axios'
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/components/adminNav";
@@ -40,8 +40,8 @@ const Page = () => {
   useEffect(() => {
     const fetchGigUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/viewgigdetail/${gigId}`);
-        const {data} = await axios.post(`http://localhost:8000/userSpecficDetails`, {userId: response.data.gig[0].userId})
+        const response = await axios.get(`/user/viewgigdetail/${gigId}`);
+        const {data} = await axios.post(`/user/userSpecficDetails`, {userId: response.data.gig[0].userId})
         setUser(data)
         setGigUser(response.data.gig[0]);
       } catch (error) {
@@ -57,7 +57,7 @@ const Page = () => {
     };
     try {
       const response = await axios.post(
-        "http://localhost:8002/rejectgig",
+        "/gig/rejectgig",
         gigSendId,
         {
           headers: {
@@ -76,7 +76,7 @@ const Page = () => {
     };
     try {
       const response = await axios.post(
-        "http://localhost:8002/acceptgig",
+        "/gig/acceptgig",
         gigSendId,
         {
           headers: {

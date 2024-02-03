@@ -1,5 +1,5 @@
 
-import RabbitMQ from '../../../../common/src/messages/rabbitMQ';
+import RabbitMQ from '../messages/rabbitMQ';
 import { UserLoggedInEvent } from '../../types/gigTypes';
 
 const consumers = { 

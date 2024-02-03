@@ -99,7 +99,7 @@ const MultiStepForm: React.FC = () => {
     e.preventDefault();
     if (bearerToken) {
       try {
-        const response = await axios.post('http://localhost:8002/addgig', formData, {
+        const response = await axios.post('/gig/addgig', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${bearerToken}`,

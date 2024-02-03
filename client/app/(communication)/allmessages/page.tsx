@@ -2,8 +2,7 @@
 import React from 'react'
 import ChatAllUsers from '@/components/chatAllUsers';
 import ChatMessages from '@/components/ChatMessages';
-import ChatSenderInfo from '@/components/ChatSenderInfo';
-import axios from 'axios';
+import axios from '../../../config/axios';
 export default function Page() {
 
   
@@ -13,7 +12,6 @@ export default function Page() {
       <div className='flex flex-row'>
         <ChatAllUsers />
         <ChatMessages/>
-        <ChatSenderInfo/>
       </div>
     </div>
   )

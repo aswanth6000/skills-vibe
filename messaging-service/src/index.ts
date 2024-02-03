@@ -16,12 +16,19 @@ messageController.userSave()
 app.use(router);
 
 
-mongoose.connect("mongodb://localhost/messageservice")
-.then(() => {
-    console.log("Product-service database connected");
+const mongoUrl: string | undefined = process.env.MONGO_URL
+
+if (!mongoUrl) {
+    console.error('MongoDB connection URL is not defined.');
+    process.exit(1);
+  }
+
+mongoose.connect(mongoUrl).then(()=>{
+    console.log('database connected..');
 })
-.catch((err) => {
-    console.log("database connection failed :", err);
+.catch((err)=>{
+    console.log("Database connection error", err);
+    
 })
 
 const server = app.listen('8004', () => {

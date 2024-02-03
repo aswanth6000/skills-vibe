@@ -23,11 +23,12 @@ export default function Login() {
   const user = useAppSelector((state)=> state.auth.value)
   const router = useRouter()
   useEffect(() => {
-    if (user.isAuth && user.isAdmin === false) {
+    const token = localStorage.getItem("token")
+    if (token && user.isAdmin === false) {
       router.push('/userhome');
-    }else if(user.isAuth && user.isAdmin){ 
+    }else if(token && user.isAdmin){ 
       router.push('/admindash')
-    }else if(!user.isAuth){
+    }else if(!token){
       router.push('/login')
     }
   }, [user.isAuth,user.isAdmin, router]);
@@ -73,7 +74,7 @@ export default function Login() {
   const sendUserData = async (userData: userDataType | userDataTypeG) => {
     try {
       setLoad(true)
-      const response = await axios.post('/login', userData, {
+      const response = await axios.post('/user/login', userData, {
         headers: {
           "Content-Type": 'application/json' 
         }

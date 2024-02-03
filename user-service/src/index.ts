@@ -1,31 +1,7 @@
-import express from 'express';
-import dotenv from 'dotenv'
+import { app } from "./app";
 import mongoose from 'mongoose'
-import router from './routes/authRoutes'
-import userRouter from './routes/userRoutes';
-import userController from './controller/userController';
-import cors from 'cors';
-const app = express();
-app.use(cors())
-
-
-dotenv.config()
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json());
-const PORT = process.env.PORT || 8001;
-
-userController.setup()
-userController.gigAccept()
-userController.gigReject()
-userController.gigDeleteEvent()
-app.use(router)
-app.use(userRouter)
-
-
 
 const mongoUrl: string | undefined = process.env.MONGO_URL
-
-
 
 if (!mongoUrl) {
     console.error('MongoDB connection URL is not defined.');
@@ -42,6 +18,6 @@ mongoose.connect(mongoUrl).then(()=>{
 
 
 
-app.listen(PORT, ()=>{
-    console.log(`server running on ${PORT}`);
+app.listen(8001, ()=>{
+    console.log(`server running on 8001`);
 })

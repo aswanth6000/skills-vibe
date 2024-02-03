@@ -1,4 +1,4 @@
-import RabbitMQ from '../../../../common/src/messages/rabbitMQ';
+import RabbitMQ from '../messages/rabbitMQ';
 
 const gigPublisher = {
   async gigCreatedEvent(gigCreatedData: any): Promise<void> {

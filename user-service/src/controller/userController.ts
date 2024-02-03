@@ -11,6 +11,7 @@ import orderPublisher from "../events/publisher/orderPublisher";
 dotenv.config();
 import { ExtendedRequest } from "../types/usertypes";
 import userMessagePublisher from "../events/publisher/userMessagePublisher";
+import { title } from "process";
 
 
 const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
@@ -313,19 +314,44 @@ const userController = {
       return res.status(401).json({ error: 'Unauthorized - Invalid token' });
     }
     try {
+      const sort = req.query.sort;
+      const filterPrice = req.query.price || 500;
+    
       const keyword = req.params.searchId
         ? {
-          $or: [
-            { username: { $regex: req.params.searchId, $options: "i" } },
-            { username: { $regex: req.params.searchId, $options: "i" } }
-          ],
-        }
+            $or: [
+              { username: { $regex: req.params.searchId, $options: "i" } },
+              { title: { $regex: req.params.searchId, $options: "i" } },
+            ],
+          }
         : {};
-      const users = await GigUserModel.find(keyword).find({ _id: { $ne: decodedToken.userId } })
-      res.status(200).json(users)
+    
+      let priceFilter = {};
+    
+      if (filterPrice) {
+        // Assuming filterPrice is a single value
+        priceFilter = { price: { $lt: filterPrice } };
+      }
+    
+      if (sort === 'High to low') {
+        const users = await GigUserModel.find(keyword)
+          .find({ _id: { $ne: decodedToken.userId }, ...priceFilter })
+          .sort({ price: -1 });
+        res.status(200).json(users);
+      } else if (sort === 'Low to high') {
+        const users = await GigUserModel.find(keyword)
+          .find({ _id: { $ne: decodedToken.userId }, ...priceFilter })
+          .sort({ price: 1 });
+        res.status(200).json(users);
+      } else {
+        const users = await GigUserModel.find(keyword)
+          .find({ _id: { $ne: decodedToken.userId }, ...priceFilter })
+          .exec();
+        res.status(200).json(users);
+      }
     } catch (error) {
-      res.status(501).json({ error: "Internal server error" })
-      console.error(error)
+      res.status(501).json({ error: "Internal server error" });
+      console.error(error);
     }
   },
   async userSpecficDetails(req: Request, res: Response){
