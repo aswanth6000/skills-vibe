@@ -1,34 +1,17 @@
-// rabbitmq.ts
 import * as amqp from 'amqplib';
-import dotenv from 'dotenv'
-dotenv.config();
 
+const rabbitURL: any = process.env.RABBIT_MQ;
 
-const rabbitURL: any = process.env.RABBIT_MQ
-class RabbitMQ {
-  private static connection: amqp.Connection | null = null;
+let channel: amqp.Channel, connection: amqp.Connection;
 
-  static async getConnection(): Promise<amqp.Connection> {
+const connectQueue = async () => {
     try {
-      if (!RabbitMQ.connection) {
-        RabbitMQ.connection = await amqp.connect(rabbitURL);
-      }
-      return RabbitMQ.connection as amqp.Connection
+        connection = await amqp.connect(rabbitURL);
+        channel = await connection.createChannel();
+        await channel.assertQueue("ORDER");
     } catch (error) {
-      console.error(error);
-      throw error;
+        console.log(error);
     }
-  }
+};
 
-  static async createChannel(): Promise<amqp.Channel> {
-    try {
-      const connection = await RabbitMQ.getConnection();
-      return connection.createChannel();
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-}
-
-export default RabbitMQ;
+export { connectQueue, channel, connection };
