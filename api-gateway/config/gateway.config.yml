@@ -24,7 +24,7 @@ serviceEndpoints:
   httpbin:
     url: "https://httpbin.org"
   userService:
-    url: "http://localhost:8001"
+    url: "http://user-service:8001"
   gigService:
     url: "http://gig-service:8002"
   messageService:
