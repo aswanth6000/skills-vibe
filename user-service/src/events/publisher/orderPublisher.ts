@@ -1,9 +1,13 @@
-import { connectQueue, channel, connection } from '../messages/rabbitMQ';
+import {  channel, connection } from '../messages/rabbitMQ';
 
 const orderPublisher = async (data: any) => {
-    channel.sendToQueue("ORDER", Buffer.from(JSON.stringify(data)));
-    await channel.close();
-    await connection.close();
+    try {
+        channel.sendToQueue("ORDER", Buffer.from(JSON.stringify(data)));
+        await channel.close();
+        await connection.close();
+    } catch (error) {
+        console.error(error);
+    }
 };
-export { orderPublisher, connectQueue };
+export { orderPublisher };
 
