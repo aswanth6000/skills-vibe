@@ -12,6 +12,15 @@ module.exports = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/userhome',
+        permanent: true,
+      },
+    ]
+  },
     async headers() {
       return [
         {
