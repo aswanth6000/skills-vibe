@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl: string = 'http://localhost:8080';
+const baseUrl: string = 'http://165.22.219.238:8080';
 
 axios.interceptors.request.use(
     (config)=>{
