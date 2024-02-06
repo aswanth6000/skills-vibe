@@ -20,12 +20,12 @@ interface GridProps {
   data: Gigs[];
 }
 
-const Page: React.FC<GridProps> = () => {
-  const [data, setData] = useState<Gigs[]>([])
+const Page = () => {
+  const [data, setData]: any = useState([])
   const params = useParams();
   const searchId = params.searchId;
   const [sort, setSort] = useState('Default')
-  const [filterPrice, setFilterPrice] = useState(500)
+  const [filterPrice, setFilterPrice]: any = useState(500)
 
 
   useEffect(() => {

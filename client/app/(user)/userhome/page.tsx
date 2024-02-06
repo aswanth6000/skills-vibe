@@ -1,19 +1,18 @@
-"use client";
+"use client"
 import Navbar from "@/components/navbar";
 import Grid from "@/components/grid";
-import Popular from "@/components/popular";
 import Footer from "@/components/footer";
 import { useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import axios from "../../../config/axios";
 import { useEffect, useState } from "react";
-import { Gigs } from "@/types/gigTypes";
 import SubNav from "@/components/subNav";
 import { Skeleton } from "antd";
 
 
 export default function Home() {
-  const [data, setData] = useState<Gigs[]>([]);
+  const router = useRouter();
+  const [data, setData]: any = useState([]);
   const [loading, setLoading] = useState(false)
   const user = useAppSelector((state) => state.auth.value);
   useEffect(() => {
@@ -29,7 +28,6 @@ export default function Home() {
         });
         if (response.status === 200) {
           setLoading(false)
-          console.log(response.data.allgigs);
           setData(response.data.allgigs);
         }
       } catch (err) {
@@ -38,11 +36,8 @@ export default function Home() {
     };
     fetchData();
   }, []);
-  console.log(data);
-  const router = useRouter();
-  if (user.isAuth === false) {
-    router.push("/login");
-  }
+
+
 
   const stl = {
     backgroundColor: "rgb(255 255 255 / 25%)",
@@ -52,9 +47,8 @@ export default function Home() {
 
   return (
     <div className="bg-bodywhite">
-      <Navbar />
+      <Navbar/>
       <SubNav/>
-      
       <div className="flex justify-center mt-4 mb-2 ">
         <div
           className="w-11/12  h-60 rounded-2xl"

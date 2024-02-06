@@ -13,7 +13,7 @@ interface GridProps {
   props: Gigs[];
 }
 
-const Grid: React.FC<GridProps> = ({ props }) => {
+const Grid = ({ props }: any) => {
   if (!props) {
     return (
       <div className="flex flex-col">
@@ -91,7 +91,7 @@ const Grid: React.FC<GridProps> = ({ props }) => {
 
   return (
     <div className='flex flex-row flex-wrap mb-5'>
-      {props.map((x) => (
+      {props.map((x: any) => (
         <div key={x.refId} className='w-56 h-auto flex flex-col justify-start border rounded-2xl mt-3 mb-3 ml-3'>
           <div>
             {/* Initialize Swiper component for image carousel */}
