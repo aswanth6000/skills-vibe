@@ -2,13 +2,13 @@ import express from 'express';
 import messageController from '../controller/messagecontroller';
 const router = express.Router();
 
-router.post('message/accesschat', messageController.accessChat);
-router.get('message/fetchchat', messageController.fetchChats)
-router.get('message/getmessage/:chatId', messageController.allMessages);
-router.post('message/sendmessage', messageController.sendMessage);
-router.get('message/searchuser', messageController.searchUsers);
-router.get('message/findchats', messageController.fetchChats)
-router.get('message/generateMeeting', messageController.meetingCodeGenerator)
+router.post('/accesschat', messageController.accessChat);
+router.get('/fetchchat', messageController.fetchChats)
+router.get('/getmessage/:chatId', messageController.allMessages);
+router.post('/sendmessage', messageController.sendMessage);
+router.get('/searchuser', messageController.searchUsers);
+router.get('/findchats', messageController.fetchChats)
+router.get('/generateMeeting', messageController.meetingCodeGenerator)
 
 
 export default router;

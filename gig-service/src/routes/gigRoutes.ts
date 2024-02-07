@@ -10,13 +10,13 @@ const upload = multerConfig.fields([
     { name: 'video', maxCount: 1 },
   ]);
 
-router.post('/gig/addgig',upload, gigController.addGig)
-router.post('/gig/editgig', upload, gigController.editgig)
-router.post('/gig/deletegig', gigController.deletegig )
-router.post('/gig/rejectgig', gigController.rejectgig)
-router.post('/gig/acceptgig', gigController.acceptgig)
+router.post('/addgig',upload, gigController.addGig)
+router.post('/editgig', upload, gigController.editgig)
+router.post('/deletegig', gigController.deletegig )
+router.post('/rejectgig', gigController.rejectgig)
+router.post('/acceptgig', gigController.acceptgig)
 
-// router.post('/gigstatus', gigController.gigStatus)
+// router.post('status', gigController.gigStatus)
 
 
 export default router;

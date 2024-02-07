@@ -17,21 +17,21 @@ const storage = multer.diskStorage({
 const orderRouter = express.Router();
 
 
-orderRouter.post('/order/payment/:id',orderController.payment )
-orderRouter.post('/order/paymentverification',orderController.paymentVerification);
-orderRouter.get('/order/getkey',orderController.getKey)
-orderRouter.get('/order/myorders', orderController.myorders)
-orderRouter.get('/order/orders', orderController.orders)
-orderRouter.get('/order/vieworders', orderController.viewOrders)
-orderRouter.post('/order/ordercancel', orderController.orderCancel)
-orderRouter.post('/order/orderaccept', orderController.orderAccept)
-orderRouter.post('/order/orderreject', orderController.orderReject)
-orderRouter.get('/order/vorders', orderController.vorders)
-orderRouter.post('/order/deliver',upload.single('file'), orderController.deliver)
-orderRouter.post('/order/orderReview', orderController.orderReview)
-orderRouter.get('/order/earnings', orderController.earnings)
-orderRouter.post('/order/viewOrderDetail', orderController.viewOrderDetail)
-orderRouter.post('/order/withdraw', orderController.withdraw)
+orderRouter.post('/payment/:id',orderController.payment )
+orderRouter.post('/paymentverification',orderController.paymentVerification);
+orderRouter.get('/getkey',orderController.getKey)
+orderRouter.get('/myorders', orderController.myorders)
+orderRouter.get('/orders', orderController.orders)
+orderRouter.get('/vieworders', orderController.viewOrders)
+orderRouter.post('/ordercancel', orderController.orderCancel)
+orderRouter.post('/orderaccept', orderController.orderAccept)
+orderRouter.post('/orderreject', orderController.orderReject)
+orderRouter.get('/vorders', orderController.vorders)
+orderRouter.post('/deliver',upload.single('file'), orderController.deliver)
+orderRouter.post('/orderReview', orderController.orderReview)
+orderRouter.get('/earnings', orderController.earnings)
+orderRouter.post('/viewOrderDetail', orderController.viewOrderDetail)
+orderRouter.post('/withdraw', orderController.withdraw)
 
 // paymentRouter.post('/payment/:id',paymentController.payment)
 // paymentRouter.post('/paymentverification', paymentController.paymentVerification)
