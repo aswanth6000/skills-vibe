@@ -1,14 +1,6 @@
 version: '3.8'
 
 services:
-  api-service:
-    image: aswanth600/api:latest
-    container_name: api-container
-    ports:
-      - "8080:8080"
-    networks:
-      - my-network  
-
   user-service:
     image: aswanth600/user:latest
     container_name: user-container

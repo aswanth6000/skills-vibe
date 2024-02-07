@@ -87,7 +87,6 @@ export default function Login() {
       console.log(response.status);
       if(response.status === 200){
         localStorage.setItem('token', token);
-        
         dispatch(logIn({
           isAuth: true,
           token: token,
