@@ -1,5 +1,6 @@
 // rabbitmq.ts
 import * as amqp from 'amqplib';
+const rabbitURL: any = process.env.RABBIT_MQ;
 
 class RabbitMQ {
   private static connection: amqp.Connection | null = null;
@@ -7,7 +8,7 @@ class RabbitMQ {
   static async getConnection(): Promise<amqp.Connection> {
     try {
       if (!RabbitMQ.connection) {
-        RabbitMQ.connection = await amqp.connect('amqp://localhost');
+        RabbitMQ.connection = await amqp.connect(rabbitURL);
       }
       return RabbitMQ.connection as amqp.Connection
     } catch (error) {
