@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl: string = 'https://gadgetease.online:8001';
+const baseUrl: string = 'http://gadgetease.online:8001';
 
 axios.interceptors.request.use(
     (config)=>{
