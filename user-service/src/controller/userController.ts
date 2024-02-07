@@ -7,7 +7,7 @@ import userPublisher from "../events/publisher/userPublisher";
 import userGigConsumers from "../events/consumer/userGigConsumer";
 import { GigUserModel } from "../models/GigUser";
 import dotenv from 'dotenv';
-import {orderPublisher} from "../events/publisher/orderPublisher";
+import orderPublisher from "../events/publisher/orderPublisher";
 dotenv.config();
 import { ExtendedRequest } from "../types/usertypes";
 import userMessagePublisher from "../events/publisher/userMessagePublisher";
@@ -249,7 +249,7 @@ const userController = {
         buyerphone: buyer?.phone,
         buyerProfile: buyer?.profilePicture,
       };
-      orderPublisher(orderDetails)
+      orderPublisher.orderEvent(orderDetails)
       return res.status(200).json({ orderDetails });
     } catch (error) {
       console.error(error);

@@ -1,17 +1,30 @@
+// rabbitmq.ts
 import * as amqp from 'amqplib';
 
-const rabbitURL: any = process.env.RABBIT_MQ;
+class RabbitMQ {
+  private static connection: amqp.Connection | null = null;
 
-let channel: amqp.Channel, connection: amqp.Connection;
-
-const connectQueue = async () => {
+  static async getConnection(): Promise<amqp.Connection> {
     try {
-        connection = await amqp.connect(rabbitURL);
-        channel = await connection.createChannel();
-        await channel.assertQueue("ORDER");
+      if (!RabbitMQ.connection) {
+        RabbitMQ.connection = await amqp.connect('amqp://localhost');
+      }
+      return RabbitMQ.connection as amqp.Connection
     } catch (error) {
-        console.log(error);
+      console.error(error);
+      throw error;
     }
-};
+  }
 
-export { connectQueue, channel, connection };
+  static async createChannel(): Promise<amqp.Channel> {
+    try {
+      const connection = await RabbitMQ.getConnection();
+      return connection.createChannel();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+}
+
+export default RabbitMQ;
