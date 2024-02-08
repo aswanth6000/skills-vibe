@@ -74,7 +74,7 @@ export default function Login() {
   const sendUserData = async (userData: userDataType | userDataTypeG) => {
     try {
       setLoad(true)
-      const response = await axios.post('https://gadgetease.online/login', userData, {
+      const response = await axios.post('/login', userData, {
         headers: {
           "Content-Type": 'application/json' 
         }
