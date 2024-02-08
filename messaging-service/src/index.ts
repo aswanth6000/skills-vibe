@@ -38,7 +38,7 @@ const server = app.listen('8004', () => {
 const io = new Server(server,{
     pingTimeout: 60000, 
     cors:{
-        origin: "http://localhost:3000"
+        origin: "https://skills-vibe.vercel.app/"
     }
 })
 

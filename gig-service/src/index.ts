@@ -3,7 +3,6 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import router from './routes/gigRoutes'
 import cors from 'cors';
-import { connectQueue } from './events/messages/rabbitMQ';
 
 const app = express();
 app.use(cors())
@@ -14,7 +13,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 const PORT = process.env.PORT || 8002;
 
-connectQueue()
 app.use(router)
 
 
