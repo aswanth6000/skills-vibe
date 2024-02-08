@@ -1,5 +1,5 @@
 'use client'
-import axios from "../../../config/axios";
+import axios from "axios";
 import { useEffect } from "react";
 import useFormValidation from "@/hooks/validation";
 import GoogleButton from 'react-google-button'
@@ -74,7 +74,7 @@ export default function Login() {
   const sendUserData = async (userData: userDataType | userDataTypeG) => {
     try {
       setLoad(true)
-      const response = await axios.post('/login', userData, {
+      const response = await axios.post('https://gadgetease.online/login', userData, {
         headers: {
           "Content-Type": 'application/json' 
         }
