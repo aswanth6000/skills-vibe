@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-container
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest 
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - my-network
   user-service:
     image: aswanth600/user:latest
     container_name: user-container
@@ -37,3 +50,5 @@ services:
 networks:
   my-network:
     driver: bridge
+volumes:
+  rabbitmq-data:
