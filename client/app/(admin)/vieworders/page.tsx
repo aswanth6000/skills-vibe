@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import axios from 'axios'
+import axios from '../../../config/axios'
 import { Pagination } from 'antd';
 
 interface OrderDetails {

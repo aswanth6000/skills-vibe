@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/navbar";
 import { CarouselDefault } from "@/components/carousel";
-import axios from "axios";
+import axios from "../../../../config/axios";
 import { useParams } from "next/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -110,7 +110,7 @@ function Page() {
         console.log("Order Detail:", data);
 
         const response = await axios.post(
-          `/user/viewGigDetail`,
+          `/viewGigDetail`,
           { gigId: data.gigId }
         );
         console.log("Gig Detail:", response.data[0]);

@@ -1,6 +1,6 @@
 'use client'
 
-import axios from "axios";
+import axios from "../../../config/axios";
 import { useEffect, useState } from "react";
 import { User } from "@/types/adminTypes";
 import Image from "next/image";
@@ -14,7 +14,7 @@ function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/user/viewAllUsers?page=${pageNumber}`);
+        const response = await axios.get(`/viewAllUsers?page=${pageNumber}`);
         if (response.status === 200) {
           setUserData(response.data.allusers);
           setTotalPages(response.data.totalPages)
@@ -31,7 +31,7 @@ function Page() {
       userId: userId
     }
     try {
-      const response = await axios.post(`/user/block`, sendBlock,{
+      const response = await axios.post(`/block`, sendBlock,{
         headers:{
           "Content-Type": 'application/json' 
         }
@@ -47,7 +47,7 @@ function Page() {
       userId: userId
     }
     try {
-      const response = await axios.post(`/user/unblock`, sendUnblock,{
+      const response = await axios.post(`/unblock`, sendUnblock,{
         headers:{
           "Content-Type": 'application/json' 
         }

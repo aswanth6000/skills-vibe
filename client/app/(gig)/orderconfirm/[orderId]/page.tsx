@@ -42,7 +42,7 @@ const OrderConfirmation: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/user/viewgig/${gigid}`,
+          `/viewgig/${gigid}`,
           {
             headers: {
               Authorization: `Bearer ${bearerToken}`,
@@ -104,7 +104,7 @@ const OrderConfirmation: React.FC = () => {
           description: "Razorpay Tutorial",
           image: "https://img.freepik.com/premium-vector/sv-letter-logo-design-black-background-initial-monogram-letter-sv-logo-design-vector-template_634196-1210.jpg",
           order_id: response.data.order.id,
-          callback_url: "http://localhost:8003/order/paymentverification",
+          callback_url: "https://gadgetease.online/order/paymentverification",
           prefill: {
             name: "Sagar Gupta",
             email: "anandguptasir@gmail.com",

@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import axios from "../../../config/axios";
 import { useEffect, useState } from "react";
 import { Gig } from "@/types/adminTypes";
 import Link from "next/link";
@@ -15,7 +15,7 @@ function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/user/viewallgigs?page=${pageNumber}`);
+        const response = await axios.get(`/viewallgigs?page=${pageNumber}`);
         if (response.status === 200) {
           setGigData(response.data.allgigs);
           setTotalPages(response.data.totalPages)
@@ -36,7 +36,7 @@ function Page() {
     };
     try {
       const response = await axios.post(
-        "/user/gigstatus",
+        "/gigstatus",
         status,
         {
           headers: {

@@ -35,7 +35,7 @@ const Page = () => {
   useEffect(()=>{
    async function fetchData (){
       const { data } = await axios.get(
-        `/user/searchGig/${searchId}?sort=${sort}&price=${filterPrice}`,
+        `/searchGig/${searchId}?sort=${sort}&price=${filterPrice}`,
         {
           headers: {
             Authorization: `Bearer ${bearerToken}`,

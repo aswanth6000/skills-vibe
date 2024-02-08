@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import useFormValidation from "@/hooks/validation";
 import Loading from "@/components/loading";
-import axios from "axios";
+import axios from "../../../config/axios";
 import { useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from 'react-toastify';
@@ -40,7 +40,7 @@ export default function Page() {
     }
     try {
       const response = await axios.post(
-        "/user/submitpassword",
+        "/submitpassword",
         sendData,
         {
           headers: {
@@ -66,7 +66,7 @@ export default function Page() {
     };
     try {
       const response = await axios.post(
-        "/user/sendotp",
+        "/sendotp",
         sendEmail,
         {
           headers: {
@@ -89,7 +89,7 @@ export default function Page() {
         email: email
       }
       const response = await axios.post(
-        "/user/submitotp",
+        "/submitotp",
         sendOtp,
         {
           headers: {

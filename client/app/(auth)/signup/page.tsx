@@ -78,7 +78,7 @@ export default function Signup() {
   }
   const sendUserData = async (userData: userDataTypeSignup) => {
     try {
-      const response = await axios.post('/user/signup', userData, {
+      const response = await axios.post('/signup', userData, {
         method: 'POST',
         headers: {
           "Content-Type": 'application/json'

@@ -40,8 +40,8 @@ const Page = () => {
   useEffect(() => {
     const fetchGigUser = async () => {
       try {
-        const response = await axios.get(`/user/viewgigdetail/${gigId}`);
-        const {data} = await axios.post(`/user/userSpecficDetails`, {userId: response.data.gig[0].userId})
+        const response = await axios.get(`/viewgigdetail/${gigId}`);
+        const {data} = await axios.post(`/userSpecficDetails`, {userId: response.data.gig[0].userId})
         setUser(data)
         setGigUser(response.data.gig[0]);
       } catch (error) {

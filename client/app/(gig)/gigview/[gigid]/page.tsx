@@ -48,7 +48,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/user/viewgig/${gigid}`, {
+        const response = await axios.get(`/viewgig/${gigid}`, {
           headers: {
             Authorization: `Bearer ${bearerToken}`,
             "Content-Type": "application/json",

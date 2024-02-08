@@ -20,7 +20,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const response = await axios.get("/user/getallgig", {
+        const response = await axios.get("/getallgig", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
