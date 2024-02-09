@@ -1,6 +1,6 @@
-import axios from "axios";
+// import axios from "axios";
 
-const baseUrl: string = 'https://gadgetease.online';
+// const baseUrl: string = 'https://gadgetease.online';
 
 // axios.interceptors.request.use(
 //     (config)=>{
@@ -14,7 +14,7 @@ const baseUrl: string = 'https://gadgetease.online';
 // }
 // )
 
-const instance = axios.create({
-    baseURL : baseUrl
-})
-export default instance
+// const instance = axios.create({
+//     baseURL : baseUrl
+// })
+// export default instance
