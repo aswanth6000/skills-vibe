@@ -114,7 +114,7 @@ const orderController = {
                     console.error('Error in orderReceived:', error);
                 }
 
-                res.redirect(`http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`);
+                res.redirect(`https://gadgetease.online/paymentsuccess?reference=${razorpay_payment_id}`);
             } else {
                 try {
 
