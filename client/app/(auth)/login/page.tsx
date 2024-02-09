@@ -26,7 +26,7 @@ export default function Login() {
     const token = localStorage.getItem("token")
     if (token && user.isAdmin === false) {
       router.push('/userhome');
-    }else if(token && user.isAdmin){ 
+    }else if( user.isAdmin){ 
       router.push('/admindash')
     }else if(!token){
       router.push('/login')
