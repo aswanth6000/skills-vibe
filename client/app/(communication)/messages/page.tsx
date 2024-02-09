@@ -31,7 +31,7 @@ import io from "socket.io-client";
 import Navbar from "@/components/navbar";
 import { useRouter } from "next/navigation";
 
-const ENDPOINT = "http://message-service:8004";
+const ENDPOINT = "https://gadgetease.online/message";
 var socket: any, selectedChatCompare: any;
 
 interface Pokedex {
