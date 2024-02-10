@@ -11,9 +11,9 @@ dotenv.config()
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
-app.use(orderRouter)
 
-// orderController.fetchOrderData()
+orderController.fetchOrderData()
+
 app.use(orderRouter)
 
 // app.use(router)
