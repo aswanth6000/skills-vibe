@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
 import {app} from './app'
+import mongoose from "mongoose";
 
 const mongoUrl: string | undefined = process.env.MONGO_URL
 

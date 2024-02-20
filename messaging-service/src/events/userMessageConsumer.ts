@@ -12,7 +12,7 @@ const userMessageConsumers ={
             const routingKey = 'user-message-created';
             await channel.bindQueue(queue ,exchangeName, routingKey);
             return new Promise((resolve ,reject)=>{
-                channel.consume(queue, (message)=>{
+                channel.consume(queue, (message: any)=>{
                     if(message){
                         try {
                             const createdGig: any = JSON.parse(message.content.toString());
@@ -43,7 +43,7 @@ const userMessageConsumers ={
             const routingKey = 'user-update-message-created';
             await channel.bindQueue(queue ,exchangeName, routingKey);
             return new Promise((resolve ,reject)=>{
-                channel.consume(queue, (message)=>{
+                channel.consume(queue, (message: any)=>{
                     if(message){
                         try {
                             const createdGig: any = JSON.parse(message.content.toString());

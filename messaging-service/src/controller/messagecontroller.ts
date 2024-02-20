@@ -13,24 +13,32 @@ const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
 const messageController = {
   async userSave() {
-    const userData: any = await userMessageConsumers.userCreatedMessageConsumer()
-    const newUser = new UserModel({
-      _id: userData._id,
-      username: userData.username,
-      phone: userData.phone,
-      email: userData.email,
-      profilePicture: userData.profilePicture,
-      createdAt: userData.createdAt,
-      updatedAt: userData.updatedAt,
-      status: userData.status,
-    })
-    await newUser.save()
-    return
+    try {
+      const userData: any = await userMessageConsumers.userCreatedMessageConsumer()
+      const newUser = new UserModel({
+        _id: userData._id,
+        username: userData.username,
+        phone: userData.phone,
+        email: userData.email,
+        profilePicture: userData.profilePicture,
+        createdAt: userData.createdAt,
+        updatedAt: userData.updatedAt,
+        status: userData.status,
+      })
+      await newUser.save()
+      return
+    } catch (error) {
+      console.log(error);
+    }
   },
   async userUpdateSave() {
-    const userData: any = await userMessageConsumers.userUpdatedMessageConsumer()
-    console.log("userData", userData);
-    await UserModel.findByIdAndUpdate(userData._id, { userData }, { new: true })
+    try {
+      const userData: any = await userMessageConsumers.userUpdatedMessageConsumer()
+      console.log("userData", userData);
+      await UserModel.findByIdAndUpdate(userData._id, { userData }, { new: true })
+    } catch (error) {
+      console.log(error);
+    }
   },
   async accessChat(req: Request, res: Response) {
     const { userId } = req.body;
