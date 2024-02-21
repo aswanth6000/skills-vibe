@@ -142,6 +142,9 @@ const authController = {
       }
     }
   },
+  // @DESC send otp using nodemailer
+  // @METHOD  post
+  // @PATH /sendotp
   async sendOtp(req: Request, res: Response) {
     const { email } = req.body;
     try {
@@ -169,6 +172,9 @@ const authController = {
       console.error(error)
     }
   },
+  // @DESC user can submit the otp recieved
+  // @METHOD  post
+  // @PATH /submitotp
   async submitOtp(req: Request, res: Response) {
     const { otp, email } = req.body;
     try {
@@ -185,6 +191,9 @@ const authController = {
       console.error(error);
     }
   },
+  // @DESC user can change the password
+  // @METHOD  post
+  // @PATH /changepassword
   async changePassword(req: Request, res: Response){
     const {otp, email, password} = req.body;
     try {

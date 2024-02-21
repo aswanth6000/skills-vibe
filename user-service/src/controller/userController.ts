@@ -19,6 +19,7 @@ const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
 
 const userController = {
+  // @DESC function for creating giguser collection using the data comming from rabbitmq 
   async setup() {
     try {
       const data: any = await userGigConsumers.gigCreatedConsumer();
@@ -60,6 +61,7 @@ const userController = {
       console.error('[User Controller]: Error setting up RabbitMQ:', error);
     }
   },
+  // @DESC option to change the gig status accroding to the data comming form rabbitmq
   async gigStatusEvent() {
     try {
       const data: any = await userGigConsumers.gigStatusConsumer();
@@ -77,6 +79,7 @@ const userController = {
 
     }
   },
+  // @DESC option to delete the gig from database
   async gigDeleteEvent() {
     try {
       const data: any = await userGigConsumers.gigDeleteConsumer();
@@ -90,7 +93,9 @@ const userController = {
 
     }
   },
-
+  // @DESC user route that will be redirectrd to the user homne after login 
+  // @METHOD  get
+  // @PATH /userhome
   async getUserHome(req: ExtendedRequest, res: Response) {
     const user = req.user;
     const userId = user?.userId
@@ -99,6 +104,9 @@ const userController = {
 
 
   },
+  // @DESC users can edit their profile picture
+  // @METHOD  post
+  // @PATH /userprovile/:userId
 
   async userProfileUpdate(req: any, res: Response) {
     try {
@@ -144,7 +152,9 @@ const userController = {
     }
   },
 
-
+  // @DESC admin can view all users
+  // @METHOD  get
+  // @PATH /getallusers
   async getAllUsers(req: Request, res: Response) {
     try {
       const PAGE_SIZE = 10
@@ -158,6 +168,9 @@ const userController = {
     }
 
   },
+  // @DESC admin can view all gigs
+  // @METHOD  get
+  // @PATH /getallgigs
   async getAllGigs(req: Request, res: Response) {
     try {
       const PAGE_SIZE = 10
@@ -169,6 +182,10 @@ const userController = {
       res.status(500).json({ error: "internal server error" })
     }
   },
+
+  // @DESC users can view their gigs
+  // @METHOD  get
+  // @PATH /mygigs
   async mygigs(req: Request, res: Response) {
     try {
       const token = req.headers.authorization?.split(' ')[1];
@@ -184,6 +201,9 @@ const userController = {
       res.status(500).json({ error: "internal server error" })
     }
   },
+  // @DESC user can view their gigs
+  // @METHOD  get
+  // @PATH /getgig
   async getgig(req: Request, res: Response) {
     try {
       const gigId = req.params.gigId
@@ -195,6 +215,9 @@ const userController = {
 
     }
   },
+  // @DESC list all gigs listed by the user 
+  // @METHOD  get
+  // @PATH /getallgig
   async getallgig(req: Request, res: Response) {
     try {
       const token = req.headers.authorization?.split(' ')[1];
@@ -211,6 +234,9 @@ const userController = {
 
     }
   },
+  // @DESC user can view the selected gig
+  // @METHOD  get
+  // @PATH /viewgig/:gigId
   async viewgig(req: Request, res: Response) {
     try {
       const gigId = req.params.id;
@@ -221,6 +247,9 @@ const userController = {
       return res.status(500).json("internal server error")
     }
   },
+  // @DESC user can order gig
+  // @METHOD  order a specific gig
+  // @PATH /ordergig
   async orderGig(req: Request, res: Response) {
     try {
       const token = req.headers.authorization?.split(' ')[1];
@@ -256,6 +285,9 @@ const userController = {
       return res.status(500).json({ message: 'Internal server error' });
     }
   },
+  // @DESC view gig in detail 
+  // @METHOD  get
+  //  @PATH /viewgigdetal
   async viewgigdetail(req: Request, res: Response) {
     try {
       const gigId = req.params.gigId;
@@ -266,28 +298,39 @@ const userController = {
       return res.status(501).json({ message: 'Internal error' })
     }
   },
+  // @DESC selller can accept the gig
+  // @METHOD  post
+  // @PATH /gigaccept
   async gigAccept() {
     const gigId = await userGigConsumers.gigAcceptConsumer()
     console.log('recieved gig id', gigId);
     const gig = await GigUserModel.findOneAndUpdate({ refId: gigId }, { gigstatus: true }, { new: true })
     console.log('accept status updated success', gig);
   },
+  // @DESC seller can reject the order
+  // @METHOD  post
+  // @PATH /gigreject
   async gigReject() {
     const gigId = await userGigConsumers.gigAcceptConsumer()
     console.log('recieved gig id', gigId);
     const gig = await GigUserModel.findOneAndUpdate({ refId: gigId }, { gigstatus: false }, { new: true })
     console.log('accept status updated success', gig);
   },
+  // @DESC admin can block the user
+  // @METHOD  post
+  // @PATH /userblock
   async userBlock(req: Request, res: Response) {
     const { userId } = req.body;
     try {
-      console.log(userId);
       const user = await UserModel.findByIdAndUpdate(userId, { status: false })
       return res.status(200).json({ message: "user blocked" })
     } catch (error) {
       console.error(error);
     }
   },
+  // @DESC admin can unmblock the user
+  // @METHOD  post
+  // @PATH /userUnlock
   async userUnblock(req: Request, res: Response) {
     const { userId } = req.body
     try {
@@ -297,8 +340,10 @@ const userController = {
     } catch (error) {
       console.error(error);
     }
-
   },
+  // @DESC user can be able to search for the user and gig
+  // @METHOD  get
+  // @PATH /searchgig
   async searchgig(req: Request, res: Response) {
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) {
@@ -354,6 +399,9 @@ const userController = {
       console.error(error);
     }
   },
+  // @DESC user can view their user secfic details here
+  // @METHOD  post
+  // @PATH /usespecificdetails
   async userSpecficDetails(req: Request, res: Response){
     const {userId} = req.body
     try {
@@ -364,6 +412,9 @@ const userController = {
       res.status(500).json({error: "Internal server error"})
     }
   },
+  // @DESC user can view the gig detail
+  // @METHOD  post
+  // @PATH /viewgigdetail
   async viewGigDetail(req: Request, res: Response){
     const {gigId} = req.body    
     try {
@@ -372,10 +423,8 @@ const userController = {
     } catch (error) {
       res.status(500).json({message: "Internal server error"})
       console.error(error);
-      
     }
   }
-
 }
 
 export default userController

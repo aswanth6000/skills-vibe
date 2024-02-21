@@ -12,6 +12,7 @@ const jwtSecret: Secret = process.env.JWT_KEY || 'defaultSecret'
 
 
 const messageController = {
+// @DESCRIPTION the user details will be saved in the message database
   async userSave() {
     try {
       const userData: any = await userMessageConsumers.userCreatedMessageConsumer()
@@ -31,6 +32,7 @@ const messageController = {
       console.log(error);
     }
   },
+// @DESCRIPTION the data of th euser will be updated accrodingly 
   async userUpdateSave() {
     try {
       const userData: any = await userMessageConsumers.userUpdatedMessageConsumer()
@@ -40,6 +42,9 @@ const messageController = {
       console.log(error);
     }
   },
+// @DESC user can access the chat
+// @METHOD  post
+// @PATH /accesschat
   async accessChat(req: Request, res: Response) {
     const { userId } = req.body;
 
@@ -98,6 +103,9 @@ const messageController = {
       }
     }
   },
+// @DESC route for fetch all chats
+// @METHOD  get
+// @PATH /fetchchat
   async fetchChats(req: Request, res: Response) {
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) {
@@ -128,6 +136,9 @@ const messageController = {
       res.status(500).json({ message: 'Internal server error' })
     }
   },
+// @DESC route to list all messages
+// @METHOD  get
+// @PATH /allmessages
   async allMessages(req: Request, res: Response) {
     console.log("Params: ", req.params);
     try {
@@ -189,6 +200,9 @@ const messageController = {
       res.status(500).json({ message: "Internal server error", error })
     }
   },
+// @DESC route for search users
+// @METHOD  post
+// @PATH /searchusers
   async searchUsers(req: Request, res: Response) {
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) {
@@ -215,6 +229,9 @@ const messageController = {
     const users = await UserModel.find(keyword).find({ _id: { $ne: decodedToken.userId } });
     res.send(users);
   },
+// @DESC it will generate the meeting code
+// @METHOD  get
+// @PATH /generatemeeting
   async meetingCodeGenerator(req: Request, res: Response) {
     try {
       const characters = 'abcdefghijklmnopqrstuvwxyz';

@@ -9,28 +9,15 @@ dotenv.config()
 import crypto from 'crypto'
 import {v4 as uuidv4} from 'uuid'
 import transporter from '../config/nodeMailer';
+import { OrderData } from '../types/orderTypes';
 const jwtSecret: Secret | GetPublicKeyOrSecret = process.env.JWT_KEY || 'defaultkey'
 
-interface OrderData {
-    userId: string;
-    refId: string;
-    username: string;
-    phone: string;
-    email: string;
-    profilePicture: string;
-    title: string;
-    price: number;
-    tags: string[];
-    buyerId: string,
-    buyeremail: string,
-    buyername: string,
-    buyerphone: number,
-    buyerProfile: string
-}
+
 
 
 var orderdata: OrderData | any
 const orderController = {
+// @DESC function to fetch order data
 
     async fetchOrderData(): Promise<OrderData | unknown> {
         try {
@@ -41,6 +28,9 @@ const orderController = {
             return null;
         }
     },
+// @DESC user can complete payment of their order
+// @METHOD  post
+// @PATH /payment
 
     async payment(req: Request, res: Response): Promise<void> {
         try {
@@ -56,7 +46,9 @@ const orderController = {
             res.status(500).json({ success: false, error: 'Internal Server Error' });
         }
     },
-
+// @DESC to verify the payment 
+// @METHOD  post
+// @PATH /paymentverification 
     async paymentVerification(req: Request, res: Response): Promise<void> {
         try {
             const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
@@ -171,10 +163,15 @@ const orderController = {
             res.status(500).json({ success: false, error: 'Internal Server Error' });
         }
     },
-
+// @DESC generate the key id for the user
+  // @METHOD  get
+  // @PATH /getkey
     getKey(req: Request, res: Response): void {
         res.status(200).json({ key: process.env.PAYMENT_KEY_ID });
     },
+// @DESC user can view their orders
+// @METHOD  get
+// @PATH /myorders
     async myorders(req: Request, res: Response) {
         try {
             const token = req.headers.authorization?.split(' ')[1];
@@ -190,6 +187,9 @@ const orderController = {
             return res.status(501).json({ message: "Internal server error"})
         }
     },
+// @DESC  user can view their order
+// @METHOD  get
+// @PATH /orders
     async orders(req: Request, res: Response) {
         try {
             const token = req.headers.authorization?.split(' ')[1];
@@ -203,9 +203,11 @@ const orderController = {
         } catch (error) {
             console.error(error);
             return res.status(501).json({ message: "Internal server error"})
-
         }
     },
+// @DESC admin  can view the all orders
+// @METHOD  get
+// @PATH /vieworders
     async viewOrders(req: Request, res: Response){
         try {
             const PAGE_SIZE = 10
@@ -218,6 +220,9 @@ const orderController = {
             res.status(501).json({message: 'internal server error'})
         }
     },
+// @DESC user can order their orders
+// @METHOD  post
+// @PATH /ordercancel
     async orderCancel(req: Request, res: Response){
         const {orderId} = req.body;
         console.log(orderId);
@@ -229,6 +234,9 @@ const orderController = {
             res.status(501).json({message: 'Internal server error'})
         }
     },
+// @DESC seller cna accept the order
+// @METHOD  post
+// @PATH /orderaccept
     async orderAccept(req: Request, res: Response){
         const {orderId, status} = req.body;
         try {
@@ -238,6 +246,9 @@ const orderController = {
             console.error(error);
         }
     },
+// @DESC seller can reject the order
+// @METHOD  post 
+// @PATH /orderreject
     async orderReject(req: Request, res: Response){
         const {orderId, status} = req.body;
         try {
@@ -246,9 +257,11 @@ const orderController = {
         } catch (error) {
             console.error(error);
             res.status(501).json({message: "Internal server error"})
-            
         }
     },
+// @DESC user route that will be redirectrd to the user homne after login 
+// @METHOD  
+// @PATH /vorders
     async vorders(req: Request, res: Response){
         try {
             const token = req.headers.authorization?.split(' ')[1];
@@ -272,6 +285,9 @@ const orderController = {
             
         }
     },
+// @DESC send the delivered product to the customer email
+// @METHOD  post
+// @PATH /dekuver
     async deliver(req: Request, res: Response){
         const file = req.file;
         const {orderId} = req.body;
@@ -289,8 +305,6 @@ const orderController = {
             ],
         };
         const odr = await OrderModel.findByIdAndUpdate(orderId, {orderStatus: 'completed'}, {new: true});
-
-        
         try {
             const info = await transporter.sendMail(mailOptions);
             console.log('Email sent:', info.response);
@@ -300,6 +314,9 @@ const orderController = {
             return res.status(500).json({ error: 'Internal server error' });
           }
     },
+// @DESC user can review the order
+// @METHOD  post
+// @PATH /orderreview
     async orderReview(req: Request, res: Response){
         try {
             const {orderId} = req.body;
@@ -310,6 +327,9 @@ const orderController = {
             res.status(501).json({message: 'Internal server error'})
         }
     },
+// @DESC user can view their earnings
+// @METHOD  get
+// @PATH /earnings
     async earnings(req: Request, res: Response) {
         const token = req.headers.authorization?.split(' ')[1];
         if (!token) {
@@ -346,6 +366,9 @@ const orderController = {
           res.status(500).json({ error: 'Internal Server Error' });
         }
       },
+// @DESC view the order details
+// @METHOD  get
+// @PATH /veieworderdetail
       async viewOrderDetail(req: Request, res: Response){
         const {orderId} = req.body
         try {
@@ -357,6 +380,9 @@ const orderController = {
         }
         
       },
+// @DESC seller can withdraw the money to his/her bank account
+// @METHOD  post
+// @PATH /withdraw
       async withdraw(req: Request, res: Response){
         const {orderId, paymentStatus} = req.body
         console.log(req.body);
