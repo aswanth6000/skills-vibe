@@ -64,7 +64,7 @@ const orderController = {
             const expectedSignature = crypto.createHmac('sha256', process.env.PAYMENT_KEY_SECRET || '').update(body.toString()).digest('hex');
             const isAuth = expectedSignature === razorpay_signature;
 
-            if (isAuth) {
+            if (isAuth && orderdata) {
                 try {
                     const {
                         userId,

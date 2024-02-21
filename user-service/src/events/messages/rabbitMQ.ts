@@ -2,9 +2,10 @@
 import * as amqp from 'amqplib';
 const rabbitURL: any = process.env.RABBIT_MQ;
 
+
 class RabbitMQ {
   private static connection: amqp.Connection | null = null;
-
+  
   static async getConnection(): Promise<amqp.Connection> {
     try {
       if (!RabbitMQ.connection) {

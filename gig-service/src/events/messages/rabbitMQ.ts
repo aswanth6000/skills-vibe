@@ -1,6 +1,6 @@
 // rabbitmq.ts
 import * as amqp from 'amqplib';
-const rabbitURL: any = process.env.RABBIT_MQ;
+const rabbitURL: any = 'amqps://dfnadvly:a1Q2OitA_xOdJZg8SSPYuMrXFdQXhi3k@puffin.rmq2.cloudamqp.com/dfnadvly';
 // const rabbitURL: any = 'amqp://localhost:5672';
 
 class RabbitMQ {

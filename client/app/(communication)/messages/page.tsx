@@ -147,7 +147,7 @@ export default function Page() {
 
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io(ENDPOINT, {path: "/socket.io", transports: ['websocket','polling']});
     socket.emit("setup", user);
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
